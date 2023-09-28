@@ -1,19 +1,37 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>go on Klaus</title>
+    <title>Go on liiqii</title>
     <link>https://liiqii.github.io/tags/go/</link>
-    <description>Recent content in go on Klaus</description>
+    <description>Recent content in Go on liiqii</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <lastBuildDate>Fri, 01 Sep 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://liiqii.github.io/tags/go/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 28 Sep 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://liiqii.github.io/tags/go/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>go 相关操作命令</title>
+      <title>Go 命令</title>
       <link>https://liiqii.github.io/posts/tech/go/command/</link>
-      <pubDate>Fri, 01 Sep 2023 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 28 Sep 2023 00:00:00 +0000</pubDate>
       
       <guid>https://liiqii.github.io/posts/tech/go/command/</guid>
-      <description>数据查询 go build 这个命令主要用于编译代码。在包的编译过程中，若有必要，会同时编译与之相关联的包。 如果是普通包，就像我们在1.2节中编写的mymath包那样，当你执行go build之后，它不会产生任何文件。如果你需要在$GOPATH/pkg下生成相应的文件，那就得执行go install</description>
+      <description>go build 这个命令主要用于编译代码。在包的编译过程中，若有必要，会同时编译与之相关联的包。 如果是普通包，就像我们在1.2节中编写的mymath包那样，当你执行go build之后，它不会产生任何文件。如果你需要在$GOPATH/pkg下生成相应的文件，那就得执行go install。 如果是</description>
+    </item>
+    
+    <item>
+      <title>Go 排序算法实现</title>
+      <link>https://liiqii.github.io/posts/tech/go/sort_algo/</link>
+      <pubDate>Thu, 28 Sep 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://liiqii.github.io/posts/tech/go/sort_algo/</guid>
+      <description>1.冒泡排序 从头开始两两互比然后进行交换。将最大值/最小值 冒到最后一位。依次循环 func bubbleSort(nums []int){ for i:=0;i&amp;lt;len(nums)-1;i++{ // 循环次数 for j:=0;j&amp;lt;len(nums)-1-i;j++{ // 数组内相邻元素比较 if nums[j]&amp;gt;nums[j+1]{ // 交换条件 nums[j],nums[j+1]=nums[j+1],nums[j] // 元素交换 } } } } 2.选择排序 在未排序序列中找到最小（大）元素，存放到排序序列的起始位置; 再从剩余未排序元素中继续寻找最小（大）元素，然后放</description>
+    </item>
+    
+    <item>
+      <title>Go 正则表达式</title>
+      <link>https://liiqii.github.io/posts/tech/go/regexp/</link>
+      <pubDate>Thu, 28 Sep 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://liiqii.github.io/posts/tech/go/regexp/</guid>
+      <description>1. 正则表达式语法 正则表达式是一种用于匹配和操作文本的强大工具，它使用特殊的字符和语法来定义模式。在 Golang 的 regexp 包中，使用的正则表达式语法是基于标准的 POSIX 正则表达式语法的一个子集。 以下是一些常用的正则表达式元字符： . ：匹配任意单个字符，除了换行符。 * ：匹配前面的元素零次或多次。 + ：匹配前面</description>
     </item>
     
   </channel>
