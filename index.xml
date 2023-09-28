@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Klaus</title>
+    <link>https://liiqii.github.io/</link>
+    <description>Recent content on Klaus</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Fri, 01 Sep 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://liiqii.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>go 相关操作命令</title>
+      <link>https://liiqii.github.io/posts/tech/go/command/</link>
+      <pubDate>Fri, 01 Sep 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://liiqii.github.io/posts/tech/go/command/</guid>
+      <description>数据查询 go build 这个命令主要用于编译代码。在包的编译过程中，若有必要，会同时编译与之相关联的包。 如果是普通包，就像我们在1.2节中编写的mymath包那样，当你执行go build之后，它不会产生任何文件。如果你需要在$GOPATH/pkg下生成相应的文件，那就得执行go install</description>
+    </item>
+    
+    <item>
+      <title>mongo 查询</title>
+      <link>https://liiqii.github.io/posts/tech/mongo/mongo_query/</link>
+      <pubDate>Fri, 01 Sep 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://liiqii.github.io/posts/tech/mongo/mongo_query/</guid>
+      <description>数据查询 find()方法 方法说明 find()方法没有参数时会匹配集合中的所有内容，find({})和find()功能一样 find({&amp;quot;_id&amp;quot;:1})表示查询_id字段为 1 的文档；find({&amp;quot;_id&amp;quot;:1,&amp;quot;name&amp;quot;</description>
+    </item>
+    
+    <item>
+      <title>建站</title>
+      <link>https://liiqii.github.io/posts/blog/blog/</link>
+      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://liiqii.github.io/posts/blog/blog/</guid>
+      <description>随便来点什么测试一下</description>
+    </item>
+    
+    <item>
+      <title>生活</title>
+      <link>https://liiqii.github.io/posts/life/life/</link>
+      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://liiqii.github.io/posts/life/life/</guid>
+      <description>随便来点什么测试一下</description>
+    </item>
+    
+    <item>
+      <title>阅读</title>
+      <link>https://liiqii.github.io/posts/read/read/</link>
+      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://liiqii.github.io/posts/read/read/</guid>
+      <description>随便来点什么测试一下</description>
+    </item>
+    
+    <item>
+      <title>🤝友链</title>
+      <link>https://liiqii.github.io/links/</link>
+      <pubDate>Sat, 06 Nov 2021 15:15:53 +0800</pubDate>
+      
+      <guid>https://liiqii.github.io/links/</guid>
+      <description>👉友链格式 名称： XXXXXX 网址： https://liiqii.github.io/ 图标： https://liiqii.github.io/img/Q.gif 描述： XXXXXX 👉友链申请要求 秉承互换友链原则、文章定期更新、不能有太多广告、个人描述字数控制在15字内</description>
+    </item>
+    
+    <item>
+      <title>🙋🏻‍♂️关于</title>
+      <link>https://liiqii.github.io/about/</link>
+      <pubDate>Sat, 06 Nov 2021 14:57:28 +0800</pubDate>
+      
+      <guid>https://liiqii.github.io/about/</guid>
+      <description>关于我 英文名: Klaus 职业: 程序员 爱好: 游戏</description>
+    </item>
+    
+    
+    
+  </channel>
+</rss>

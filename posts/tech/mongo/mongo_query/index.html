@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>mongo 查询 | Klaus</title>
+<meta name="keywords" content="mongo">
+<meta name="description" content="数据查询 find()方法 方法说明 find()方法没有参数时会匹配集合中的所有内容，find({})和find()功能一样 find({&quot;_id&quot;:1})表示查询_id字段为 1 的文档；find({&quot;_id&quot;:1,&quot;name&quot;">
+<meta name="author" content="liiqii">
+<link rel="canonical" href="https://liiqii.github.io/posts/tech/mongo/mongo_query/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.css" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.js" onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://liiqii.github.io/img/icon.jpg">
+<link rel="icon" type="image/png" sizes="16x16" href="https://liiqii.github.io/img/icon.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="https://liiqii.github.io/img/icon.jpg">
+<link rel="apple-touch-icon" href="https://liiqii.github.io/img/icon.jpg">
+<link rel="mask-icon" href="https://liiqii.github.io/img/icon.jpg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js"></script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = ""; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<meta property="og:title" content="mongo 查询" />
+<meta property="og:description" content="数据查询 find()方法 方法说明 find()方法没有参数时会匹配集合中的所有内容，find({})和find()功能一样 find({&quot;_id&quot;:1})表示查询_id字段为 1 的文档；find({&quot;_id&quot;:1,&quot;name&quot;" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liiqii.github.io/posts/tech/mongo/mongo_query/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-09-01T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-09-01T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="mongo 查询"/>
+<meta name="twitter:description" content="数据查询 find()方法 方法说明 find()方法没有参数时会匹配集合中的所有内容，find({})和find()功能一样 find({&quot;_id&quot;:1})表示查询_id字段为 1 的文档；find({&quot;_id&quot;:1,&quot;name&quot;"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+
+        {
+          "@type": "ListItem",
+          "position":  1 ,
+          "name": "📚文章",
+          "item": "https://liiqii.github.io/posts/"
+        },
+
+        {
+          "@type": "ListItem",
+          "position":  2 ,
+          "name": "👨🏻‍💻 技术",
+          "item": "https://liiqii.github.io/posts/tech/"
+        }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "mongo 查询",
+      "item": "https://liiqii.github.io/posts/tech/mongo/mongo_query/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "mongo 查询",
+  "name": "mongo 查询",
+  "description": "数据查询 find()方法 方法说明 find()方法没有参数时会匹配集合中的所有内容，find({})和find()功能一样 find({\u0026quot;_id\u0026quot;:1})表示查询_id字段为 1 的文档；find({\u0026quot;_id\u0026quot;:1,\u0026quot;name\u0026quot;",
+  "keywords": [
+    "mongo"
+  ],
+  "articleBody": "数据查询 find()方法 方法说明\nfind()方法没有参数时会匹配集合中的所有内容，find({})和find()功能一样 find({\"_id\":1})表示查询_id字段为 1 的文档；find({\"_id\":1,\"name\":\"salta\"})多个筛选条件表示为and的关系，表示查询_id=1 and name='salta'的文档；增加查询条件也一样 find({},{\"price\":0,\"_id\":0})表示从查询结果中剔除price和_id字段；find({},{\"name\":1,\"price\":1})表示从查询结果中只保留name和price字段。 find()方法中的筛选条件必须是常量 **注意：**第二个参数中如果是保留字段，则必须都是保留字段；如果是剔除字段，则必须都是剔除字段。否则 mongodb 会报错。但_id字段不受此规则限制，可以随意剔除。举例如下：\n//以下代码会报错 db.game.find( {}, { name: 1, price: 0, } ); //以下代码能正常运行 db.game.find( {}, { name: 1, _id: 0, } ); 运行效果如下：\n\u003e db.game.find({},{ ... \"name\":1, ... \"price\":0 ... }) Error: error: { \"ok\" : 0, \"errmsg\" : \"Cannot do exclusion on field price in inclusion projection\", \"code\" : 31254, \"codeName\" : \"Location31254\" } \u003e db.game.find({},{ ... \"name\":1, ... \"_id\":0 ... }) { \"name\" : \"salta legend\" } { \"name\" : \"monster hunter: rise\" } { \"name\" : \"monster hunter: world\" } { \"name\" : \"bayonetta\" } { \"name\" : \"nier replicant\" } { \"name\" : \"god of war\" } { \"name\" : \"Nioh 2\" } 条件查询 $lt,$lte,$gt,$gte,$ne $lt小于 $lte小于等于 $gt大于 $gte大于等于 $ne不等于,$ne可用于任意数据类型 以下代码用来查询价格大于 20,且价格小于等于 280 的 document\ndb.game.find({ price: { $gt: 20, $lte: 280, }, }); 运行效果如下:\n\u003e db.game.find({ ... \"price\":{ ... \"$gt\":20, ... \"$lte\":280 ... } ... }) { \"_id\" : 1, \"name\" : \"monster hunter: world\", \"price\" : 128, \"platform\" : [ \"steam\" ], \"comments\" : [ { \"author\" : \"xilia\", \"content\" : \"hello salta\", \"hidden\" : true }, { \"author\" : \"salta\" }, { \"author\" : \"link\" }, { \"author\" : \"link\" } ] } { \"_id\" : ObjectId(\"62ba596511721fa1455eb94b\"), \"name\" : \"nier replicant\", \"company\" : \"square enix\", \"price\" : 180 } { \"_id\" : ObjectId(\"62bd39540a71331919b6295e\"), \"name\" : \"god of war\", \"price\" : 30 } $or $or运算符用于表示两个是筛选条件是或的关系,以下代码用来筛选价格大于280或者价格小于等于20的document\ndb.game.find({\"$or\":[ {\"price\":{\"$gt\":280}}, {\"price\":{\"$lte\":20}} ]}) 代码运行效果如下:\n\u003e db.game.find({\"$or\":[ ... {\"price\":{\"$gt\":280}}, ... {\"price\":{\"$lte\":20}} ... ]}) { \"_id\" : ObjectId(\"62b9515ba8e0e5b80c720d94\"), \"name\" : \"salta legend\", \"orderDate\" : ISODate(\"2022-06-27T06:42:35.640Z\"), \"price\" : 327 } { \"_id\" : ObjectId(\"62ba565711721fa1455eb949\"), \"name\" : \"monster hunter: rise\", \"orderDate\" : ISODate(\"2022-06-28T01:16:07.114Z\"), \"price\" : 298 } { \"_id\" : ObjectId(\"62ba596511721fa1455eb94a\"), \"name\" : \"bayonetta\", \"company\" : \"nintendo\", \"price\" : 318 } $in和$nin $in用来筛选在某些列出的范围内的属性(和sql语句中的in关键字相同)\n$nin是not in的意思\n以下代码用来查询价格在[327,30]两个数字中的结果:\ndb.game.find({\"price\":{ \"$in\":[327,30] }}) 代码运行效果如下:\n\u003e db.game.find({\"price\":{ ... \"$in\":[327,30] ... }}) { \"_id\" : ObjectId(\"62b9515ba8e0e5b80c720d94\"), \"name\" : \"salta legend\", \"orderDate\" : ISODate(\"2022-06-27T06:42:35.640Z\"), \"price\" : 327 } { \"_id\" : ObjectId(\"62bd39540a71331919b6295e\"), \"name\" : \"god of war\", \"price\" : 30 } $mod $mod为取模运算符,以下代码用来筛选出 对price模3余0的document。\ndb.game.find({\"price\":{ \"$mod\":[3,0] }}) 代码运行效果为：\n\u003e db.game.find({\"price\":{ ... \"$mod\":[3,0] ... }}) { \"_id\" : ObjectId(\"62b9515ba8e0e5b80c720d94\"), \"name\" : \"salta legend\", \"orderDate\" : ISODate(\"2022-06-27T06:42:35.640Z\"), \"price\" : 327 } { \"_id\" : ObjectId(\"62ba596511721fa1455eb94a\"), \"name\" : \"bayonetta\", \"company\" : \"nintendo\", \"price\" : 318 } { \"_id\" : ObjectId(\"62ba596511721fa1455eb94b\"), \"name\" : \"nier replicant\", \"company\" : \"square enix\", \"price\" : 180 } { \"_id\" : ObjectId(\"62bd39540a71331919b6295e\"), \"name\" : \"god of war\", \"price\" : 30 } $not $not表示取反，可用于描述其他运算符，以下代码用来筛选出 不满足对price模3余0的document\ndb.game.find({\"price\":{ \"$not\":{ \"$mod\":[3,0] } }}) 代码运行效果如下：\n\u003e db.game.find({\"price\":{ ... \"$not\":{ ... \"$mod\":[3,0] ... } ... }}) { \"_id\" : ObjectId(\"62ba565711721fa1455eb949\"), \"name\" : \"monster hunter: rise\", \"orderDate\" : ISODate(\"2022-06-28T01:16:07.114Z\"), \"price\" : 298 } { \"_id\" : 1, \"name\" : \"monster hunter: world\", \"price\" : 128, \"platform\" : [ \"steam\" ], \"comments\" : [ { \"author\" : \"xilia\", \"content\" : \"hello salta\", \"hidden\" : true }, { \"author\" : \"salta\" }, { \"author\" : \"link\" }, { \"author\" : \"link\" } ] } { \"_id\" : ObjectId(\"62bd3d9f0a71331919b6297a\"), \"name\" : \"Nioh 2\", \"published\" : ISODate(\"2022-06-30T06:08:30.014Z\") } 类型查询 关于null类型的说明 当查询条件设置为{\"platform\":null}时，既可以查到platform=null的文档，也可以查到不存在platform字段的文档。如果只希望得到platform=null的文档，可以通过$exits条件确定该字段存在。\n以下代码用来筛选出platform字段存在，并且为空的文档：\ndb.game.find({\"platform\":{ \"$eq\":null, \"$exists\":true }}) 代码运行效果如下：\n\u003e db.game.insertMany([{name:\"it takes two\",platform:null},{name:\"naraka\",platform:\"\"},{name:\"gta5\"}]) { \"acknowledged\" : true, \"insertedIds\" : [ ObjectId(\"62be8e82718b6cda80d080aa\"), ObjectId(\"62be8e82718b6cda80d080ab\"), ObjectId(\"62be8e82718b6cda80d080ac\") ] } \u003e db.game.find({\"platform\":{ ... \"$eq\":null, ... \"$exists\":true ... }}) { \"_id\" : ObjectId(\"62be8e82718b6cda80d080aa\"), \"name\" : \"it takes two\", \"platform\" : null } 如果只进行null筛选，效果如下:\n\u003e db.game.find({\"platform\":null}) { \"_id\" : ObjectId(\"62b9515ba8e0e5b80c720d94\"), \"name\" : \"salta legend\", \"orderDate\" : ISODate(\"2022-06-27T06:42:35.640Z\"), \"price\" : 327 } { \"_id\" : ObjectId(\"62ba565711721fa1455eb949\"), \"name\" : \"monster hunter: rise\", \"orderDate\" : ISODate(\"2022-06-28T01:16:07.114Z\"), \"price\" : 298 } { \"_id\" : ObjectId(\"62ba596511721fa1455eb94a\"), \"name\" : \"bayonetta\", \"company\" : \"nintendo\", \"price\" : 318 } { \"_id\" : ObjectId(\"62ba596511721fa1455eb94b\"), \"name\" : \"nier replicant\", \"company\" : \"square enix\", \"price\" : 180 } { \"_id\" : ObjectId(\"62bd39540a71331919b6295e\"), \"name\" : \"god of war\", \"price\" : 30 } { \"_id\" : ObjectId(\"62bd3d9f0a71331919b6297a\"), \"name\" : \"Nioh 2\", \"published\" : ISODate(\"2022-06-30T06:08:30.014Z\") } { \"_id\" : ObjectId(\"62be8e82718b6cda80d080aa\"), \"name\" : \"it takes two\", \"platform\" : null } { \"_id\" : ObjectId(\"62be8e82718b6cda80d080ac\"), \"name\" : \"gta5\" } 正则表达式 $regex运算符用来在查询中对字符串进行正则表达时匹配，正则表达式也遵循JavaScript的正则表达式语法。如，以下代码用来查询name字段以n或N开头的文档：\ndb.game.find({\"name\":{ \"$regex\":/^n/i }}) 查询结果如下：\n\u003e db.game.find({\"name\":{ ... \"$regex\":/^n/i ... }}) { \"_id\" : ObjectId(\"62ba596511721fa1455eb94b\"), \"name\" : \"nier replicant\", \"company\" : \"square enix\", \"price\" : 180 } { \"_id\" : ObjectId(\"62bd3d9f0a71331919b6297a\"), \"name\" : \"Nioh 2\", \"published\" : ISODate(\"2022-06-30T06:08:30.014Z\") } { \"_id\" : ObjectId(\"62be8e82718b6cda80d080ab\"), \"name\" : \"naraka\", \"platform\" : \"\" } 数组查询 测试用法之前先新增数据：\ndb.game.updateOne( {name:\"naraka\"}, {$set:[ \"it is so good\", \"it is so pretty\", \"i am a old gamer\", \"it`s my like\", \"i like sanniang\" ]} ) 数组内容匹配方式：\n完全匹配整个数组\ndb.game.find({\"comments\":[\"abc\",\"def\"]})用来筛选出数组comments字段值为['abc','def']的文档，这种用法和精确匹配完全一样。\n匹配单个数组元素\ndb.game.find({\"comments\":\"it is so good\"})用来筛选出数组comments字段值中包含it is so good元素的文档\n匹配多个数组元素，$all\ndb.game.find({\"comments\":{\"all\":[\"it is so good\",\"i am a old gamer\"]}})用来筛选出数组元素中包含it is so good和i am a old gamer两个元素的文档。如果$all的数组中只有一个元素，那么使用$all和不适用$all结果一样，即：{\"author\":{\"$all\":[\"apple\"]}}和{\"author\":\"apple\"}的筛选结果完全一样\n匹配数组长度\n$size运算符用于匹配数组长度，但$size只能是常数，且$size不能和$lt等比较运算符同时使用。如果需要比较数组的长度，可以单独增加一个size字段，每次修改数组同时修改这个size字段，这在mongoDB中很容易实现。\ndb.game.find({\"comments\":{\"$size\":3}})用于筛选comments数组长度为3的文档。\n匹配数组元素对象的属性\ndb.game.find({\"comments.author\":\"salta\"})用于筛选comments数组中元素的author属性为salta的文档\n控制返回值数组的长度\n过滤返回值中显示的数组长度可以使用$slice修饰符，整数n表示返回前n条数据，负数n表示返回后n条数据。以下代码用于返回comments字段的前3个元素：\ndb.game.find( {\"name\":\"naraka\"}, {\"comments\":{\"$slice\":3}} ) 运行效果如下：\n\u003e db.game.find( ... {\"name\":\"naraka\"}, ... {\"comments\":{\"$slice\":3}} ... ) { \"_id\" : ObjectId(\"62be8e82718b6cda80d080ab\"), \"name\" : \"naraka\", \"platform\" : \"\", \"comments\" : [ \"it is so good\", \"it is so pretty\", \"i am a old gamer\" ] } 此方法也可以返回数组中的一段数据，以下代码会返回comments字段的第2~第4个元素（忽略前1个元素，从第2个开始返回3个元素）\ndb.game.find( {\"name\":\"naraka\"}, {\"comments\":{\"$slice\":[1,3]}} ) 显示效果如下：\n\u003e db.game.find( ... {\"name\":\"naraka\"}, ... {\"comments\":{\"$slice\":[1,3]}} ... ) { \"_id\" : ObjectId(\"62be8e82718b6cda80d080ab\"), \"name\" : \"naraka\", \"platform\" : \"\", \"comments\" : [ \"it is so pretty\", \"i am a old gamer\", \"it`s my like\" ] } 只返回数组中匹配到的第一个元素\n可以通过$$运算符来返回匹配到的元素，这种方法只能返回匹配到的第一个元素，返回值的数组中只有一个元素。以下代码用于筛选comments数组字段中的元素对象的author属性，返回值中只有_id和comments字段，且comments字段中只有匹配到的第一个元素。\ndb.game.find( {\"comments.author\":\"salta\"}, {\"comments.$\":1} ) 代码运行效果如下：\n\u003e db.game.find( ... {\"comments.author\":\"salta\"}, ... {\"comments.$\":1} ... ) { \"_id\" : 1, \"comments\" : [ { \"author\" : \"salta\" } ] } { \"_id\" : ObjectId(\"62be8e82718b6cda80d080ab\"), \"comments\" : [ { \"author\" : \"salta\", \"content\" : \"i am salta\" } ] } 数组与范围查询 有以下数据：\ndb.number.insertMany([ {\"num\":6}, {\"num\":66}, {\"num\":666}, {\"num\":[6,66]}, {\"num\":[6,666]}, {\"num\":[6,66,666]} ]) 有以下查询代码：\ndb.number.find({\"num\":{ \"$gt\":10, \"$lt\":100 }}) 此代码目的是查找 10 \u003c n u m \u003c 100 10",
+  "wordCount" : "5153",
+  "inLanguage": "zh",
+  "datePublished": "2023-09-01T00:00:00Z",
+  "dateModified": "2023-09-01T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "liiqii"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://liiqii.github.io/posts/tech/mongo/mongo_query/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Klaus",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://liiqii.github.io/img/icon.jpg"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    (function () {
+        let  arr,reg = new RegExp("(^| )"+"change-themes"+"=([^;]*)(;|$)");
+        if(arr = document.cookie.match(reg)) {
+        } else {
+            if (new Date().getHours() >= 19 || new Date().getHours() < 6) {
+                document.body.classList.add('dark');
+                localStorage.setItem("pref-theme", 'dark');
+            } else {
+                document.body.classList.remove('dark');
+                localStorage.setItem("pref-theme", 'light');
+            }
+        }
+    })()
+
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://liiqii.github.io/" accesskey="h" title="Home (Alt + H)">Home</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://liiqii.github.io/search" title="🔍 搜索 (Alt &#43; /)" accesskey=/>
+                <span>🔍 搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://liiqii.github.io/posts" title="📚 文章">
+                <span>📚 文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://liiqii.github.io/tags" title="🧩 标签">
+                <span>🧩 标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://liiqii.github.io/archives/" title="⏱️ 时间轴">
+                <span>⏱️ 时间轴</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main page">
+<style>
+    i[id*="post_meta_style"] {
+        display: flex;
+        align-items: center;
+        margin: 0 0 10px 0;
+    }
+</style>
+
+<article class="post-single">
+    <div id="single-content">
+        <header class="post-header">
+            
+            <h1 class="post-title">
+                mongo 查询
+            </h1>
+            <div class="post-meta">
+
+<style>
+    i[id*="post_meta_style"] {
+        display: flex;
+        align-items: center;
+        margin: 0 0 10px 0;
+    }
+
+    .parent-post-meta {
+        display: flex;
+        flex-wrap: wrap;
+        opacity: 0.8;
+    }
+</style>
+
+<span class="parent-post-meta">
+    <span id="post_meta_style_1">
+        <span class="fa fa-calendar-check-o"></span>
+        <span>2023-09-01
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    
+    
+    
+    
+    
+    
+    
+    <span id="post_meta_style_3">
+        <span class="fa fa-file-word-o"></span>
+        <span>5153字
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_4">
+        <span class="fa fa-clock-o"></span>
+        <span>11分钟
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_5">
+        <span class="fa fa-user-o"></span>
+        <span>liiqii
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_6">
+        <span class="fa fa-tags" style="opacity: 0.8"></span>
+        <span>
+            <span class="post-tags-meta">
+                <a href="https://liiqii.github.io/tags/mongo/" style="color: var(--secondary)!important;">mongo</a>
+            </span>
+        </span>
+    </span>
+</span>
+<span style="opacity: 0.8;">
+                    <span id="post_meta_style_7">
+                        &nbsp;&nbsp;
+                        <span class="fa fa-eye" ></span>
+                        <span>
+                            <span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+                            &nbsp;&nbsp;
+                        </span>
+                    </span>
+                    <span id="post_meta_style_8">
+                        <span class="fa fa-commenting-o"></span>
+                        <span>
+                            <script src="https://cdn.staticfile.org/twikoo/1.5.8/twikoo.all.min.js"></script>
+                            <script>
+                                let url = document.documentURI
+                                
+                                let dnsUrl = "https://liiqii.github.io/"
+                                let urlSplit = url.split(dnsUrl)
+                                let finalUrl = urlSplit[1]
+                                if (finalUrl[0] !== '/') {
+                                    finalUrl = '/'+finalUrl
+                                }
+                                twikoo.getCommentsCount({
+                                    envId:  null , 
+                                region:  null , 
+                                urls: [ 
+                                    
+                                    finalUrl,
+                                ],
+                                    includeReply: false 
+                                }).then(function (res) {
+                                    let count = res[0].count
+                                    const obj = document.getElementById("comment_count");
+                                    obj.innerText = count
+                                    
+                                    
+                                    
+                                }).catch(function (err) {
+                                    
+                                    console.error(err);
+                                });
+                            </script>
+                            <span id="comment_count"></span>
+                        </span>
+                    </span>
+                </span>
+
+</div>
+        </header> <aside id="toc-container" class="toc-container wide">
+    <div class="toc">
+        <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">目录</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#%e6%95%b0%e6%8d%ae%e6%9f%a5%e8%af%a2" aria-label="数据查询">数据查询</a><ul>
+                        
+                <li>
+                    <a href="#find%e6%96%b9%e6%b3%95" aria-label="find()方法"><code>find()</code>方法</a></li>
+                <li>
+                    <a href="#%e6%9d%a1%e4%bb%b6%e6%9f%a5%e8%af%a2" aria-label="条件查询">条件查询</a><ul>
+                        
+                <li>
+                    <a href="#ltltegtgtene" aria-label="$lt,$lte,$gt,$gte,$ne"><code>$lt</code>,<code>$lte</code>,<code>$gt</code>,<code>$gte</code>,<code>$ne</code></a></li>
+                <li>
+                    <a href="#or" aria-label="$or"><code>$or</code></a></li>
+                <li>
+                    <a href="#in%e5%92%8cnin" aria-label="$in和$nin"><code>$in</code>和<code>$nin</code></a></li>
+                <li>
+                    <a href="#mod" aria-label="$mod"><code>$mod</code></a></li>
+                <li>
+                    <a href="#not" aria-label="$not"><code>$not</code></a></li></ul>
+                </li>
+                <li>
+                    <a href="#%e7%b1%bb%e5%9e%8b%e6%9f%a5%e8%af%a2" aria-label="类型查询">类型查询</a><ul>
+                        
+                <li>
+                    <a href="#%e5%85%b3%e4%ba%8enull%e7%b1%bb%e5%9e%8b%e7%9a%84%e8%af%b4%e6%98%8e" aria-label="关于null类型的说明">关于null类型的说明</a></li>
+                <li>
+                    <a href="#%e6%ad%a3%e5%88%99%e8%a1%a8%e8%be%behttpssocsdnnetsosearchqe6ada3e58899e8a1a8e8bebespm1001210130017020%e5%bc%8f" aria-label="正则表达式"><a href="https://so.csdn.net/so/search?q=%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE&amp;spm=1001.2101.3001.7020">正则表达</a>式</a></li>
+                <li>
+                    <a href="#%e6%95%b0%e7%bb%84%e6%9f%a5%e8%af%a2" aria-label="数组查询">数组查询</a></li>
+                <li>
+                    <a href="#%e6%95%b0%e7%bb%84%e4%b8%8e%e8%8c%83%e5%9b%b4%e6%9f%a5%e8%af%a2" aria-label="数组与范围查询">数组与范围查询</a></li>
+                <li>
+                    <a href="#%e5%86%85%e5%b5%8c%e6%96%87%e6%a1%a3%e6%9f%a5%e8%af%a2" aria-label="内嵌文档查询">内嵌文档查询</a></li></ul>
+                </li>
+                <li>
+                    <a href="#where%e6%9f%a5%e8%af%a2" aria-label="$where查询"><code>$where</code>查询</a></li>
+                <li>
+                    <a href="#%e6%b8%b8%e6%a0%87" aria-label="游标">游标</a><ul>
+                        
+                <li>
+                    <a href="#%e6%b8%b8%e6%a0%87%e5%9f%ba%e7%a1%80" aria-label="游标基础">游标基础</a></li>
+                <li>
+                    <a href="#limitskipsort" aria-label="limit()、skip()、sort()"><code>limit()</code>、<code>skip()</code>、<code>sort()</code></a></li>
+                <li>
+                    <a href="#%e6%b8%b8%e6%a0%87%e7%9a%84%e7%94%9f%e5%91%bd%e5%91%a8%e6%9c%9f" aria-label="游标的生命周期">游标的生命周期</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+        </details>
+    </div>
+</aside>
+<script>
+    let activeElement;
+    let elements;
+    window.addEventListener('DOMContentLoaded', function (event) {
+        checkTocPosition();
+
+        elements = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]');
+        
+        activeElement = elements[0];
+        const id = encodeURI(activeElement.getAttribute('id')).toLowerCase();
+        document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+    }, false);
+
+    window.addEventListener('resize', function(event) {
+        checkTocPosition();
+    }, false);
+
+    window.addEventListener('scroll', () => {
+        
+        if (elements) {
+            activeElement = Array.from(elements).find((element) => {
+                if ((getOffsetTop(element) - window.pageYOffset) > 0 &&
+                    (getOffsetTop(element) - window.pageYOffset) < window.innerHeight/2) {
+                    return element;
+                }
+            }) || activeElement
+
+            elements.forEach(element => {
+                const id = encodeURI(element.getAttribute('id')).toLowerCase();
+                if (element === activeElement){
+                    document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+                } else {
+                    document.querySelector(`.inner ul li a[href="#${id}"]`).classList.remove('active');
+                }
+            })
+        }
+    }, false);
+
+    const main = parseInt(getComputedStyle(document.body).getPropertyValue('--article-width'), 10);
+    const toc = parseInt(getComputedStyle(document.body).getPropertyValue('--toc-width'), 10);
+    const gap = parseInt(getComputedStyle(document.body).getPropertyValue('--gap'), 10);
+
+    function checkTocPosition() {
+        const width = document.body.scrollWidth;
+        if (width - main - (toc * 2) - (gap * 4) > 0) {
+            document.getElementById("toc-container").classList.add("wide");
+        } else {
+            document.getElementById("toc-container").classList.remove("wide");
+        }
+    }
+
+    function getOffsetTop(element) {
+        if (!element.getClientRects().length) {
+            return 0;
+        }
+        let rect = element.getBoundingClientRect();
+        let win = element.ownerDocument.defaultView;
+        return rect.top + win.pageYOffset;
+    }
+</script>
+        <div class="post-content"><h1 id="数据查询">数据查询<a hidden class="anchor" aria-hidden="true" href="#数据查询">#</a></h1>
+<h2 id="find方法"><code>find()</code>方法<a hidden class="anchor" aria-hidden="true" href="#find方法">#</a></h2>
+<p><strong>方法说明</strong></p>
+<ol>
+<li><code>find()</code>方法没有参数时会匹配集合中的所有内容，<code>find({})</code>和<code>find()</code>功能一样</li>
+<li><code>find({&quot;_id&quot;:1})</code>表示查询<code>_id</code>字段为 1 的文档；<code>find({&quot;_id&quot;:1,&quot;name&quot;:&quot;salta&quot;})</code>多个筛选条件表示为<code>and</code>的关系，表示查询<code>_id=1 and name='salta'</code>的文档；增加查询条件也一样</li>
+<li><code>find({},{&quot;price&quot;:0,&quot;_id&quot;:0})</code>表示从查询结果中剔除<code>price</code>和<code>_id</code>字段；<code>find({},{&quot;name&quot;:1,&quot;price&quot;:1})</code>表示从查询结果中只保留<code>name</code>和<code>price</code>字段。</li>
+<li><code>find()</code>方法中的筛选条件必须是常量</li>
+</ol>
+<p>**注意：**第二个参数中如果是保留字段，则必须都是保留字段；如果是剔除字段，则必须都是剔除字段。否则 mongodb 会报错。但<code>_id</code>字段不受此规则限制，可以随意剔除。举例如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#75715e">//以下代码会报错
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">game</span>.<span style="color:#a6e22e">find</span>(
+</span></span><span style="display:flex;"><span>    {},
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">name</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">price</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//以下代码能正常运行
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">game</span>.<span style="color:#a6e22e">find</span>(
+</span></span><span style="display:flex;"><span>    {},
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">name</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">_id</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>);
+</span></span></code></pre></div><p>运行效果如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>&gt; db.game.find<span style="color:#f92672">({}</span>,<span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>...     <span style="color:#e6db74">&#34;name&#34;</span>:1,
+</span></span><span style="display:flex;"><span>...     <span style="color:#e6db74">&#34;price&#34;</span>:0
+</span></span><span style="display:flex;"><span>... <span style="color:#f92672">})</span>
+</span></span><span style="display:flex;"><span>Error: error: <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;ok&#34;</span> : 0,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;errmsg&#34;</span> : <span style="color:#e6db74">&#34;Cannot do exclusion on field price in inclusion projection&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;code&#34;</span> : 31254,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;codeName&#34;</span> : <span style="color:#e6db74">&#34;Location31254&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>&gt; db.game.find<span style="color:#f92672">({}</span>,<span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>...     <span style="color:#e6db74">&#34;name&#34;</span>:1,
+</span></span><span style="display:flex;"><span>...     <span style="color:#e6db74">&#34;_id&#34;</span>:0
+</span></span><span style="display:flex;"><span>... <span style="color:#f92672">})</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;salta legend&#34;</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;monster hunter: rise&#34;</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;monster hunter: world&#34;</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;bayonetta&#34;</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;nier replicant&#34;</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;god of war&#34;</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;Nioh 2&#34;</span> <span style="color:#f92672">}</span>
+</span></span></code></pre></div><h2 id="条件查询">条件查询<a hidden class="anchor" aria-hidden="true" href="#条件查询">#</a></h2>
+<h3 id="ltltegtgtene"><code>$lt</code>,<code>$lte</code>,<code>$gt</code>,<code>$gte</code>,<code>$ne</code><a hidden class="anchor" aria-hidden="true" href="#ltltegtgtene">#</a></h3>
+<ol>
+<li><code>$lt</code>小于</li>
+<li><code>$lte</code>小于等于</li>
+<li><code>$gt</code>大于</li>
+<li><code>$gte</code>大于等于</li>
+<li><code>$ne</code>不等于,<code>$ne</code>可用于任意数据类型</li>
+</ol>
+<p>以下代码用来查询价格大于 20,且价格小于等于 280 的 document</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">game</span>.<span style="color:#a6e22e">find</span>({
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">price</span><span style="color:#f92672">:</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">$gt</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">20</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">$lte</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">280</span>,
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>});
+</span></span></code></pre></div><p>运行效果如下:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>&gt; db.game.find<span style="color:#f92672">({</span>
+</span></span><span style="display:flex;"><span>...     <span style="color:#e6db74">&#34;price&#34;</span>:<span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>...         <span style="color:#e6db74">&#34;</span>$gt<span style="color:#e6db74">&#34;</span>:20,
+</span></span><span style="display:flex;"><span>...         <span style="color:#e6db74">&#34;</span>$lte<span style="color:#e6db74">&#34;</span>:280
+</span></span><span style="display:flex;"><span>...     <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>... <span style="color:#f92672">})</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : 1, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;monster hunter: world&#34;</span>, <span style="color:#e6db74">&#34;price&#34;</span> : 128, <span style="color:#e6db74">&#34;platform&#34;</span> : <span style="color:#f92672">[</span> <span style="color:#e6db74">&#34;steam&#34;</span> <span style="color:#f92672">]</span>, <span style="color:#e6db74">&#34;comments&#34;</span> : <span style="color:#f92672">[</span> <span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;author&#34;</span> : <span style="color:#e6db74">&#34;xilia&#34;</span>, <span style="color:#e6db74">&#34;content&#34;</span> : <span style="color:#e6db74">&#34;hello salta&#34;</span>, <span style="color:#e6db74">&#34;hidden&#34;</span> : true <span style="color:#f92672">}</span>, <span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;author&#34;</span> : <span style="color:#e6db74">&#34;salta&#34;</span> <span style="color:#f92672">}</span>, <span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;author&#34;</span> : <span style="color:#e6db74">&#34;link&#34;</span> <span style="color:#f92672">}</span>, <span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;author&#34;</span> : <span style="color:#e6db74">&#34;link&#34;</span> <span style="color:#f92672">}</span> <span style="color:#f92672">]</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62ba596511721fa1455eb94b&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;nier replicant&#34;</span>, <span style="color:#e6db74">&#34;company&#34;</span> : <span style="color:#e6db74">&#34;square enix&#34;</span>, <span style="color:#e6db74">&#34;price&#34;</span> : <span style="color:#ae81ff">180</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62bd39540a71331919b6295e&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;god of war&#34;</span>, <span style="color:#e6db74">&#34;price&#34;</span> : <span style="color:#ae81ff">30</span> <span style="color:#f92672">}</span>
+</span></span></code></pre></div><h3 id="or"><code>$or</code><a hidden class="anchor" aria-hidden="true" href="#or">#</a></h3>
+<p><code>$or</code>运算符用于表示两个是筛选条件是或的关系,以下代码用来筛选价格大于280或者价格小于等于20的document</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">game</span>.<span style="color:#a6e22e">find</span>({<span style="color:#e6db74">&#34;$or&#34;</span><span style="color:#f92672">:</span>[
+</span></span><span style="display:flex;"><span>    {<span style="color:#e6db74">&#34;price&#34;</span><span style="color:#f92672">:</span>{<span style="color:#e6db74">&#34;$gt&#34;</span><span style="color:#f92672">:</span><span style="color:#ae81ff">280</span>}},
+</span></span><span style="display:flex;"><span>    {<span style="color:#e6db74">&#34;price&#34;</span><span style="color:#f92672">:</span>{<span style="color:#e6db74">&#34;$lte&#34;</span><span style="color:#f92672">:</span><span style="color:#ae81ff">20</span>}}
+</span></span><span style="display:flex;"><span>]})
+</span></span></code></pre></div><p>代码运行效果如下:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>&gt; db.game.find<span style="color:#f92672">({</span><span style="color:#e6db74">&#34;</span>$or<span style="color:#e6db74">&#34;</span>:<span style="color:#f92672">[</span>
+</span></span><span style="display:flex;"><span>...     <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;price&#34;</span>:<span style="color:#f92672">{</span><span style="color:#e6db74">&#34;</span>$gt<span style="color:#e6db74">&#34;</span>:280<span style="color:#f92672">}}</span>,
+</span></span><span style="display:flex;"><span>...     <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;price&#34;</span>:<span style="color:#f92672">{</span><span style="color:#e6db74">&#34;</span>$lte<span style="color:#e6db74">&#34;</span>:20<span style="color:#f92672">}}</span>
+</span></span><span style="display:flex;"><span>... <span style="color:#f92672">]})</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62b9515ba8e0e5b80c720d94&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;salta legend&#34;</span>, <span style="color:#e6db74">&#34;orderDate&#34;</span> : ISODate<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;2022-06-27T06:42:35.640Z&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;price&#34;</span> : <span style="color:#ae81ff">327</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62ba565711721fa1455eb949&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;monster hunter: rise&#34;</span>, <span style="color:#e6db74">&#34;orderDate&#34;</span> : ISODate<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;2022-06-28T01:16:07.114Z&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;price&#34;</span> : <span style="color:#ae81ff">298</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62ba596511721fa1455eb94a&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;bayonetta&#34;</span>, <span style="color:#e6db74">&#34;company&#34;</span> : <span style="color:#e6db74">&#34;nintendo&#34;</span>, <span style="color:#e6db74">&#34;price&#34;</span> : <span style="color:#ae81ff">318</span> <span style="color:#f92672">}</span>
+</span></span></code></pre></div><h3 id="in和nin"><code>$in</code>和<code>$nin</code><a hidden class="anchor" aria-hidden="true" href="#in和nin">#</a></h3>
+<p><code>$in</code>用来筛选在某些列出的范围内的属性(和sql语句中的in关键字相同)<br>
+<code>$nin</code>是not in的意思<br>
+以下代码用来查询价格在[327,30]两个数字中的结果:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">game</span>.<span style="color:#a6e22e">find</span>({<span style="color:#e6db74">&#34;price&#34;</span><span style="color:#f92672">:</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;$in&#34;</span><span style="color:#f92672">:</span>[<span style="color:#ae81ff">327</span>,<span style="color:#ae81ff">30</span>]
+</span></span><span style="display:flex;"><span>}})
+</span></span></code></pre></div><p>代码运行效果如下:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>&gt; db.game.find<span style="color:#f92672">({</span><span style="color:#e6db74">&#34;price&#34;</span>:<span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>...     <span style="color:#e6db74">&#34;</span>$in<span style="color:#e6db74">&#34;</span>:<span style="color:#f92672">[</span>327,30<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>... <span style="color:#f92672">}})</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62b9515ba8e0e5b80c720d94&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;salta legend&#34;</span>, <span style="color:#e6db74">&#34;orderDate&#34;</span> : ISODate<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;2022-06-27T06:42:35.640Z&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;price&#34;</span> : <span style="color:#ae81ff">327</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62bd39540a71331919b6295e&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;god of war&#34;</span>, <span style="color:#e6db74">&#34;price&#34;</span> : <span style="color:#ae81ff">30</span> <span style="color:#f92672">}</span>
+</span></span></code></pre></div><h3 id="mod"><code>$mod</code><a hidden class="anchor" aria-hidden="true" href="#mod">#</a></h3>
+<p><code>$mod</code>为<a href="https://so.csdn.net/so/search?q=%E5%8F%96%E6%A8%A1%E8%BF%90%E7%AE%97&amp;spm=1001.2101.3001.7020">取模运算</a>符,以下代码用来筛选出 对price模3余0的document。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">game</span>.<span style="color:#a6e22e">find</span>({<span style="color:#e6db74">&#34;price&#34;</span><span style="color:#f92672">:</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;$mod&#34;</span><span style="color:#f92672">:</span>[<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>}})
+</span></span></code></pre></div><p>代码运行效果为：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>&gt; db.game.find<span style="color:#f92672">({</span><span style="color:#e6db74">&#34;price&#34;</span>:<span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>...     <span style="color:#e6db74">&#34;</span>$mod<span style="color:#e6db74">&#34;</span>:<span style="color:#f92672">[</span>3,0<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>... <span style="color:#f92672">}})</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62b9515ba8e0e5b80c720d94&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;salta legend&#34;</span>, <span style="color:#e6db74">&#34;orderDate&#34;</span> : ISODate<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;2022-06-27T06:42:35.640Z&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;price&#34;</span> : <span style="color:#ae81ff">327</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62ba596511721fa1455eb94a&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;bayonetta&#34;</span>, <span style="color:#e6db74">&#34;company&#34;</span> : <span style="color:#e6db74">&#34;nintendo&#34;</span>, <span style="color:#e6db74">&#34;price&#34;</span> : <span style="color:#ae81ff">318</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62ba596511721fa1455eb94b&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;nier replicant&#34;</span>, <span style="color:#e6db74">&#34;company&#34;</span> : <span style="color:#e6db74">&#34;square enix&#34;</span>, <span style="color:#e6db74">&#34;price&#34;</span> : <span style="color:#ae81ff">180</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62bd39540a71331919b6295e&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;god of war&#34;</span>, <span style="color:#e6db74">&#34;price&#34;</span> : <span style="color:#ae81ff">30</span> <span style="color:#f92672">}</span>
+</span></span></code></pre></div><h3 id="not"><code>$not</code><a hidden class="anchor" aria-hidden="true" href="#not">#</a></h3>
+<p><code>$not</code>表示取反，可用于描述其他运算符，以下代码用来筛选出 不满足对price模3余0的document</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">game</span>.<span style="color:#a6e22e">find</span>({<span style="color:#e6db74">&#34;price&#34;</span><span style="color:#f92672">:</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;$not&#34;</span><span style="color:#f92672">:</span>{
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;$mod&#34;</span><span style="color:#f92672">:</span>[<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}})
+</span></span></code></pre></div><p>代码运行效果如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>&gt; db.game.find<span style="color:#f92672">({</span><span style="color:#e6db74">&#34;price&#34;</span>:<span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>...     <span style="color:#e6db74">&#34;</span>$not<span style="color:#e6db74">&#34;</span>:<span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>...         <span style="color:#e6db74">&#34;</span>$mod<span style="color:#e6db74">&#34;</span>:<span style="color:#f92672">[</span>3,0<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>...     <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>... <span style="color:#f92672">}})</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62ba565711721fa1455eb949&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;monster hunter: rise&#34;</span>, <span style="color:#e6db74">&#34;orderDate&#34;</span> : ISODate<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;2022-06-28T01:16:07.114Z&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;price&#34;</span> : <span style="color:#ae81ff">298</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : 1, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;monster hunter: world&#34;</span>, <span style="color:#e6db74">&#34;price&#34;</span> : 128, <span style="color:#e6db74">&#34;platform&#34;</span> : <span style="color:#f92672">[</span> <span style="color:#e6db74">&#34;steam&#34;</span> <span style="color:#f92672">]</span>, <span style="color:#e6db74">&#34;comments&#34;</span> : <span style="color:#f92672">[</span> <span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;author&#34;</span> : <span style="color:#e6db74">&#34;xilia&#34;</span>, <span style="color:#e6db74">&#34;content&#34;</span> : <span style="color:#e6db74">&#34;hello salta&#34;</span>, <span style="color:#e6db74">&#34;hidden&#34;</span> : true <span style="color:#f92672">}</span>, <span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;author&#34;</span> : <span style="color:#e6db74">&#34;salta&#34;</span> <span style="color:#f92672">}</span>, <span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;author&#34;</span> : <span style="color:#e6db74">&#34;link&#34;</span> <span style="color:#f92672">}</span>, <span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;author&#34;</span> : <span style="color:#e6db74">&#34;link&#34;</span> <span style="color:#f92672">}</span> <span style="color:#f92672">]</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62bd3d9f0a71331919b6297a&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;Nioh 2&#34;</span>, <span style="color:#e6db74">&#34;published&#34;</span> : ISODate<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;2022-06-30T06:08:30.014Z&#34;</span><span style="color:#f92672">)</span> <span style="color:#f92672">}</span>
+</span></span></code></pre></div><h2 id="类型查询">类型查询<a hidden class="anchor" aria-hidden="true" href="#类型查询">#</a></h2>
+<h3 id="关于null类型的说明">关于null类型的说明<a hidden class="anchor" aria-hidden="true" href="#关于null类型的说明">#</a></h3>
+<p>当查询条件设置为<code>{&quot;platform&quot;:null}</code>时，既可以查到<code>platform=null</code>的文档，也可以查到不存在<code>platform</code>字段的文档。如果只希望得到<code>platform=null</code>的文档，可以通过<code>$exits</code>条件确定该字段存在。</p>
+<p>以下代码用来筛选出<code>platform</code>字段存在，并且为空的文档：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">game</span>.<span style="color:#a6e22e">find</span>({<span style="color:#e6db74">&#34;platform&#34;</span><span style="color:#f92672">:</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;$eq&#34;</span><span style="color:#f92672">:</span><span style="color:#66d9ef">null</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;$exists&#34;</span><span style="color:#f92672">:</span><span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>}})
+</span></span></code></pre></div><p>代码运行效果如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>&gt; db.game.insertMany<span style="color:#f92672">([{</span>name:<span style="color:#e6db74">&#34;it takes two&#34;</span>,platform:null<span style="color:#f92672">}</span>,<span style="color:#f92672">{</span>name:<span style="color:#e6db74">&#34;naraka&#34;</span>,platform:<span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">}</span>,<span style="color:#f92672">{</span>name:<span style="color:#e6db74">&#34;gta5&#34;</span><span style="color:#f92672">}])</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;acknowledged&#34;</span> : true,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;insertedIds&#34;</span> : <span style="color:#f92672">[</span>
+</span></span><span style="display:flex;"><span>                ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62be8e82718b6cda80d080aa&#34;</span><span style="color:#f92672">)</span>,
+</span></span><span style="display:flex;"><span>                ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62be8e82718b6cda80d080ab&#34;</span><span style="color:#f92672">)</span>,
+</span></span><span style="display:flex;"><span>                ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62be8e82718b6cda80d080ac&#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>&gt; db.game.find<span style="color:#f92672">({</span><span style="color:#e6db74">&#34;platform&#34;</span>:<span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>...     <span style="color:#e6db74">&#34;</span>$eq<span style="color:#e6db74">&#34;</span>:null,
+</span></span><span style="display:flex;"><span>...     <span style="color:#e6db74">&#34;</span>$exists<span style="color:#e6db74">&#34;</span>:true
+</span></span><span style="display:flex;"><span>... <span style="color:#f92672">}})</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62be8e82718b6cda80d080aa&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;it takes two&#34;</span>, <span style="color:#e6db74">&#34;platform&#34;</span> : null <span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>如果只进行null筛选，效果如下:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>&gt; db.game.find<span style="color:#f92672">({</span><span style="color:#e6db74">&#34;platform&#34;</span>:null<span style="color:#f92672">})</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62b9515ba8e0e5b80c720d94&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;salta legend&#34;</span>, <span style="color:#e6db74">&#34;orderDate&#34;</span> : ISODate<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;2022-06-27T06:42:35.640Z&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;price&#34;</span> : <span style="color:#ae81ff">327</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62ba565711721fa1455eb949&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;monster hunter: rise&#34;</span>, <span style="color:#e6db74">&#34;orderDate&#34;</span> : ISODate<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;2022-06-28T01:16:07.114Z&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;price&#34;</span> : <span style="color:#ae81ff">298</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62ba596511721fa1455eb94a&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;bayonetta&#34;</span>, <span style="color:#e6db74">&#34;company&#34;</span> : <span style="color:#e6db74">&#34;nintendo&#34;</span>, <span style="color:#e6db74">&#34;price&#34;</span> : <span style="color:#ae81ff">318</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62ba596511721fa1455eb94b&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;nier replicant&#34;</span>, <span style="color:#e6db74">&#34;company&#34;</span> : <span style="color:#e6db74">&#34;square enix&#34;</span>, <span style="color:#e6db74">&#34;price&#34;</span> : <span style="color:#ae81ff">180</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62bd39540a71331919b6295e&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;god of war&#34;</span>, <span style="color:#e6db74">&#34;price&#34;</span> : <span style="color:#ae81ff">30</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62bd3d9f0a71331919b6297a&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;Nioh 2&#34;</span>, <span style="color:#e6db74">&#34;published&#34;</span> : ISODate<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;2022-06-30T06:08:30.014Z&#34;</span><span style="color:#f92672">)</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62be8e82718b6cda80d080aa&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;it takes two&#34;</span>, <span style="color:#e6db74">&#34;platform&#34;</span> : null <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62be8e82718b6cda80d080ac&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;gta5&#34;</span> <span style="color:#f92672">}</span>
+</span></span></code></pre></div><h3 id="正则表达httpssocsdnnetsosearchqe6ada3e58899e8a1a8e8bebespm1001210130017020式"><a href="https://so.csdn.net/so/search?q=%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE&amp;spm=1001.2101.3001.7020">正则表达</a>式<a hidden class="anchor" aria-hidden="true" href="#正则表达httpssocsdnnetsosearchqe6ada3e58899e8a1a8e8bebespm1001210130017020式">#</a></h3>
+<p><code>$regex</code>运算符用来在查询中对字符串进行正则表达时匹配，正则表达式也遵循JavaScript的正则表达式语法。如，以下代码用来查询name字段以n或N开头的文档：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">game</span>.<span style="color:#a6e22e">find</span>({<span style="color:#e6db74">&#34;name&#34;</span><span style="color:#f92672">:</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;$regex&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">/^n/i</span>
+</span></span><span style="display:flex;"><span>}})
+</span></span></code></pre></div><p>查询结果如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>&gt; db.game.find<span style="color:#f92672">({</span><span style="color:#e6db74">&#34;name&#34;</span>:<span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>...     <span style="color:#e6db74">&#34;</span>$regex<span style="color:#e6db74">&#34;</span>:/^n/i
+</span></span><span style="display:flex;"><span>... <span style="color:#f92672">}})</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62ba596511721fa1455eb94b&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;nier replicant&#34;</span>, <span style="color:#e6db74">&#34;company&#34;</span> : <span style="color:#e6db74">&#34;square enix&#34;</span>, <span style="color:#e6db74">&#34;price&#34;</span> : <span style="color:#ae81ff">180</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62bd3d9f0a71331919b6297a&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;Nioh 2&#34;</span>, <span style="color:#e6db74">&#34;published&#34;</span> : ISODate<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;2022-06-30T06:08:30.014Z&#34;</span><span style="color:#f92672">)</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62be8e82718b6cda80d080ab&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;naraka&#34;</span>, <span style="color:#e6db74">&#34;platform&#34;</span> : <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#f92672">}</span>
+</span></span></code></pre></div><h3 id="数组查询">数组查询<a hidden class="anchor" aria-hidden="true" href="#数组查询">#</a></h3>
+<p>测试用法之前先新增数据：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">game</span>.<span style="color:#a6e22e">updateOne</span>(
+</span></span><span style="display:flex;"><span>    {<span style="color:#a6e22e">name</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;naraka&#34;</span>},
+</span></span><span style="display:flex;"><span>    {<span style="color:#a6e22e">$set</span><span style="color:#f92672">:</span>[
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;it is so good&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;it is so pretty&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;i am a old gamer&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;it`s my like&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;i like sanniang&#34;</span>
+</span></span><span style="display:flex;"><span>    ]}
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p><strong>数组内容匹配方式：</strong></p>
+<ol>
+<li>
+<p>完全匹配整个数组</p>
+<p><code>db.game.find({&quot;comments&quot;:[&quot;abc&quot;,&quot;def&quot;]})</code>用来筛选出数组<code>comments</code>字段值为<code>['abc','def']</code>的文档，这种用法和精确匹配完全一样。</p>
+</li>
+<li>
+<p>匹配单个数组元素</p>
+<p><code>db.game.find({&quot;comments&quot;:&quot;it is so good&quot;})</code>用来筛选出数组<code>comments</code>字段值中包含<code>it is so good</code>元素的文档</p>
+</li>
+<li>
+<p>匹配多个数组元素，<code>$all</code></p>
+<p><code>db.game.find({&quot;comments&quot;:{&quot;all&quot;:[&quot;it is so good&quot;,&quot;i am a old gamer&quot;]}})</code>用来筛选出数组元素中包含<code>it is so good</code>和<code>i am a old gamer</code>两个元素的文档。如果<code>$all</code>的数组中只有一个元素，那么使用<code>$all</code>和不适用<code>$all</code>结果一样，即：<code>{&quot;author&quot;:{&quot;$all&quot;:[&quot;apple&quot;]}}</code>和<code>{&quot;author&quot;:&quot;apple&quot;}</code>的筛选结果完全一样</p>
+</li>
+<li>
+<p>匹配数组长度</p>
+<p><code>$size</code>运算符用于匹配数组长度，但<code>$size</code>只能是常数，且<code>$size</code>不能和<code>$lt</code>等比较运算符同时使用。如果需要比较数组的长度，可以单独增加一个<code>size</code>字段，每次修改数组同时修改这个<code>size</code>字段，这在mongoDB中很容易实现。</p>
+<p><code>db.game.find({&quot;comments&quot;:{&quot;$size&quot;:3}})</code>用于筛选<code>comments</code>数组长度为3的文档。</p>
+</li>
+<li>
+<p>匹配数组元素对象的属性</p>
+<p><code>db.game.find({&quot;comments.author&quot;:&quot;salta&quot;})</code>用于筛选<code>comments</code>数组中元素的<code>author</code>属性为salta的文档</p>
+</li>
+</ol>
+<p><strong>控制返回值数组的长度</strong></p>
+<p>过滤返回值中显示的数组长度可以使用<code>$slice</code>修饰符，整数n表示返回前n条数据，负数n表示返回后n条数据。以下代码用于返回<code>comments</code>字段的前3个元素：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">game</span>.<span style="color:#a6e22e">find</span>(
+</span></span><span style="display:flex;"><span>    {<span style="color:#e6db74">&#34;name&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;naraka&#34;</span>},
+</span></span><span style="display:flex;"><span>    {<span style="color:#e6db74">&#34;comments&#34;</span><span style="color:#f92672">:</span>{<span style="color:#e6db74">&#34;$slice&#34;</span><span style="color:#f92672">:</span><span style="color:#ae81ff">3</span>}}
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p>运行效果如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>&gt; db.game.find<span style="color:#f92672">(</span>
+</span></span><span style="display:flex;"><span>...     <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;name&#34;</span>:<span style="color:#e6db74">&#34;naraka&#34;</span><span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>...     <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;comments&#34;</span>:<span style="color:#f92672">{</span><span style="color:#e6db74">&#34;</span>$slice<span style="color:#e6db74">&#34;</span>:3<span style="color:#f92672">}}</span>
+</span></span><span style="display:flex;"><span>... <span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62be8e82718b6cda80d080ab&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;naraka&#34;</span>, <span style="color:#e6db74">&#34;platform&#34;</span> : <span style="color:#e6db74">&#34;&#34;</span>, <span style="color:#e6db74">&#34;comments&#34;</span> : <span style="color:#f92672">[</span> <span style="color:#e6db74">&#34;it is so good&#34;</span>, <span style="color:#e6db74">&#34;it is so pretty&#34;</span>, <span style="color:#e6db74">&#34;i am a old gamer&#34;</span> <span style="color:#f92672">]</span> <span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>此方法也可以返回数组中的一段数据，以下代码会返回<code>comments</code>字段的第2~第4个元素（忽略前1个元素，从第2个开始返回3个元素）</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">game</span>.<span style="color:#a6e22e">find</span>(
+</span></span><span style="display:flex;"><span>    {<span style="color:#e6db74">&#34;name&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;naraka&#34;</span>},
+</span></span><span style="display:flex;"><span>    {<span style="color:#e6db74">&#34;comments&#34;</span><span style="color:#f92672">:</span>{<span style="color:#e6db74">&#34;$slice&#34;</span><span style="color:#f92672">:</span>[<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">3</span>]}}
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p>显示效果如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>&gt; db.game.find<span style="color:#f92672">(</span>
+</span></span><span style="display:flex;"><span>...     <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;name&#34;</span>:<span style="color:#e6db74">&#34;naraka&#34;</span><span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>...     <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;comments&#34;</span>:<span style="color:#f92672">{</span><span style="color:#e6db74">&#34;</span>$slice<span style="color:#e6db74">&#34;</span>:<span style="color:#f92672">[</span>1,3<span style="color:#f92672">]}}</span>
+</span></span><span style="display:flex;"><span>... <span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62be8e82718b6cda80d080ab&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;naraka&#34;</span>, <span style="color:#e6db74">&#34;platform&#34;</span> : <span style="color:#e6db74">&#34;&#34;</span>, <span style="color:#e6db74">&#34;comments&#34;</span> : <span style="color:#f92672">[</span> <span style="color:#e6db74">&#34;it is so pretty&#34;</span>, <span style="color:#e6db74">&#34;i am a old gamer&#34;</span>, <span style="color:#e6db74">&#34;it`s my like&#34;</span> <span style="color:#f92672">]</span> <span style="color:#f92672">}</span>
+</span></span></code></pre></div><p><strong>只返回数组中匹配到的第一个元素</strong></p>
+<p>可以通过<code>$$</code>运算符来返回匹配到的元素，这种方法只能返回匹配到的第一个元素，返回值的数组中只有一个元素。以下代码用于筛选<code>comments</code>数组字段中的元素对象的<code>author</code>属性，返回值中只有<code>_id</code>和<code>comments</code>字段，且<code>comments</code>字段中只有匹配到的第一个元素。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">game</span>.<span style="color:#a6e22e">find</span>(
+</span></span><span style="display:flex;"><span>	{<span style="color:#e6db74">&#34;comments.author&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;salta&#34;</span>},
+</span></span><span style="display:flex;"><span>    {<span style="color:#e6db74">&#34;comments.$&#34;</span><span style="color:#f92672">:</span><span style="color:#ae81ff">1</span>}
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p>代码运行效果如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>&gt; db.game.find<span style="color:#f92672">(</span>
+</span></span><span style="display:flex;"><span>... <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;comments.author&#34;</span>:<span style="color:#e6db74">&#34;salta&#34;</span><span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>...     <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;comments.</span>$<span style="color:#e6db74">&#34;</span>:1<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>... <span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : 1, <span style="color:#e6db74">&#34;comments&#34;</span> : <span style="color:#f92672">[</span> <span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;author&#34;</span> : <span style="color:#e6db74">&#34;salta&#34;</span> <span style="color:#f92672">}</span> <span style="color:#f92672">]</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62be8e82718b6cda80d080ab&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;comments&#34;</span> : <span style="color:#f92672">[</span> <span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;author&#34;</span> : <span style="color:#e6db74">&#34;salta&#34;</span>, <span style="color:#e6db74">&#34;content&#34;</span> : <span style="color:#e6db74">&#34;i am salta&#34;</span> <span style="color:#f92672">}</span> <span style="color:#f92672">]</span> <span style="color:#f92672">}</span>
+</span></span></code></pre></div><h3 id="数组与范围查询">数组与范围查询<a hidden class="anchor" aria-hidden="true" href="#数组与范围查询">#</a></h3>
+<p>有以下数据：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">number</span>.<span style="color:#a6e22e">insertMany</span>([
+</span></span><span style="display:flex;"><span>    {<span style="color:#e6db74">&#34;num&#34;</span><span style="color:#f92672">:</span><span style="color:#ae81ff">6</span>},
+</span></span><span style="display:flex;"><span>	{<span style="color:#e6db74">&#34;num&#34;</span><span style="color:#f92672">:</span><span style="color:#ae81ff">66</span>},
+</span></span><span style="display:flex;"><span>	{<span style="color:#e6db74">&#34;num&#34;</span><span style="color:#f92672">:</span><span style="color:#ae81ff">666</span>},
+</span></span><span style="display:flex;"><span>	{<span style="color:#e6db74">&#34;num&#34;</span><span style="color:#f92672">:</span>[<span style="color:#ae81ff">6</span>,<span style="color:#ae81ff">66</span>]},
+</span></span><span style="display:flex;"><span>	{<span style="color:#e6db74">&#34;num&#34;</span><span style="color:#f92672">:</span>[<span style="color:#ae81ff">6</span>,<span style="color:#ae81ff">666</span>]},
+</span></span><span style="display:flex;"><span>	{<span style="color:#e6db74">&#34;num&#34;</span><span style="color:#f92672">:</span>[<span style="color:#ae81ff">6</span>,<span style="color:#ae81ff">66</span>,<span style="color:#ae81ff">666</span>]}
+</span></span><span style="display:flex;"><span>])
+</span></span></code></pre></div><p>有以下查询代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">number</span>.<span style="color:#a6e22e">find</span>({<span style="color:#e6db74">&#34;num&#34;</span><span style="color:#f92672">:</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;$gt&#34;</span><span style="color:#f92672">:</span><span style="color:#ae81ff">10</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;$lt&#34;</span><span style="color:#f92672">:</span><span style="color:#ae81ff">100</span>
+</span></span><span style="display:flex;"><span>}})
+</span></span></code></pre></div><p>此代码目的是查找 10 &lt; n u m &lt; 100 10&lt;num&lt;100 10&lt;num&lt;100的数据，期望能返回的数据为：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{<span style="color:#f92672">&#34;num&#34;</span>:<span style="color:#ae81ff">66</span>}<span style="color:#960050;background-color:#1e0010">,</span>
+</span></span></code></pre></div><p>但，实际返回的数据为：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{<span style="color:#f92672">&#34;num&#34;</span> : <span style="color:#ae81ff">66</span> }
+</span></span><span style="display:flex;"><span>{<span style="color:#f92672">&#34;num&#34;</span> : [ <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">66</span> ] }
+</span></span><span style="display:flex;"><span>{<span style="color:#f92672">&#34;num&#34;</span> : [ <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">666</span> ] }
+</span></span><span style="display:flex;"><span>{<span style="color:#f92672">&#34;num&#34;</span> : [ <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">66</span>, <span style="color:#ae81ff">666</span> ] }
+</span></span></code></pre></div><p>因为，在数组的比较中，满足<code>6&lt;100</code> 和<code>666&gt;66&gt;10</code>，所以实际返回值和期望返回值产生了差别，这就使得针对数组的范围查询失效。</p>
+<p>这种现象可以通过<code>$elemMatch</code>表达式解决，但是<code>$elemMatch</code>表达式只能匹配数组元素，对于非数组元素回被跳过。效果如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>&gt; db.number.find<span style="color:#f92672">()</span>.pretty<span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62beb40a718b6cda80d080ad&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;num&#34;</span> : <span style="color:#ae81ff">6</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62beb40a718b6cda80d080ae&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;num&#34;</span> : <span style="color:#ae81ff">66</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62beb40a718b6cda80d080af&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;num&#34;</span> : <span style="color:#ae81ff">666</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62beb40a718b6cda80d080b0&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;num&#34;</span> : <span style="color:#f92672">[</span> 6, <span style="color:#ae81ff">66</span> <span style="color:#f92672">]</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62beb40a718b6cda80d080b1&#34;</span><span style="color:#f92672">)</span>, <span style="color:#e6db74">&#34;num&#34;</span> : <span style="color:#f92672">[</span> 6, <span style="color:#ae81ff">666</span> <span style="color:#f92672">]</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;_id&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;62beb40a718b6cda80d080b2&#34;</span><span style="color:#f92672">)</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;num&#34;</span> : <span style="color:#f92672">[</span>
+</span></span><span style="display:flex;"><span>                6,
+</span></span><span style="display:flex;"><span>                66,
+</span></span><span style="display:flex;"><span>                <span style="color:#ae81ff">666</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>&gt; db.number.find<span style="color:#f92672">({</span><span style="color:#e6db74">&#34;num&#34;</span>:<span style="color:#f92672">{</span><span style="color:#e6db74">&#34;</span>$elemMatch<span style="color:#e6db74">&#34;</span>:<span style="color:#f92672">{</span><span style="color:#e6db74">&#34;</span>$gt<span style="color:#e6db74">&#34;</span>:10,<span style="color:#e6db74">&#34;</span>$lt<span style="color:#e6db74">&#34;</span>:100<span style="color:#f92672">}}})</span>
+</span></span><span style="display:flex;"><span>&gt; //查询结果为空。可见，<span style="color:#f92672">{</span><span style="color:#e6db74">&#34;num&#34;</span>:66<span style="color:#f92672">}</span>未参与筛选
+</span></span></code></pre></div><p>对于以上现象，可以通过对<code>num</code>字段添加索引，之后使用min和max方法将筛选条件的索引范围限制在最大和最小值之间的形式予以解决。具体代码如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#75715e">//已对num字段创建索引
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">number</span>.<span style="color:#a6e22e">find</span>({<span style="color:#e6db74">&#34;num&#34;</span><span style="color:#f92672">:</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;$gt&#34;</span><span style="color:#f92672">:</span><span style="color:#ae81ff">10</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;$lt&#34;</span><span style="color:#f92672">:</span><span style="color:#ae81ff">100</span>
+</span></span><span style="display:flex;"><span>}}).<span style="color:#a6e22e">min</span>({<span style="color:#e6db74">&#34;num&#34;</span><span style="color:#f92672">:</span><span style="color:#ae81ff">10</span>}).<span style="color:#a6e22e">max</span>({<span style="color:#e6db74">&#34;num&#34;</span><span style="color:#f92672">:</span><span style="color:#ae81ff">100</span>})
+</span></span></code></pre></div><h3 id="内嵌文档查询">内嵌文档查询<a hidden class="anchor" aria-hidden="true" href="#内嵌文档查询">#</a></h3>
+<p>如果想要通过以下方式查询一个子文档，那么这个被查询必须精确的匹配整个文档（包括各个属性的顺序）。即，如果文档的内容为<code>{&quot;author&quot;:&quot;xilia&quot;,&quot;content&quot;:&quot;hello salta&quot;}</code>，则能匹配成功；但是如果文档中存在更多其他的属性，如<code>{&quot;author&quot;:&quot;xilia&quot;,&quot;content&quot;:&quot;hello salta&quot;,&quot;hidden&quot;:true}</code>则这种匹配方式不能查询出对应的结果。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">game</span>.<span style="color:#a6e22e">find</span>({<span style="color:#e6db74">&#34;comments&#34;</span><span style="color:#f92672">:</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;author&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;xilia&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;content&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;hello salta&#34;</span>
+</span></span><span style="display:flex;"><span>}})
+</span></span></code></pre></div><p>更重要的一点是，除了需要匹配整个文档之外，这种查询方式还是强顺序相关的，两个条件的顺序必须符合要求才能成功匹配。</p>
+<p>在这中情况下，需要使用<strong>点调用</strong><sup><a href="https://blog.csdn.net/qq_43408971/article/details/125608311#fn1" id="fnref1" target="_self">1</a></sup>的方式</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">game</span>.<span style="color:#a6e22e">find</span>({
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;comments.author&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;xilia&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;comments.content&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;hello salta&#34;</span>
+</span></span><span style="display:flex;"><span>})
+</span></span></code></pre></div><p>效果如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>&gt; db.game.find<span style="color:#f92672">({</span><span style="color:#e6db74">&#34;comments&#34;</span>:<span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>...     <span style="color:#e6db74">&#34;author&#34;</span>:<span style="color:#e6db74">&#34;xilia&#34;</span>,
+</span></span><span style="display:flex;"><span>...     <span style="color:#e6db74">&#34;content&#34;</span>:<span style="color:#e6db74">&#34;hello salta&#34;</span>
+</span></span><span style="display:flex;"><span>... <span style="color:#f92672">}})</span>
+</span></span><span style="display:flex;"><span>&gt; db.game.find<span style="color:#f92672">({</span>
+</span></span><span style="display:flex;"><span>...     <span style="color:#e6db74">&#34;comments.author&#34;</span>:<span style="color:#e6db74">&#34;xilia&#34;</span>,
+</span></span><span style="display:flex;"><span>...     <span style="color:#e6db74">&#34;comments.content&#34;</span>:<span style="color:#e6db74">&#34;hello salta&#34;</span>
+</span></span><span style="display:flex;"><span>... <span style="color:#f92672">})</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;_id&#34;</span> : 1, <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;monster hunter: world&#34;</span>, <span style="color:#e6db74">&#34;price&#34;</span> : 128, <span style="color:#e6db74">&#34;platform&#34;</span> : <span style="color:#f92672">[</span> <span style="color:#e6db74">&#34;steam&#34;</span> <span style="color:#f92672">]</span>, <span style="color:#e6db74">&#34;comments&#34;</span> : <span style="color:#f92672">[</span> <span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;author&#34;</span> : <span style="color:#e6db74">&#34;xilia&#34;</span>, <span style="color:#e6db74">&#34;content&#34;</span> : <span style="color:#e6db74">&#34;hello salta&#34;</span>, <span style="color:#e6db74">&#34;hidden&#34;</span> : true <span style="color:#f92672">}</span>, <span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;author&#34;</span> : <span style="color:#e6db74">&#34;salta&#34;</span> <span style="color:#f92672">}</span>, <span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;author&#34;</span> : <span style="color:#e6db74">&#34;link&#34;</span> <span style="color:#f92672">}</span>, <span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;author&#34;</span> : <span style="color:#e6db74">&#34;link&#34;</span> <span style="color:#f92672">}</span> <span style="color:#f92672">]</span> <span style="color:#f92672">}</span>
+</span></span></code></pre></div><h2 id="where查询"><code>$where</code>查询<a hidden class="anchor" aria-hidden="true" href="#where查询">#</a></h2>
+<p>对于有些特殊的查询，无法通过以上任何一种方式表示出来，mongoDB提供了<code>$where子句</code>这种查询方式。<code>$where子句</code>允许在查询中执行JavaScript代码，这样就能在JavaScript代码中执行某些特殊的比较逻辑。但是为了安全和效率的要求，应该尽量减少或消除使用<code>$where</code>，并且禁止普通用户使用。</p>
+<p>在<code>$where</code>查询过程中，每个文档都必须从<code>BSON</code>转换成<code>JavaScript对象</code>，而且<code>$where</code>查询也不能使用索引，所以有很大的性能问题。</p>
+<p>具体使用方法如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * 查询文档中存在两个字段满足以下条件：
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * 1.其中一个字段是日期类型，并且时间在当前日期之前；
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * 2.另一个字段是数字类型，并且这个数字小于300。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">game</span>.<span style="color:#a6e22e">find</span>({<span style="color:#e6db74">&#34;$where&#34;</span><span style="color:#f92672">:</span><span style="color:#66d9ef">function</span>(){
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">param_1</span> <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">this</span>){
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">param_2</span> <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">this</span>){
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">this</span>[<span style="color:#a6e22e">param_1</span>]<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">new</span> Date() <span style="color:#f92672">&amp;&amp;</span> <span style="color:#66d9ef">this</span>[<span style="color:#a6e22e">param_2</span>]<span style="color:#f92672">&lt;</span><span style="color:#ae81ff">300</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span>}}).<span style="color:#a6e22e">pretty</span>()
+</span></span></code></pre></div><p>执行效果如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>&gt; db.game.find<span style="color:#f92672">({</span><span style="color:#e6db74">&#34;</span>$where<span style="color:#e6db74">&#34;</span>:function<span style="color:#f92672">(){</span>
+</span></span><span style="display:flex;"><span>...     <span style="color:#66d9ef">for</span><span style="color:#f92672">(</span>var param_1 in this<span style="color:#f92672">){</span>
+</span></span><span style="display:flex;"><span>...         <span style="color:#66d9ef">for</span><span style="color:#f92672">(</span>var param_2 in this<span style="color:#f92672">){</span>
+</span></span><span style="display:flex;"><span>...             <span style="color:#66d9ef">return</span> this<span style="color:#f92672">[</span>param_1<span style="color:#f92672">]</span>&lt;new Date<span style="color:#f92672">()</span> <span style="color:#f92672">&amp;&amp;</span> this<span style="color:#f92672">[</span>param_2<span style="color:#f92672">]</span>&lt;300;
+</span></span><span style="display:flex;"><span>...         <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>...     <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>...     <span style="color:#66d9ef">return</span> false;
+</span></span><span style="display:flex;"><span>... <span style="color:#f92672">}})</span>.pretty<span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;_id&#34;</span> : 1,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;monster hunter: world&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;price&#34;</span> : 128,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;platform&#34;</span> : <span style="color:#f92672">[</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;steam&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">]</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;comments&#34;</span> : <span style="color:#f92672">[</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                        <span style="color:#e6db74">&#34;author&#34;</span> : <span style="color:#e6db74">&#34;xilia&#34;</span>,
+</span></span><span style="display:flex;"><span>                        <span style="color:#e6db74">&#34;content&#34;</span> : <span style="color:#e6db74">&#34;hello salta&#34;</span>,
+</span></span><span style="display:flex;"><span>                        <span style="color:#e6db74">&#34;hidden&#34;</span> : true
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                        <span style="color:#e6db74">&#34;author&#34;</span> : <span style="color:#e6db74">&#34;salta&#34;</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                        <span style="color:#e6db74">&#34;author&#34;</span> : <span style="color:#e6db74">&#34;link&#34;</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                        <span style="color:#e6db74">&#34;author&#34;</span> : <span style="color:#e6db74">&#34;link&#34;</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><h2 id="游标">游标<a hidden class="anchor" aria-hidden="true" href="#游标">#</a></h2>
+<h3 id="游标基础">游标基础<a hidden class="anchor" aria-hidden="true" href="#游标基础">#</a></h3>
+<p><code>find()</code>方法的返回值是一个游标对象，通过对游标对象的各种操作，可以对查询结果进行输出控制。（在mongoDBshell中执行<code>find()</code>方法的打印操作是shell自动执行的结果）游标对象提供了<code>hasNex()</code>和<code>next()</code>两个方法，典型的使用方式为：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">cursor</span><span style="color:#f92672">=</span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">game</span>.<span style="color:#a6e22e">find</span>()
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">while</span>(<span style="color:#a6e22e">cursor</span>.<span style="color:#a6e22e">hasNext</span>()){
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">item</span><span style="color:#f92672">=</span><span style="color:#a6e22e">cursor</span>.<span style="color:#a6e22e">next</span>()
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">print</span>(<span style="color:#a6e22e">item</span>.<span style="color:#a6e22e">name</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>同时游标对象也实现了迭代器接口，可以在<code>forEach()</code>方法中进行操作，使用方式如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">cursor</span><span style="color:#f92672">=</span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">game</span>.<span style="color:#a6e22e">find</span>();
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">cursor</span>.<span style="color:#a6e22e">forEach</span>(<span style="color:#a6e22e">res</span>=&gt;{
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">print</span>(<span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">name</span>)
+</span></span><span style="display:flex;"><span>})
+</span></span></code></pre></div><p><strong>注意</strong>：当调用<code>find()</code>方法时，shell并不会立即执行查询操作，而是真正开始获取结果时才执行查询操作。所以可以在查询之前进行一些额外的操作，如：排序、分页、限制长度等，这些操作的返回值仍然是一个游标对象。</p>
+<p>因此，以下三行代码返回的数据相同：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">game</span>.<span style="color:#a6e22e">find</span>().<span style="color:#a6e22e">sort</span>({<span style="color:#e6db74">&#34;price&#34;</span><span style="color:#f92672">:</span><span style="color:#ae81ff">1</span>}).<span style="color:#a6e22e">limit</span>(<span style="color:#ae81ff">3</span>).<span style="color:#a6e22e">skip</span>(<span style="color:#ae81ff">2</span>).<span style="color:#a6e22e">pretty</span>();
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">game</span>.<span style="color:#a6e22e">find</span>().<span style="color:#a6e22e">sort</span>({<span style="color:#e6db74">&#34;price&#34;</span><span style="color:#f92672">:</span><span style="color:#ae81ff">1</span>}).<span style="color:#a6e22e">skip</span>(<span style="color:#ae81ff">2</span>).<span style="color:#a6e22e">limit</span>(<span style="color:#ae81ff">3</span>).<span style="color:#a6e22e">pretty</span>();
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">game</span>.<span style="color:#a6e22e">find</span>().<span style="color:#a6e22e">limit</span>(<span style="color:#ae81ff">3</span>).<span style="color:#a6e22e">sort</span>({<span style="color:#e6db74">&#34;price&#34;</span><span style="color:#f92672">:</span><span style="color:#ae81ff">1</span>}).<span style="color:#a6e22e">skip</span>(<span style="color:#ae81ff">2</span>).<span style="color:#a6e22e">pretty</span>();
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">game</span>.<span style="color:#a6e22e">find</span>().<span style="color:#a6e22e">limit</span>(<span style="color:#ae81ff">3</span>).<span style="color:#a6e22e">skip</span>(<span style="color:#ae81ff">2</span>).<span style="color:#a6e22e">sort</span>({<span style="color:#e6db74">&#34;price&#34;</span><span style="color:#f92672">:</span><span style="color:#ae81ff">1</span>}).<span style="color:#a6e22e">pretty</span>();
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">game</span>.<span style="color:#a6e22e">find</span>().<span style="color:#a6e22e">skip</span>(<span style="color:#ae81ff">2</span>).<span style="color:#a6e22e">limit</span>(<span style="color:#ae81ff">3</span>).<span style="color:#a6e22e">sort</span>({<span style="color:#e6db74">&#34;price&#34;</span><span style="color:#f92672">:</span><span style="color:#ae81ff">1</span>}).<span style="color:#a6e22e">pretty</span>();
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">game</span>.<span style="color:#a6e22e">find</span>().<span style="color:#a6e22e">skip</span>(<span style="color:#ae81ff">2</span>).<span style="color:#a6e22e">sort</span>({<span style="color:#e6db74">&#34;price&#34;</span><span style="color:#f92672">:</span><span style="color:#ae81ff">1</span>}).<span style="color:#a6e22e">limit</span>(<span style="color:#ae81ff">3</span>).<span style="color:#a6e22e">pretty</span>();
+</span></span></code></pre></div><p>当<code>hasNext()</code>方法被调用后，查询条件会发送到服务端，之后shell会获取一段查询结果（这里的一段是100个结果或4MB数据中的较小值），在客户端遍历完这些数据后，shell会再次链接数据库，使用<code>getMore</code>获取更多数据。</p>
+<h3 id="limitskipsort"><code>limit()</code>、<code>skip()</code>、<code>sort()</code><a hidden class="anchor" aria-hidden="true" href="#limitskipsort">#</a></h3>
+<p>这三个函数的使用方法如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#75715e">//限制只返回三个结果
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">game</span>.<span style="color:#a6e22e">find</span>().<span style="color:#a6e22e">limit</span>(<span style="color:#ae81ff">3</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//跳过前三条数据
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">game</span>.<span style="color:#a6e22e">find</span>().<span style="color:#a6e22e">skip</span>(<span style="color:#ae81ff">3</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//按价格升序排序，-1表示降序
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">game</span>.<span style="color:#a6e22e">find</span>().<span style="color:#a6e22e">sort</span>({<span style="color:#e6db74">&#34;price&#34;</span><span style="color:#f92672">:</span><span style="color:#ae81ff">1</span>})
+</span></span></code></pre></div><p>以上三个方法可以结合使用。对于一个字段的数据包含多种类型时，mongoDB预设了排序顺序，从最小值到最大值顺序为：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">最小值</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">null</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">数字</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">字符串</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">对象、文档</td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td style="text-align:center">数组</td>
+</tr>
+<tr>
+<td style="text-align:center">7</td>
+<td style="text-align:center">二进制数据</td>
+</tr>
+<tr>
+<td style="text-align:center">8</td>
+<td style="text-align:center">对象ID</td>
+</tr>
+<tr>
+<td style="text-align:center">9</td>
+<td style="text-align:center">布尔</td>
+</tr>
+<tr>
+<td style="text-align:center">10</td>
+<td style="text-align:center">日期</td>
+</tr>
+<tr>
+<td style="text-align:center">11</td>
+<td style="text-align:center">时间戳</td>
+</tr>
+<tr>
+<td style="text-align:center">12</td>
+<td style="text-align:center">正则表达式</td>
+</tr>
+<tr>
+<td style="text-align:center">13</td>
+<td style="text-align:center">最大值</td>
+</tr>
+</tbody>
+</table>
+<p><strong>注意</strong>：当<code>skip()</code>方法跳过大量数据时会产生性能问题，所以对于大数据量的分页操作，通常不用<code>skip()</code>方法实现。假设有一个需求，需要使用<code>create_date</code>字段降序排列，可以通过如下方式操作：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">page_1</span><span style="color:#f92672">=</span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">game</span>.<span style="color:#a6e22e">find</span>().<span style="color:#a6e22e">sort</span>({<span style="color:#e6db74">&#34;create_date&#34;</span><span style="color:#f92672">:-</span><span style="color:#ae81ff">1</span>}).<span style="color:#a6e22e">limit</span>(<span style="color:#ae81ff">20</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">latest</span><span style="color:#f92672">=</span><span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">while</span>(<span style="color:#a6e22e">page_1</span>.<span style="color:#a6e22e">hasNext</span>()){
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">latest</span><span style="color:#f92672">=</span><span style="color:#a6e22e">page_1</span>.<span style="color:#a6e22e">next</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//do sth
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">page_2</span><span style="color:#f92672">=</span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">game</span>.<span style="color:#a6e22e">find</span>({
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;create_date&#34;</span><span style="color:#f92672">:</span>{<span style="color:#e6db74">&#34;$lt&#34;</span><span style="color:#f92672">:</span><span style="color:#a6e22e">latest</span>.<span style="color:#a6e22e">create_date</span>}
+</span></span><span style="display:flex;"><span>}).<span style="color:#a6e22e">sort</span>({<span style="color:#e6db74">&#34;create_date&#34;</span><span style="color:#f92672">:-</span><span style="color:#ae81ff">1</span>}).<span style="color:#a6e22e">limit</span>(<span style="color:#ae81ff">100</span>)
+</span></span></code></pre></div><h3 id="游标的生命周期">游标的生命周期<a hidden class="anchor" aria-hidden="true" href="#游标的生命周期">#</a></h3>
+<p>一个游标会占用服务器的资源，在满足一定的条件之后，服务端会释放这个游标的资源，这些条件包括：</p>
+<ol>
+<li>游标遍历完所有的结果</li>
+<li>客户端要求终止该游标</li>
+<li>当游标超出客户端的作用域，驱动程序会向数据库发送一条 “可以销毁该游标” 的消息</li>
+<li>一个游标如果10分钟内没有被使用，数据库会自动销毁</li>
+</ol>
+
+
+        </div>
+
+        <footer class="post-footer">
+            
+<nav class="paginav">
+  <a class="prev" href="https://liiqii.github.io/posts/tech/go/command/">
+    <span class="title">« 上一页</span>
+    <br>
+    <span>go 相关操作命令</span>
+  </a>
+  <a class="next" href="https://liiqii.github.io/posts/blog/blog/">
+    <span class="title">下一页 »</span>
+    <br>
+    <span>建站</span>
+  </a>
+</nav>
+
+
+<div class="share-buttons">
+    <a target="_blank" rel="noopener noreferrer" aria-label="share mongo 查询 on twitter"
+       href="https://twitter.com/intent/tweet/?text=mongo%20%e6%9f%a5%e8%af%a2&amp;url=https%3a%2f%2fliiqii.github.io%2fposts%2ftech%2fmongo%2fmongo_query%2f&amp;hashtags=mongo">
+    <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve">
+            <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-253.927,424.544c135.939,0 210.268,-112.643 210.268,-210.268c0,-3.218 0,-6.437 -0.153,-9.502c14.406,-10.421 26.973,-23.448 36.935,-38.314c-13.18,5.824 -27.433,9.809 -42.452,11.648c15.326,-9.196 26.973,-23.602 32.49,-40.92c-14.252,8.429 -30.038,14.56 -46.896,17.931c-13.487,-14.406 -32.644,-23.295 -53.946,-23.295c-40.767,0 -73.87,33.104 -73.87,73.87c0,5.824 0.613,11.494 1.992,16.858c-61.456,-3.065 -115.862,-32.49 -152.337,-77.241c-6.284,10.881 -9.962,23.601 -9.962,37.088c0,25.594 13.027,48.276 32.95,61.456c-12.107,-0.307 -23.448,-3.678 -33.41,-9.196l0,0.92c0,35.862 25.441,65.594 59.311,72.49c-6.13,1.686 -12.72,2.606 -19.464,2.606c-4.751,0 -9.348,-0.46 -13.946,-1.38c9.349,29.426 36.628,50.728 68.965,51.341c-25.287,19.771 -57.164,31.571 -91.8,31.571c-5.977,0 -11.801,-0.306 -17.625,-1.073c32.337,21.15 71.264,33.41 112.95,33.41Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share mongo 查询 on linkedin"
+       href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fliiqii.github.io%2fposts%2ftech%2fmongo%2fmongo_query%2f&amp;title=mongo%20%e6%9f%a5%e8%af%a2&amp;summary=mongo%20%e6%9f%a5%e8%af%a2&amp;source=https%3a%2f%2fliiqii.github.io%2fposts%2ftech%2fmongo%2fmongo_query%2f">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve">
+            <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share mongo 查询 on reddit"
+       href="https://reddit.com/submit?url=https%3a%2f%2fliiqii.github.io%2fposts%2ftech%2fmongo%2fmongo_query%2f&title=mongo%20%e6%9f%a5%e8%af%a2">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve">
+            <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share mongo 查询 on facebook"
+       href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fliiqii.github.io%2fposts%2ftech%2fmongo%2fmongo_query%2f">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve">
+            <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share mongo 查询 on whatsapp"
+       href="https://api.whatsapp.com/send?text=mongo%20%e6%9f%a5%e8%af%a2%20-%20https%3a%2f%2fliiqii.github.io%2fposts%2ftech%2fmongo%2fmongo_query%2f">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve">
+            <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share mongo 查询 on telegram"
+       href="https://telegram.me/share/url?text=mongo%20%e6%9f%a5%e8%af%a2&amp;url=https%3a%2f%2fliiqii.github.io%2fposts%2ftech%2fmongo%2fmongo_query%2f">
+        <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28">
+            <path
+                    d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+        </svg>
+    </a>
+</div>
+
+        </footer>
+    </div>
+
+<style>
+    .comments_details summary::marker {
+        font-size: 20px;
+        content: '👉展开评论';
+        color: var(--content);
+    }
+    .comments_details[open] summary::marker{
+        font-size: 20px;
+        content: '👇关闭评论';
+        color: var(--content);
+    }
+</style>
+
+
+<div>
+    <details class="comments_details">
+        <summary style="cursor: pointer; margin: 50px 0 20px 0;width: 130px;">
+            <span style="font-size: 20px;color: var(--content);">...</span>
+        </summary>
+        <div id="tcomment"></div>
+    </details>
+    <script src="https://cdn.staticfile.org/twikoo/1.5.8/twikoo.all.min.js">
+    </script>
+    <script>
+        twikoo.init({
+            envId:  null ,
+        el: "#tcomment",
+            lang: 'zh-CN',
+            region:  null ,
+        path: window.TWIKOO_MAGIC_PATH||window.location.pathname,
+        })
+    </script>
+</div>
+</article>
+</main>
+
+<footer class="footer">
+    <span>
+        &copy;
+        -2023
+        <a href="https://liiqii.github.io/" style="color:#939393;">Klaus</a>
+    </span>
+    
+    <span>Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &amp;
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+    
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

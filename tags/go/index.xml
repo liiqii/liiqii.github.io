@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>go on Klaus</title>
+    <link>https://liiqii.github.io/tags/go/</link>
+    <description>Recent content in go on Klaus</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Fri, 01 Sep 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://liiqii.github.io/tags/go/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>go 相关操作命令</title>
+      <link>https://liiqii.github.io/posts/tech/go/command/</link>
+      <pubDate>Fri, 01 Sep 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://liiqii.github.io/posts/tech/go/command/</guid>
+      <description>数据查询 go build 这个命令主要用于编译代码。在包的编译过程中，若有必要，会同时编译与之相关联的包。 如果是普通包，就像我们在1.2节中编写的mymath包那样，当你执行go build之后，它不会产生任何文件。如果你需要在$GOPATH/pkg下生成相应的文件，那就得执行go install</description>
+    </item>
+    
+  </channel>
+</rss>
