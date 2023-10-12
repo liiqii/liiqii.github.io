@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Go 面试题集锦快答 | liiqii</title>
+<meta name="keywords" content="">
+<meta name="description" content="Linux安装指定版本golang">
+<meta name="author" content="liiqii">
+<link rel="canonical" href="https://liiqii.github.io/posts/tech/go/go_interview_questions_quick_answer/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.css" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.js" onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://liiqii.github.io/img/icon.jpg">
+<link rel="icon" type="image/png" sizes="16x16" href="https://liiqii.github.io/img/icon.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="https://liiqii.github.io/img/icon.jpg">
+<link rel="apple-touch-icon" href="https://liiqii.github.io/img/icon.jpg">
+<link rel="mask-icon" href="https://liiqii.github.io/img/icon.jpg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js"></script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = ""; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<meta property="og:title" content="Go 面试题集锦快答" />
+<meta property="og:description" content="Linux安装指定版本golang" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liiqii.github.io/posts/tech/go/go_interview_questions_quick_answer/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-10-10T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-10-10T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go 面试题集锦快答"/>
+<meta name="twitter:description" content="Linux安装指定版本golang"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+
+        {
+          "@type": "ListItem",
+          "position":  1 ,
+          "name": "📚文章",
+          "item": "https://liiqii.github.io/posts/"
+        },
+
+        {
+          "@type": "ListItem",
+          "position":  2 ,
+          "name": "👨🏻‍💻 技术",
+          "item": "https://liiqii.github.io/posts/tech/"
+        }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "Go 面试题集锦快答",
+      "item": "https://liiqii.github.io/posts/tech/go/go_interview_questions_quick_answer/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Go 面试题集锦快答",
+  "name": "Go 面试题集锦快答",
+  "description": "Linux安装指定版本golang",
+  "keywords": [
+    ""
+  ],
+  "articleBody": "转自：GO面试题集锦快答[持续更新]\nslice 扩容机制 GO1.17版本及之前 当新切片需要的容量cap大于两倍扩容的容量，则直接按照新切片需要的容量扩容； 当原 slice 容量 \u003c 1024 的时候，新 slice 容量变成原来的 2 倍； 当原 slice 容量 \u003e 1024，进入一个循环，每次容量变成原来的1.25倍,直到大于期望容量。 GO1.18之后 当新切片需要的容量cap大于两倍扩容的容量，则直接按照新切片需要的容量扩容； 当原 slice 容量 \u003c threshold 的时候，新 slice 容量变成原来的 2 倍； 当原 slice 容量 \u003e threshold，进入一个循环，每次容量增加（旧容量+3*threshold）/4。 slice 为什么不是线程安全的 slice底层结构并没有使用加锁的方式,不支持并发读写 map 底层原理 map 是一个指针 占用8个字节(64位计算机),指向hmap结构体,hmap包含多个bmap数组(桶) type hmap struct { count int //元素个数，调用len(map)时直接返回 flags uint8 //标志map当前状态,正在删除元素、添加元素..... B uint8 //单元(buckets)的对数 B=5表示能容纳32个元素 B随着map容量增大而变大 noverflow uint16 //单元(buckets)溢出数量，如果一个单元能存8个key，此时存储了9个，溢出了，就需要再增加一个单元 hash0 uint32 //哈希种子 buckets unsafe.Pointer //指向单元(buckets)数组,大小为2^B，可以为nil oldbuckets unsafe.Pointer //扩容的时候，buckets长度会是oldbuckets的两倍 nevacute uintptr //指示扩容进度，小于此buckets迁移完成 extra *mapextra //与gc相关 可选字段 } type bmap struct { tophash [bucketCnt]uint8 } //实际上编译期间会生成一个新的数据结构 type bmap struct { topbits [8]uint8 //key hash值前8位 用于快速定位keys的位置 keys [8]keytype //键 values [8]valuetype //值 pad uintptr overflow uintptr //指向溢出桶 无符号整形 优化GC } map 扩容机制 扩容时机：向 map 插入新 key 的时候，会进行条件检测，符合下面这 2 个条件，就会触发扩容 扩容条件： 1.超过负载 map元素个数 \u003e 6.5（负载因子） * 桶个数 2.溢出桶太多 当桶总数\u003c2^15时，如果溢出桶总数\u003e=桶总数，则认为溢出桶过多 当桶总数\u003e2^15时，如果溢出桶总数\u003e=2^15，则认为溢出桶过多 扩容机制： 双倍扩容：针对条件1，新建一个buckets数组，新的buckets大小是原来的2倍，然后旧buckets数据搬迁到新的buckets。 等量扩容：针对条件2，并不扩大容量，buckets数量维持不变，重新做一遍类似双倍扩容的搬迁动作，把松散的键值对重新排列一次，使得同一个 bucket 中的 key 排列地更紧密，节省空间，提高 bucket 利用率，进而保证更快的存取。 渐进式扩容： 插入修改删除key的时候，都会尝试进行搬迁桶的工作，每次都会检查oldbucket是否nil，如果不是nil则每次搬迁2个桶，蚂蚁搬家一样渐进式扩容 map 遍历为什么无序 map每次遍历,都会从一个随机值序号的桶,再从其中随机的cell开始遍历,并且扩容后,原来桶中的key会落到其他桶中,本身就会造成失序 如果想顺序遍历map,先把key放到切片排序,再按照key的顺序遍历map var sl []int for k := range m { sl = append(sl, k) } sort.Ints(sl) for _,k:= range sl { fmt.Print(m[k]) } map 为什么不是线程安全的 map设计就不是用来多个协程高并发访问的 多个协程同时对map进行并发读写,程序会panic 如果想线程安全,可以使用sync.RWLock 锁 sync.map 这个包里面的map实现了锁,是线程安全的 Map 如何查找 1.写保护机制 先查hmap的标志位flags,如果flags写标志位此时是1,说明其他协程正在写操作,直接panic 2.计算hash值 key经过哈希函数计算后,得到64bit(64位CPU) 10010111 | 101011101010110101010101101010101010 | 10010 3.找到hash对应的桶 上面64位后5(hmap的B值)位定位所存放的桶 如果当前正在扩容中,并且定位到旧桶数据还未完成迁移,则使用旧的桶 4.遍历桶查找 上面64位前8位用来在tophash数组查找快速判断key是否在当前的桶中,如果不在需要去溢出桶查找 5.返回key对应的指针 Map 冲突解决方式 GO采用链地址法解决冲突，具体就是插入key到map中时，当key定位的桶填满8个元素后，将会创建一个溢出桶，并且将溢出桶插入当前桶的所在链表尾部 Map 负载因子为什么是 6.5 负载因子 = 哈希表存储的元素个数 / 桶个数 Go 官方发现：装载因子越大，填入的元素越多，空间利用率就越高，但发生哈希冲突的几率就变大。 装载因子越小，填入的元素越少，冲突发生的几率减小，但空间浪费也会变得更多，而且还会提高扩容操作的次数 Go 官方取了一个相对适中的值，把 Go 中的 map 的负载因子硬编码为 6.5，这就是 6.5 的选择缘由。 这意味着在 Go 语言中，当 map存储的元素个数大于或等于 6.5 * 桶个数 时，就会触发扩容行为。 Map 和 Sync.Map 哪个性能好 type Map struct { mu Mutex read atomic.Value dirty map[interface()]*entry misses int } 对比原始map： 和原始map+RWLock的实现并发的方式相比，减少了加锁对性能的影响。它做了一些优化：可以无锁访问read map，而且会优先操作read map，倘若只操作read map就可以满足要求，那就不用去操作write map(dirty)，所以在某些特定场景中它发生锁竞争的频率会远远小于map+RWLock的实现方式 优点： 适合读多写少的场景 缺点： 写多的场景，会导致 read map 缓存失效，需要加锁，冲突变多，性能急剧下降 Channel 底层实现原理 通过var声明或者make函数创建的channel变量是一个存储在函数栈帧上的指针，占用8个字节，指向堆上的hchan结构体 type hchan struct { closed uint32 // channel是否关闭的标志 elemtype *_type // channel中的元素类型 // channel分为无缓冲和有缓冲两种。 // 对于有缓冲的channel存储数据，使用了 ring buffer（环形缓冲区) 来缓存写入的数据，本质是循环数组 // 为啥是循环数组？普通数组不行吗，普通数组容量固定更适合指定的空间，弹出元素时，普通数组需要全部都前移 // 当下标超过数组容量后会回到第一个位置，所以需要有两个字段记录当前读和写的下标位置 buf unsafe.Pointer // 指向底层循环数组的指针（环形缓冲区） qcount uint // 循环数组中的元素数量 dataqsiz uint // 循环数组的长度 elemsize uint16 // 元素的大小 sendx uint // 下一次写下标的位置 recvx uint // 下一次读下标的位置 // 尝试读取channel或向channel写入数据而被阻塞的goroutine recvq waitq // 读等待队列 sendq waitq // 写等待队列 lock mutex //互斥锁，保证读写channel时不存在并发竞争问题 } 等待队列： 双向链表，包含一个头结点和一个尾结点 每个节点是一个sudog结构体变量，记录哪个协程在等待，等待的是哪个channel，等待发送/接收的数据在哪里 type waitq struct { first *sudog last *sudog } type sudog struct { g *g next *sudog prev *sudog elem unsafe.Pointer c *hchan ... } 创建时: 创建时会做一些检查: - 元素大小不能超过 64K - 元素的对齐大小不能超过 maxAlign 也就是 8 字节 - 计算出来的内存是否超过限制 创建时的策略: - 如果是无缓冲的 channel，会直接给 hchan 分配内存 - 如果是有缓冲的 channel，并且元素不包含指针，那么会为 hchan 和底层数组分配一段连续的地址 - 如果是有缓冲的 channel，并且元素包含指针，那么会为 hchan 和底层数组分别分配地址 发送时: - 如果 channel 的读等待队列存在接收者goroutine - 将数据**直接发送**给第一个等待的 goroutine， **唤醒接收的 goroutine** - 如果 channel 的读等待队列不存在接收者goroutine - 如果循环数组buf未满，那么将会把数据发送到循环数组buf的队尾 - 如果循环数组buf已满，这个时候就会走阻塞发送的流程，将当前 goroutine 加入写等待队列，并**挂起等待唤醒** 接收时: - 如果 channel 的写等待队列存在发送者goroutine - 如果是无缓冲 channel，**直接**从第一个发送者goroutine那里把数据拷贝给接收变量，**唤醒发送的 goroutine** - 如果是有缓冲 channel（已满），将循环数组buf的队首元素拷贝给接收变量，将第一个发送者goroutine的数据拷贝到 buf循环数组队尾，**唤醒发送的 goroutine** - 如果 channel 的写等待队列不存在发送者goroutine - 如果循环数组buf非空，将循环数组buf的队首元素拷贝给接收变量 - 如果循环数组buf为空，这个时候就会走阻塞接收的流程，将当前 goroutine 加入读等待队列，并**挂起等待唤醒** Channel 有什么特点 channel有2种类型：无缓冲、有缓冲 channel有3种模式：写操作模式（单向通道）、读操作模式（单向通道）、读写操作模式（双向通道） 写操作模式 make(chan\u003c- int) 读操作模式 make(\u003c-chan int) 读写操作模式 make(chan int) channel 有 3 种状态：未初始化、正常、关闭\n操作 \\ 状态 未初始化 关闭 正常 关闭 panic panic 正常 发送 永远阻塞导致死锁 panic 阻塞或者成功发送 接收 永远阻塞导致死锁 缓冲区为空则为零值，否则可以继续读 阻塞或者成功接收 注意点： 一个 channel不能多次关闭，会导致painc 如果多个 goroutine 都监听同一个 channel，那么 channel 上的数据都可能随机被某一个 goroutine 取走进行消费 如果多个 goroutine 监听同一个 channel，如果这个 channel 被关闭，则所有 goroutine 都能收到退出信号 Channel 为什么是线程安全的 不同协程通过channel进行通信，本身的使用场景就是多线程，为了保证数据的一致性，必须实现线程安全 channel的底层实现中，hchan结构体中采用Mutex锁来保证数据读写安全。在对循环数组buf中的数据进行入队和出队操作时，必须先获取互斥锁，才能操作channel数据 Channel 发送和接收什么情况下会死锁？ func deadlock1() { //无缓冲channel只写不读 ch := make(chan int) ch \u003c- 3 // 这里会发生一直阻塞的情况，执行不到下面一句 } func deadlock2() { //无缓冲channel读在写后面 ch := make(chan int) ch \u003c- 3 // 这里会发生一直阻塞的情况，执行不到下面一句 num := \u003c-ch fmt.Println(\"num=\", num) } func deadlock3() { //无缓冲channel读在写后面 ch := make(chan int) ch \u003c- 100 // 这里会发生一直阻塞的情况，执行不到下面一句 go func() { num := \u003c-ch fmt.Println(\"num=\", num) }() time.Sleep(time.Second) } func deadlock3() { //有缓冲channel写入超过缓冲区数量 ch := make(chan int, 3) ch \u003c- 3 ch \u003c- 4 ch \u003c- 5 ch \u003c- 6 // 这里会发生一直阻塞的情况 } func deadlock4() { //空读 ch := make(chan int) // ch := make(chan int, 1) fmt.Println(\u003c-ch) // 这里会发生一直阻塞的情况 } func deadlock5() { //互相等对方造成死锁 ch1 := make(chan int) ch2 := make(chan int) go func() { for { select { case num := \u003c-ch1: fmt.Println(\"num=\", num) ch2 \u003c- 100 } } }() for { select { case num := \u003c-ch2: fmt.Println(\"num=\", num) ch1 \u003c- 300 } } } 互斥锁实现原理 Go sync包提供了两种锁类型：互斥锁sync.Mutex 和 读写互斥锁sync.RWMutex，都属于悲观锁。 锁的实现一般会依赖于原子操作、信号量，通过atomic 包中的一些原子操作来实现锁的锁定，通过信号量来实现线程的阻塞与唤醒 在正常模式下，锁的等待者会按照先进先出的顺序获取锁。但是刚被唤起的 Goroutine 与新创建的 Goroutine 竞争时，大概率会获取不到锁，在这种情况下，这个被唤醒的 Goroutine 会加入到等待队列的前面。 如果一个等待的 Goroutine 超过1ms 没有获取锁，那么它将会把锁转变为饥饿模式。 Go在1.9中引入优化，目的保证互斥锁的公平性。在饥饿模式中，互斥锁会直接交给等待队列最前面的 Goroutine。新的 Goroutine 在该状态下不能获取锁、也不会进入自旋状态，它们只会在队列的末尾等待。如果一个 Goroutine 获得了互斥锁并且它在队列的末尾或者它等待的时间少于 1ms，那么当前的互斥锁就会切换回正常模式。 互斥锁允许自旋的条件？ 线程没有获取到锁时常见有2种处理方式： - 一种是没有获取到锁的线程就一直循环等待判断该资源是否已经释放锁，这种锁也叫做自旋锁，它不用将线程阻塞起来， 适用于并发低且程序执行时间短的场景，缺点是cpu占用较高 - 另外一种处理方式就是把自己阻塞起来，会释放CPU给其他线程，内核会将线程置为「睡眠」状态，等到锁被释放后，内核会在合适的时机唤醒该线程，适用于高并发场景，缺点是有线程上下文切换的开销 Go语言中的Mutex实现了自旋与阻塞两种场景，当满足不了自旋条件时，就会进入阻塞 **允许自旋的条件：** 1. 锁已被占用，并且锁不处于饥饿模式。 2. 积累的自旋次数小于最大自旋次数（active_spin=4）。 3. cpu 核数大于 1。 4. 有空闲的 P。 5. 当前 goroutine 所挂载的 P 下，本地待运行队列为空。 读写锁实现原理 读写锁的底层是基于互斥锁实现的。 写锁需要阻塞写锁：一个协程拥有写锁时，其他协程写锁定需要阻塞； 写锁需要阻塞读锁：一个协程拥有写锁时，其他协程读锁定需要阻塞； 读锁需要阻塞写锁：一个协程拥有读锁时，其他协程写锁定需要阻塞； 读锁不能阻塞读锁：一个协程拥有读锁时，其他协程也可以拥有读锁。 原子操作有哪些 Go atomic包是最轻量级的锁（也称无锁结构），可以在不形成临界区和创建互斥量的情况下完成并发安全的值替换操作，不过这个包只支持int32/int64/uint32/uint64/uintptr这几种数据类型的一些基础操作（增减、交换、载入、存储等） 当我们想要对**某个变量**并发安全的修改，除了使用官方提供的 `mutex`，还可以使用 sync/atomic 包的原子操作，它能够保证对变量的读取或修改期间不被其他的协程所影响。 atomic 包提供的原子操作能够确保任一时刻只有一个goroutine对变量进行操作，善用 atomic 能够避免程序中出现大量的锁操作。 **常见操作：** - 增减Add AddInt32 AddInt64 AddUint32 AddUint64 AddUintptr - 载入Load LoadInt32 LoadInt64 LoadPointer LoadUint32 LoadUint64 LoadUintptr - 比较并交换CompareAndSwap CompareAndSwapInt32... - 交换Swap SwapInt32... - 存储Store StoreInt32... 原子操作和锁的区别 原子操作由底层硬件支持，而锁是基于原子操作+信号量完成的。若实现相同的功能，前者通常会更有效率 原子操作是单个指令的互斥操作；互斥锁/读写锁是一种数据结构，可以完成临界区（多个指令）的互斥操作，扩大原子操作的范围 原子操作是无锁操作，属于乐观锁；说起锁的时候，一般属于悲观锁 原子操作存在于各个指令/语言层级，比如“机器指令层级的原子操作”，“汇编指令层级的原子操作”，“Go语言层级的原子操作”等。 锁也存在于各个指令/语言层级中，比如“机器指令层级的锁”，“汇编指令层级的锁”，“Go语言层级的锁”等 goroutine 的底层实现原理 g本质是一个数据结构,真正让 goroutine 运行起来的是调度器 type g struct { goid int64 // 唯一的goroutine的ID sched gobuf // goroutine切换时，用于保存g的上下文 stack stack // 栈 gopc // pc of go statement that created this goroutine startpc uintptr // pc of goroutine function ... } type gobuf struct { //运行时寄存器 sp uintptr // 栈指针位置 pc uintptr // 运行到的程序位置 g guintptr // 指向 goroutine ret uintptr // 保存系统调用的返回值 ... } type stack struct { //运行时栈 lo uintptr // 栈的下界内存地址 hi uintptr // 栈的上界内存地址 } goroutine 和线程的区别 内存占用: 创建一个 goroutine 的栈内存消耗为 2 KB，实际运行过程中，如果栈空间不够用，会自动进行扩容。创建一个 thread 则需要消耗 1 MB 栈内存。 创建和销毀: Thread 创建和销毀需要陷入内核,系统调用。而 goroutine 因为是由 Go runtime 负责管理的，创建和销毁的消耗非常小，是用户级。 切换: 当 threads 切换时，需要保存各种寄存器,而 goroutines 切换只需保存三个寄存器：Program Counter, Stack Pointer and BP。一般而言，线程切换会消耗 1000-1500 ns,Goroutine 的切换约为 200 ns,因此，goroutines 切换成本比 threads 要小得多。 goroutine 泄露场景 泄露原因 Goroutine 内进行channel/mutex 等读写操作被一直阻塞。 Goroutine 内的业务逻辑进入死循环，资源一直无法释放。 Goroutine 内的业务逻辑进入长时间等待，有不断新增的 Goroutine 进入等待 泄露场景 channel 如果忘记初始化，那么无论你是读，还是写操作，都会造成阻塞。 channel 发送数量 超过 channel接收数量，就会造成阻塞 channel 接收数量 超过 channel发送数量，也会造成阻塞 http request body未关闭，goroutine不会退出 互斥锁忘记解锁 sync.WaitGroup使用不当 如何排查 单个函数：调用 `runtime.NumGoroutine` 方法来打印 执行代码前后Goroutine 的运行数量，进行前后比较，就能知道有没有泄露了。 生产/测试环境：使用`PProf`实时监测Goroutine的数量 如何查看正在运行的 goroutine 数量 package main import ( \"net/http\" _ \"net/http/pprof\" ) func main() { for i := 0; i \u003c 100; i++ { go func() { select {} }() } go func() { http.ListenAndServe(\"localhost:6060\", nil) }() select {} } 执行程序之后，命令运行以下命令，会自动打开浏览器显示一系列目前还看不懂的图，提示Could not execute dot; may need to install graphviz.则需要安装graphviz，需要python环境 go tool pprof -http=:1248 http://127.0.0.1:6060/debug/pprof/goroutine 如何控制并发的 goroutine 数量？ 在开发过程中，如果不对goroutine加以控制而进行滥用的话，可能会导致服务整体崩溃。比如耗尽系统资源导致程序崩溃，或者CPU使用率过高导致系统忙不过来。 解决方案： 有缓冲channel:利用缓冲满时发送阻塞的特性 无缓冲channel:任务发送和执行分离，指定消费者并发协程数 GO 线程模型如何实现 M个线程对应N个内核线程 优点： - 能够利用多核 - 上下文切换成本低 - 如果进程中的一个线程被阻塞，不会阻塞其他线程，是能够切换同一进程内的其他线程继续执行 GMP 和 GM 模型 G：Goroutine M: 线程 P: Processor 本地队列 GM模型： 2012年前的调度器模型，使用了4年果断被抛弃，缺点如下： 1. 创建、销毁、调度G都需要每个M获取锁，这就形成了激烈的锁竞争。 2. M转移G会造成延迟和额外的系统负载。比如当G中包含创建新协程的时候，M创建了G’，为了继续执行G，需要把G’交给M’执行，也造成了很差的局部性，因为G’和G是相关的，最好放在M上执行，而不是其他M'。 3. 系统调用(CPU在M之间的切换)导致频繁的线程阻塞和取消阻塞操作增加了系统开销。 GMP模型： P的数量： 由启动时环境变量`$GOMAXPROCS`或者是由`runtime`的方法`GOMAXPROCS()`决定 M的数量: go语言本身的限制：go程序启动时，会设置M的最大数量，默认10000.但是内核很难支持这么多的线程数 runtime/debug中的SetMaxThreads函数，设置M的最大数量 一个M阻塞了，会创建新的M。 P何时创建：在确定了P的最大数量n后，运行时系统会根据这个数量创建n个P。 M何时创建：没有足够的M来关联P并运行其中的可运行的G。比如所有的M此时都阻塞住了，而P中还有很多就绪任务，就会去寻找空闲的M，而没有空闲的，就会去创建新的M。 全场景解析： 1.P拥有G1，M1获取P后开始运行G1，G1创建了G2，为了局部性G2优先加入到P1的本地队列。 2.G1运行完成后，M上运行的goroutine切换为G0，G0负责调度时协程的切换。从P的本地队列取G2，从G0切换到G2，并开始运行G2。实现了线程M1的复用。 3.假设每个P的本地队列只能存4个G。G2要创建了6个G，前4个G（G3, G4, G5, G6）已经加入p1的本地队列，p1本地队列满了。 4.G2在创建G7的时候，发现P1的本地队列已满，需要执行负载均衡(把P1中本地队列中前一半的G，还有新创建G转移到全局队列)，这些G被转移到全局队列时，会被打乱顺序 5.G2创建G8时，P1的本地队列未满，所以G8会被加入到P1的本地队列。 6.在创建G时，运行的G会尝试唤醒其他空闲的P和M组合去执行。假定G2唤醒了M2，M2绑定了P2，并运行G0，但P2本地队列没有G，M2此时为自旋线程 7.M2尝试从全局队列取一批G放到P2的本地队列，至少从全局队列取1个g，但每次不要从全局队列移动太多的g到p本地队列，给其他p留点。 8.假设G2一直在M1上运行，经过2轮后，M2已经把G7、G4从全局队列获取到了P2的本地队列并完成运行，全局队列和P2的本地队列都空了,那m就要执行work stealing(偷取)：从其他有G的P哪里偷取一半G过来，放到自己的P本地队列。P2从P1的本地队列尾部取一半的G 9.G1本地队列G5、G6已经被其他M偷走并运行完成，当前M1和M2分别在运行G2和G8，M3和M4没有goroutine可以运行，M3和M4处于自旋状态，它们不断寻找goroutine。系统中最多有GOMAXPROCS个自旋的线程，多余的没事做线程会让他们休眠。 10.假定当前除了M3和M4为自旋线程，还有M5和M6为空闲的线程，G8创建了G9，G8进行了阻塞的系统调用，M2和P2立即解绑，P2会执行以下判断：如果P2本地队列有G、全局队列有G或有空闲的M，P2都会立马唤醒1个M和它绑定，否则P2则会加入到空闲P列表，等待M来获取可用的p。 11.G8创建了G9，假如G8进行了非阻塞系统调用。M2和P2会解绑，但M2会记住P2，然后G8和M2进入系统调用状态。当G8和M2退出系统调用时，会尝试获取P2，如果无法获取，则获取空闲的P，如果依然没有，G8会被记为可运行状态，并加入到全局队列,M2因为没有P的绑定而变成休眠状态 work stealing 机制？ 当线程M⽆可运⾏的G时，尝试从其他M绑定的P偷取G，减少空转，提高了线程利用率（避免闲着不干活）。 当从本线程绑定 P 本地 队列、全局G队列、netpoller都找不到可执行的 g，会从别的 P 里窃取G并放到当前P上面。 从netpoller 中拿到的G是_Gwaiting状态（ 存放的是因为网络IO被阻塞的G），从其它地方拿到的G是_Grunnable状态 从全局队列取的G数量：N = min(len(GRQ)/GOMAXPROCS + 1, len(GRQ/2)) （根据GOMAXPROCS负载均衡） 从其它P本地队列窃取的G数量：N = len(LRQ)/2（平分） hand off 机制？ 也称为P分离机制，当本线程 M 因为 G 进行的系统调用阻塞时，线程释放绑定的 P，把 P 转移给其他空闲的 M 执行，也提高了线程利用率（避免站着茅坑不拉shi）。 如何查看运行时调度信息？ 有 2 种方式可以查看一个程序的调度GMP信息，分别是go tool trace和GODEBUG 内存分配机制 额，这个不太了解！ 好的你回去等通知吧！ 内存逃逸机制 编译器会根据变量是否被外部引用来决定是否逃逸： 如果函数外部没有引用，则优先放到栈中； 如果函数外部存在引用，则必定放到堆中; 如果栈上放不下，则必定放到堆上; 案例： 指针逃逸：函数返回值为局部变量的指针，函数虽然退出了，但是因为指针的存在，指向的内存不能随着函数结束而回收，因此只能分配在堆上。 栈空间不足：当栈空间足够时，不会发生逃逸，但是当变量过大时，已经完全超过栈空间的大小时，将会发生逃逸到堆上分配内存。局部变量s占用内存过大，编译器会将其分配到堆上 变量大小不确定：编译期间无法确定slice的长度，这种情况为了保证内存的安全，编译器也会触发逃逸，在堆上进行分配内存 动态类型：动态类型就是编译期间不确定参数的类型、参数的长度也不确定的情况下就会发生逃逸 闭包引用对象：闭包函数中局部变量i在后续函数是继续使用的，编译器将其分配到堆上 总结： 1. 栈上分配内存比在堆中分配内存效率更高 2. 栈上分配的内存不需要 GC 处理，而堆需要 3. 逃逸分析目的是决定内分配地址是栈还是堆 4. 逃逸分析在编译阶段完成 因为无论变量的大小，只要是指针变量都会在堆上分配，所以对于小变量我们还是使用传值效率（而不是传指针）更高一点。 GO 内存对齐机制 什么是内存对齐 为了能让CPU可以更快的存取到各个字段，Go编译器会帮你把struct结构体做数据的对齐。所谓的数据对齐，是指内存地址是所存储数据大小（按字节为单位）的整数倍，以便CPU可以一次将该数据从内存中读取出来。编译器通过在结构体的各个字段之间填充一些空白已达到对齐的目的。存在内存空间的浪费，实际上是空间换时间 对齐原则： 1. 结构体变量中成员的偏移量必须是成员大小的整数倍 2. 整个结构体的地址必须是最大字节的整数倍 GC 实现原理 在应用程序中会使用到两种内存，分别为堆（Heap）和栈（Stack），GC负责回收堆内存，而不负责回收栈中的内存 常用GC算法 1.引用计数：python,swift,php 2.分代收集：Java 3.标记清除：GO 三色标记法+混合屏障 停顿时间在0.5ms左右 GC 如何调优 1.控制内存分配的速度，限制 Goroutine 的数量，提高赋值器 mutator 的 CPU 利用率（降低GC的CPU利用率） 2.少量使用+连接string 3.slice提前分配足够的内存来降低扩容带来的拷贝 4.避免map key对象过多，导致扫描时间增加 5.变量复用，减少对象分配，例如使用 sync.Pool 来复用需要频繁创建临时对象、使用全局变量等 6.增大 GOGC 的值，降低 GC 的运行频率 (不太用这个) 如何查看 GC 信息 1. GODEBUG='gctrace=1' go run main.go 2. go tool trace trace.out 3. debug.ReadGCStats 4. runtime.ReadMemStats Go 有哪些并发同步原语？ 额，这个不太了解！ 好的你回去等通知吧！ Go 如何排查数据竞争问题？ go run -race main.go Go 限制协程数、按顺序打印 cat、dog、fish 各 100 次 好无聊的面试题，正常人谁这么写代码\npackage main import ( \"fmt\" \"sync\" ) var wg sync.WaitGroup func dog(dogChan chan bool, catChan chan bool) { i := 0 for { select { case \u003c-dogChan: fmt.Println(\"dog\", i) i++ catChan \u003c- true break default: break } } } func cat(catChan chan bool, fishChan chan bool) { for { select { case \u003c-catChan: fmt.Println(\"cat\") fishChan \u003c- true break default: break } } } func fish(fishChan chan bool, dogChan chan bool) { i := 0 for { select { case \u003c-fishChan: fmt.Println(\"fish\") i++ // 计数，打印完之后就溜溜结束了。 if i \u003e 9 { wg.Done() return } dogChan \u003c- true break default: break } } } func main() { dogChan, catChan, fishChan := make(chan bool), make(chan bool), make(chan bool) wg.Add(1) go dog(dogChan, catChan) go cat(catChan, fishChan) go fish(fishChan, dogChan) dogChan \u003c- true // 记得这里进行启动条件，不然就没法启动了。 wg.Wait() } 代码题 func main() { a := [3]int{1, 2, 3} for k, v := range a { if k == 0 { a[0], a[1] = 100, 200 } a[k] = 100 + v } fmt.Print(a) //数组 101 102 103 } func main() { a := []int{1, 2, 3} for k, v := range a { if k == 0 { a[0], a[1] = 100, 200 } a[k] = 100 + v } fmt.Print(a) //切片 101 300 103 } package main import \"fmt\" func main() { var a uint = 0 var b uint = 1 c := a - b fmt.Print(c) //18446744073709551615 64位CPU 2^64-1 32位CPU 2^32-1 } ",
+  "wordCount" : "9946",
+  "inLanguage": "zh",
+  "datePublished": "2023-10-10T00:00:00Z",
+  "dateModified": "2023-10-10T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "liiqii"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://liiqii.github.io/posts/tech/go/go_interview_questions_quick_answer/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "liiqii",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://liiqii.github.io/img/icon.jpg"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    (function () {
+        let  arr,reg = new RegExp("(^| )"+"change-themes"+"=([^;]*)(;|$)");
+        if(arr = document.cookie.match(reg)) {
+        } else {
+            if (new Date().getHours() >= 19 || new Date().getHours() < 6) {
+                document.body.classList.add('dark');
+                localStorage.setItem("pref-theme", 'dark');
+            } else {
+                document.body.classList.remove('dark');
+                localStorage.setItem("pref-theme", 'light');
+            }
+        }
+    })()
+
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://liiqii.github.io/" accesskey="h" title="Home (Alt + H)">Home</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://liiqii.github.io/search" title="🔍 搜索 (Alt &#43; /)" accesskey=/>
+                <span>🔍 搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://liiqii.github.io/posts" title="📚 文章">
+                <span>📚 文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://liiqii.github.io/tags" title="🧩 标签">
+                <span>🧩 标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://liiqii.github.io/archives/" title="⏱️ 时间轴">
+                <span>⏱️ 时间轴</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main page">
+<style>
+    i[id*="post_meta_style"] {
+        display: flex;
+        align-items: center;
+        margin: 0 0 10px 0;
+    }
+</style>
+
+<article class="post-single">
+    <div id="single-content">
+        <header class="post-header">
+            <div class="breadcrumbs"><a href="https://liiqii.github.io/">🏠 主页</a>&nbsp;»&nbsp;<a href="https://liiqii.github.io/posts/">📚文章</a>&nbsp;»&nbsp;<a href="https://liiqii.github.io/posts/tech/">👨🏻‍💻 技术</a></div>
+            <h1 class="post-title">
+                Go 面试题集锦快答
+            </h1>
+            <div class="post-description">
+                Linux安装指定版本golang
+            </div>
+            <div class="post-meta">
+
+<style>
+    i[id*="post_meta_style"] {
+        display: flex;
+        align-items: center;
+        margin: 0 0 10px 0;
+    }
+
+    .parent-post-meta {
+        display: flex;
+        flex-wrap: wrap;
+        opacity: 0.8;
+    }
+</style>
+
+<span class="parent-post-meta">
+    <span id="post_meta_style_1">
+        <span class="fa fa-calendar-check-o"></span>
+        <span>2023-10-10
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    
+    
+    
+    
+    
+    
+    
+    <span id="post_meta_style_3">
+        <span class="fa fa-file-word-o"></span>
+        <span>9946字
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_4">
+        <span class="fa fa-clock-o"></span>
+        <span>20分钟
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_5">
+        <span class="fa fa-user-o"></span>
+        <span>liiqii
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_6">
+        <span class="fa fa-tags" style="opacity: 0.8"></span>
+        <span>
+            <span class="post-tags-meta">
+                <a href="https://liiqii.github.io/tags/go/" style="color: var(--secondary)!important;">Go</a>
+                &nbsp;<a href="https://liiqii.github.io/tags/%E9%9D%A2%E8%AF%95/" style="color: var(--secondary)!important;">面试</a>
+            </span>
+        </span>
+    </span>
+</span>
+<span style="opacity: 0.8;">
+                    <span id="post_meta_style_7">
+                        &nbsp;&nbsp;
+                        <span class="fa fa-eye" ></span>
+                        <span>
+                            <span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+                            &nbsp;&nbsp;
+                        </span>
+                    </span>
+                    <span id="post_meta_style_8">
+                        <span class="fa fa-commenting-o"></span>
+                        <span>
+                            <script src="https://cdn.staticfile.org/twikoo/1.5.8/twikoo.all.min.js"></script>
+                            <script>
+                                let url = document.documentURI
+                                
+                                let dnsUrl = "https://liiqii.github.io/"
+                                let urlSplit = url.split(dnsUrl)
+                                let finalUrl = urlSplit[1]
+                                if (finalUrl[0] !== '/') {
+                                    finalUrl = '/'+finalUrl
+                                }
+                                twikoo.getCommentsCount({
+                                    envId:  null , 
+                                region:  null , 
+                                urls: [ 
+                                    
+                                    finalUrl,
+                                ],
+                                    includeReply: false 
+                                }).then(function (res) {
+                                    let count = res[0].count
+                                    const obj = document.getElementById("comment_count");
+                                    obj.innerText = count
+                                    
+                                    
+                                    
+                                }).catch(function (err) {
+                                    
+                                    console.error(err);
+                                });
+                            </script>
+                            <span id="comment_count"></span>
+                        </span>
+                    </span>
+                </span>
+
+</div>
+        </header> <aside id="toc-container" class="toc-container wide">
+    <div class="toc">
+        <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">目录</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#slice-%e6%89%a9%e5%ae%b9%e6%9c%ba%e5%88%b6" aria-label="slice 扩容机制">slice 扩容机制</a></li>
+                <li>
+                    <a href="#slice-%e4%b8%ba%e4%bb%80%e4%b9%88%e4%b8%8d%e6%98%af%e7%ba%bf%e7%a8%8b%e5%ae%89%e5%85%a8%e7%9a%84" aria-label="slice 为什么不是线程安全的">slice 为什么不是线程安全的</a></li>
+                <li>
+                    <a href="#map-%e5%ba%95%e5%b1%82%e5%8e%9f%e7%90%86" aria-label="map 底层原理">map 底层原理</a></li>
+                <li>
+                    <a href="#map-%e6%89%a9%e5%ae%b9%e6%9c%ba%e5%88%b6" aria-label="map 扩容机制">map 扩容机制</a></li>
+                <li>
+                    <a href="#map-%e9%81%8d%e5%8e%86%e4%b8%ba%e4%bb%80%e4%b9%88%e6%97%a0%e5%ba%8f" aria-label="map 遍历为什么无序">map 遍历为什么无序</a></li>
+                <li>
+                    <a href="#map-%e4%b8%ba%e4%bb%80%e4%b9%88%e4%b8%8d%e6%98%af%e7%ba%bf%e7%a8%8b%e5%ae%89%e5%85%a8%e7%9a%84" aria-label="map 为什么不是线程安全的">map 为什么不是线程安全的</a></li>
+                <li>
+                    <a href="#map-%e5%a6%82%e4%bd%95%e6%9f%a5%e6%89%be" aria-label="Map 如何查找">Map 如何查找</a></li>
+                <li>
+                    <a href="#map-%e5%86%b2%e7%aa%81%e8%a7%a3%e5%86%b3%e6%96%b9%e5%bc%8f" aria-label="Map 冲突解决方式">Map 冲突解决方式</a></li>
+                <li>
+                    <a href="#map-%e8%b4%9f%e8%bd%bd%e5%9b%a0%e5%ad%90%e4%b8%ba%e4%bb%80%e4%b9%88%e6%98%af-65" aria-label="Map 负载因子为什么是 6.5">Map 负载因子为什么是 6.5</a></li>
+                <li>
+                    <a href="#map-%e5%92%8c-syncmap-%e5%93%aa%e4%b8%aa%e6%80%a7%e8%83%bd%e5%a5%bd" aria-label="Map 和 Sync.Map 哪个性能好">Map 和 Sync.Map 哪个性能好</a></li>
+                <li>
+                    <a href="#channel-%e5%ba%95%e5%b1%82%e5%ae%9e%e7%8e%b0%e5%8e%9f%e7%90%86" aria-label="Channel 底层实现原理">Channel 底层实现原理</a></li>
+                <li>
+                    <a href="#channel-%e6%9c%89%e4%bb%80%e4%b9%88%e7%89%b9%e7%82%b9" aria-label="Channel 有什么特点">Channel 有什么特点</a></li>
+                <li>
+                    <a href="#channel-%e4%b8%ba%e4%bb%80%e4%b9%88%e6%98%af%e7%ba%bf%e7%a8%8b%e5%ae%89%e5%85%a8%e7%9a%84" aria-label="Channel 为什么是线程安全的">Channel 为什么是线程安全的</a></li>
+                <li>
+                    <a href="#channel-%e5%8f%91%e9%80%81%e5%92%8c%e6%8e%a5%e6%94%b6%e4%bb%80%e4%b9%88%e6%83%85%e5%86%b5%e4%b8%8b%e4%bc%9a%e6%ad%bb%e9%94%81" aria-label="Channel 发送和接收什么情况下会死锁？">Channel 发送和接收什么情况下会死锁？</a></li>
+                <li>
+                    <a href="#%e4%ba%92%e6%96%a5%e9%94%81%e5%ae%9e%e7%8e%b0%e5%8e%9f%e7%90%86" aria-label="互斥锁实现原理">互斥锁实现原理</a></li>
+                <li>
+                    <a href="#%e4%ba%92%e6%96%a5%e9%94%81%e5%85%81%e8%ae%b8%e8%87%aa%e6%97%8b%e7%9a%84%e6%9d%a1%e4%bb%b6" aria-label="互斥锁允许自旋的条件？">互斥锁允许自旋的条件？</a></li>
+                <li>
+                    <a href="#%e8%af%bb%e5%86%99%e9%94%81%e5%ae%9e%e7%8e%b0%e5%8e%9f%e7%90%86" aria-label="读写锁实现原理">读写锁实现原理</a></li>
+                <li>
+                    <a href="#%e5%8e%9f%e5%ad%90%e6%93%8d%e4%bd%9c%e6%9c%89%e5%93%aa%e4%ba%9b" aria-label="原子操作有哪些">原子操作有哪些</a></li>
+                <li>
+                    <a href="#%e5%8e%9f%e5%ad%90%e6%93%8d%e4%bd%9c%e5%92%8c%e9%94%81%e7%9a%84%e5%8c%ba%e5%88%ab" aria-label="原子操作和锁的区别">原子操作和锁的区别</a></li>
+                <li>
+                    <a href="#goroutine-%e7%9a%84%e5%ba%95%e5%b1%82%e5%ae%9e%e7%8e%b0%e5%8e%9f%e7%90%86" aria-label="goroutine 的底层实现原理">goroutine 的底层实现原理</a></li>
+                <li>
+                    <a href="#goroutine-%e5%92%8c%e7%ba%bf%e7%a8%8b%e7%9a%84%e5%8c%ba%e5%88%ab" aria-label="goroutine 和线程的区别">goroutine 和线程的区别</a></li>
+                <li>
+                    <a href="#goroutine-%e6%b3%84%e9%9c%b2%e5%9c%ba%e6%99%af" aria-label="goroutine 泄露场景">goroutine 泄露场景</a></li>
+                <li>
+                    <a href="#%e5%a6%82%e4%bd%95%e6%9f%a5%e7%9c%8b%e6%ad%a3%e5%9c%a8%e8%bf%90%e8%a1%8c%e7%9a%84-goroutine-%e6%95%b0%e9%87%8f" aria-label="如何查看正在运行的 goroutine 数量">如何查看正在运行的 goroutine 数量</a></li>
+                <li>
+                    <a href="#%e5%a6%82%e4%bd%95%e6%8e%a7%e5%88%b6%e5%b9%b6%e5%8f%91%e7%9a%84-goroutine-%e6%95%b0%e9%87%8f" aria-label="如何控制并发的 goroutine 数量？">如何控制并发的 goroutine 数量？</a></li>
+                <li>
+                    <a href="#go-%e7%ba%bf%e7%a8%8b%e6%a8%a1%e5%9e%8b%e5%a6%82%e4%bd%95%e5%ae%9e%e7%8e%b0" aria-label="GO 线程模型如何实现">GO 线程模型如何实现</a></li>
+                <li>
+                    <a href="#gmp-%e5%92%8c-gm-%e6%a8%a1%e5%9e%8b" aria-label="GMP 和 GM 模型">GMP 和 GM 模型</a></li>
+                <li>
+                    <a href="#work-stealing-%e6%9c%ba%e5%88%b6" aria-label="work stealing 机制？">work stealing 机制？</a></li>
+                <li>
+                    <a href="#hand-off-%e6%9c%ba%e5%88%b6" aria-label="hand off 机制？">hand off 机制？</a></li>
+                <li>
+                    <a href="#%e5%a6%82%e4%bd%95%e6%9f%a5%e7%9c%8b%e8%bf%90%e8%a1%8c%e6%97%b6%e8%b0%83%e5%ba%a6%e4%bf%a1%e6%81%af" aria-label="如何查看运行时调度信息？">如何查看运行时调度信息？</a></li>
+                <li>
+                    <a href="#%e5%86%85%e5%ad%98%e5%88%86%e9%85%8d%e6%9c%ba%e5%88%b6" aria-label="内存分配机制">内存分配机制</a></li>
+                <li>
+                    <a href="#%e5%86%85%e5%ad%98%e9%80%83%e9%80%b8%e6%9c%ba%e5%88%b6" aria-label="内存逃逸机制">内存逃逸机制</a></li>
+                <li>
+                    <a href="#go-%e5%86%85%e5%ad%98%e5%af%b9%e9%bd%90%e6%9c%ba%e5%88%b6" aria-label="GO 内存对齐机制">GO 内存对齐机制</a></li>
+                <li>
+                    <a href="#gc-%e5%ae%9e%e7%8e%b0%e5%8e%9f%e7%90%86" aria-label="GC 实现原理">GC 实现原理</a></li>
+                <li>
+                    <a href="#gc-%e5%a6%82%e4%bd%95%e8%b0%83%e4%bc%98" aria-label="GC 如何调优">GC 如何调优</a></li>
+                <li>
+                    <a href="#%e5%a6%82%e4%bd%95%e6%9f%a5%e7%9c%8b-gc-%e4%bf%a1%e6%81%af" aria-label="如何查看 GC 信息">如何查看 GC 信息</a></li>
+                <li>
+                    <a href="#go-%e6%9c%89%e5%93%aa%e4%ba%9b%e5%b9%b6%e5%8f%91%e5%90%8c%e6%ad%a5%e5%8e%9f%e8%af%ad" aria-label="Go 有哪些并发同步原语？">Go 有哪些并发同步原语？</a></li>
+                <li>
+                    <a href="#go-%e5%a6%82%e4%bd%95%e6%8e%92%e6%9f%a5%e6%95%b0%e6%8d%ae%e7%ab%9e%e4%ba%89%e9%97%ae%e9%a2%98" aria-label="Go 如何排查数据竞争问题？">Go 如何排查数据竞争问题？</a></li>
+                <li>
+                    <a href="#go-%e9%99%90%e5%88%b6%e5%8d%8f%e7%a8%8b%e6%95%b0%e6%8c%89%e9%a1%ba%e5%ba%8f%e6%89%93%e5%8d%b0-catdogfish-%e5%90%84-100-%e6%ac%a1" aria-label="Go 限制协程数、按顺序打印 cat、dog、fish 各 100 次">Go 限制协程数、按顺序打印 cat、dog、fish 各 100 次</a></li>
+                <li>
+                    <a href="#%e4%bb%a3%e7%a0%81%e9%a2%98" aria-label="代码题">代码题</a>
+                </li>
+            </ul>
+        </div>
+        </details>
+    </div>
+</aside>
+<script>
+    let activeElement;
+    let elements;
+    window.addEventListener('DOMContentLoaded', function (event) {
+        checkTocPosition();
+
+        elements = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]');
+        
+        activeElement = elements[0];
+        const id = encodeURI(activeElement.getAttribute('id')).toLowerCase();
+        document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+    }, false);
+
+    window.addEventListener('resize', function(event) {
+        checkTocPosition();
+    }, false);
+
+    window.addEventListener('scroll', () => {
+        
+        if (elements) {
+            activeElement = Array.from(elements).find((element) => {
+                if ((getOffsetTop(element) - window.pageYOffset) > 0 &&
+                    (getOffsetTop(element) - window.pageYOffset) < window.innerHeight/2) {
+                    return element;
+                }
+            }) || activeElement
+
+            elements.forEach(element => {
+                const id = encodeURI(element.getAttribute('id')).toLowerCase();
+                if (element === activeElement){
+                    document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+                } else {
+                    document.querySelector(`.inner ul li a[href="#${id}"]`).classList.remove('active');
+                }
+            })
+        }
+    }, false);
+
+    const main = parseInt(getComputedStyle(document.body).getPropertyValue('--article-width'), 10);
+    const toc = parseInt(getComputedStyle(document.body).getPropertyValue('--toc-width'), 10);
+    const gap = parseInt(getComputedStyle(document.body).getPropertyValue('--gap'), 10);
+
+    function checkTocPosition() {
+        const width = document.body.scrollWidth;
+        if (width - main - (toc * 2) - (gap * 4) > 0) {
+            document.getElementById("toc-container").classList.add("wide");
+        } else {
+            document.getElementById("toc-container").classList.remove("wide");
+        }
+    }
+
+    function getOffsetTop(element) {
+        if (!element.getClientRects().length) {
+            return 0;
+        }
+        let rect = element.getBoundingClientRect();
+        let win = element.ownerDocument.defaultView;
+        return rect.top + win.pageYOffset;
+    }
+</script>
+        <div class="post-content"><p>转自：<a href="https://learnku.com/articles/69250">GO面试题集锦快答[持续更新]</a></p>
+<h1 id="slice-扩容机制">slice 扩容机制<a hidden class="anchor" aria-hidden="true" href="#slice-扩容机制">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>GO1.17版本及之前
+</span></span><span style="display:flex;"><span>当新切片需要的容量cap大于两倍扩容的容量，则直接按照新切片需要的容量扩容；
+</span></span><span style="display:flex;"><span>当原 slice 容量 &lt; 1024 的时候，新 slice 容量变成原来的 2 倍；
+</span></span><span style="display:flex;"><span>当原 slice 容量 &gt; 1024，进入一个循环，每次容量变成原来的1.25倍,直到大于期望容量。
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>GO1.18之后
+</span></span><span style="display:flex;"><span>当新切片需要的容量cap大于两倍扩容的容量，则直接按照新切片需要的容量扩容；
+</span></span><span style="display:flex;"><span>当原 slice 容量 &lt; threshold 的时候，新 slice 容量变成原来的 2 倍；
+</span></span><span style="display:flex;"><span>当原 slice 容量 &gt; threshold，进入一个循环，每次容量增加（旧容量+3*threshold）/4。
+</span></span></code></pre></div><h1 id="slice-为什么不是线程安全的">slice 为什么不是线程安全的<a hidden class="anchor" aria-hidden="true" href="#slice-为什么不是线程安全的">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>slice底层结构并没有使用加锁的方式,不支持并发读写
+</span></span></code></pre></div><h1 id="map-底层原理">map 底层原理<a hidden class="anchor" aria-hidden="true" href="#map-底层原理">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>map 是一个指针 占用8个字节(64位计算机),指向hmap结构体,hmap包含多个bmap数组(桶) 
+</span></span><span style="display:flex;"><span>type hmap struct { 
+</span></span><span style="display:flex;"><span>    count int  //元素个数，调用len(map)时直接返回 
+</span></span><span style="display:flex;"><span>    flags uint8  //标志map当前状态,正在删除元素、添加元素..... 
+</span></span><span style="display:flex;"><span>    B uint8  //单元(buckets)的对数 B=5表示能容纳32个元素  B随着map容量增大而变大
+</span></span><span style="display:flex;"><span>    noverflow uint16  //单元(buckets)溢出数量，如果一个单元能存8个key，此时存储了9个，溢出了，就需要再增加一个单元 
+</span></span><span style="display:flex;"><span>    hash0 uint32  //哈希种子 
+</span></span><span style="display:flex;"><span>    buckets unsafe.Pointer //指向单元(buckets)数组,大小为2^B，可以为nil 
+</span></span><span style="display:flex;"><span>    oldbuckets unsafe.Pointer //扩容的时候，buckets长度会是oldbuckets的两倍 
+</span></span><span style="display:flex;"><span>    nevacute uintptr  //指示扩容进度，小于此buckets迁移完成 
+</span></span><span style="display:flex;"><span>    extra *mapextra //与gc相关 可选字段 
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>type bmap struct { 
+</span></span><span style="display:flex;"><span>    tophash [bucketCnt]uint8 
+</span></span><span style="display:flex;"><span>} 
+</span></span><span style="display:flex;"><span>//实际上编译期间会生成一个新的数据结构  
+</span></span><span style="display:flex;"><span>type bmap struct { 
+</span></span><span style="display:flex;"><span>    topbits [8]uint8     //key hash值前8位 用于快速定位keys的位置
+</span></span><span style="display:flex;"><span>    keys [8]keytype     //键
+</span></span><span style="display:flex;"><span>    values [8]valuetype //值
+</span></span><span style="display:flex;"><span>    pad uintptr 
+</span></span><span style="display:flex;"><span>    overflow uintptr     //指向溢出桶 无符号整形 优化GC
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h1 id="map-扩容机制">map 扩容机制<a hidden class="anchor" aria-hidden="true" href="#map-扩容机制">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>扩容时机：向 map 插入新 key 的时候，会进行条件检测，符合下面这 2 个条件，就会触发扩容
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>扩容条件：
+</span></span><span style="display:flex;"><span>1.超过负载 map元素个数 &gt; 6.5（负载因子） * 桶个数
+</span></span><span style="display:flex;"><span>2.溢出桶太多
+</span></span><span style="display:flex;"><span>当桶总数&lt;2^15时，如果溢出桶总数&gt;=桶总数，则认为溢出桶过多
+</span></span><span style="display:flex;"><span>当桶总数&gt;2^15时，如果溢出桶总数&gt;=2^15，则认为溢出桶过多
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>扩容机制：
+</span></span><span style="display:flex;"><span>双倍扩容：针对条件1，新建一个buckets数组，新的buckets大小是原来的2倍，然后旧buckets数据搬迁到新的buckets。
+</span></span><span style="display:flex;"><span>等量扩容：针对条件2，并不扩大容量，buckets数量维持不变，重新做一遍类似双倍扩容的搬迁动作，把松散的键值对重新排列一次，使得同一个 bucket 中的 key 排列地更紧密，节省空间，提高 bucket 利用率，进而保证更快的存取。
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>渐进式扩容：
+</span></span><span style="display:flex;"><span>插入修改删除key的时候，都会尝试进行搬迁桶的工作，每次都会检查oldbucket是否nil，如果不是nil则每次搬迁2个桶，蚂蚁搬家一样渐进式扩容
+</span></span></code></pre></div><h1 id="map-遍历为什么无序">map 遍历为什么无序<a hidden class="anchor" aria-hidden="true" href="#map-遍历为什么无序">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>map每次遍历,都会从一个随机值序号的桶,再从其中随机的cell开始遍历,并且扩容后,原来桶中的key会落到其他桶中,本身就会造成失序
+</span></span><span style="display:flex;"><span>如果想顺序遍历map,先把key放到切片排序,再按照key的顺序遍历map
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>var sl []int
+</span></span><span style="display:flex;"><span>for k := range m {
+</span></span><span style="display:flex;"><span>    sl = append(sl, k)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>sort.Ints(sl)
+</span></span><span style="display:flex;"><span>for _,k:= range sl {
+</span></span><span style="display:flex;"><span>    fmt.Print(m[k])
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h1 id="map-为什么不是线程安全的">map 为什么不是线程安全的<a hidden class="anchor" aria-hidden="true" href="#map-为什么不是线程安全的">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>map设计就不是用来多个协程高并发访问的
+</span></span><span style="display:flex;"><span>多个协程同时对map进行并发读写,程序会panic
+</span></span><span style="display:flex;"><span>如果想线程安全,可以使用sync.RWLock 锁
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sync.map
+</span></span><span style="display:flex;"><span>这个包里面的map实现了锁,是线程安全的
+</span></span></code></pre></div><h1 id="map-如何查找">Map 如何查找<a hidden class="anchor" aria-hidden="true" href="#map-如何查找">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>1.写保护机制
+</span></span><span style="display:flex;"><span>先查hmap的标志位flags,如果flags写标志位此时是1,说明其他协程正在写操作,直接panic
+</span></span><span style="display:flex;"><span>2.计算hash值
+</span></span><span style="display:flex;"><span>key经过哈希函数计算后,得到64bit(64位CPU)
+</span></span><span style="display:flex;"><span>10010111 | 101011101010110101010101101010101010 | 10010
+</span></span><span style="display:flex;"><span>3.找到hash对应的桶
+</span></span><span style="display:flex;"><span>上面64位后5(hmap的B值)位定位所存放的桶
+</span></span><span style="display:flex;"><span>如果当前正在扩容中,并且定位到旧桶数据还未完成迁移,则使用旧的桶
+</span></span><span style="display:flex;"><span>4.遍历桶查找
+</span></span><span style="display:flex;"><span>上面64位前8位用来在tophash数组查找快速判断key是否在当前的桶中,如果不在需要去溢出桶查找  
+</span></span><span style="display:flex;"><span>5.返回key对应的指针
+</span></span></code></pre></div><h1 id="map-冲突解决方式">Map 冲突解决方式<a hidden class="anchor" aria-hidden="true" href="#map-冲突解决方式">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>GO采用链地址法解决冲突，具体就是插入key到map中时，当key定位的桶填满8个元素后，将会创建一个溢出桶，并且将溢出桶插入当前桶的所在链表尾部
+</span></span></code></pre></div><h1 id="map-负载因子为什么是-65">Map 负载因子为什么是 6.5<a hidden class="anchor" aria-hidden="true" href="#map-负载因子为什么是-65">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>负载因子 = 哈希表存储的元素个数 / 桶个数
+</span></span><span style="display:flex;"><span>Go 官方发现：装载因子越大，填入的元素越多，空间利用率就越高，但发生哈希冲突的几率就变大。
+</span></span><span style="display:flex;"><span>            装载因子越小，填入的元素越少，冲突发生的几率减小，但空间浪费也会变得更多，而且还会提高扩容操作的次数
+</span></span><span style="display:flex;"><span>Go 官方取了一个相对适中的值，把 Go 中的 map 的负载因子硬编码为 6.5，这就是 6.5 的选择缘由。
+</span></span><span style="display:flex;"><span>这意味着在 Go 语言中，当 map存储的元素个数大于或等于 6.5 * 桶个数 时，就会触发扩容行为。
+</span></span></code></pre></div><h1 id="map-和-syncmap-哪个性能好">Map 和 Sync.Map 哪个性能好<a hidden class="anchor" aria-hidden="true" href="#map-和-syncmap-哪个性能好">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>type Map struct {
+</span></span><span style="display:flex;"><span>    mu Mutex
+</span></span><span style="display:flex;"><span>    read atomic.Value
+</span></span><span style="display:flex;"><span>    dirty map[interface()]*entry
+</span></span><span style="display:flex;"><span>    misses int
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>对比原始map：
+</span></span><span style="display:flex;"><span>和原始map+RWLock的实现并发的方式相比，减少了加锁对性能的影响。它做了一些优化：可以无锁访问read map，而且会优先操作read map，倘若只操作read map就可以满足要求，那就不用去操作write map(dirty)，所以在某些特定场景中它发生锁竞争的频率会远远小于map+RWLock的实现方式
+</span></span><span style="display:flex;"><span>优点：
+</span></span><span style="display:flex;"><span>适合读多写少的场景
+</span></span><span style="display:flex;"><span>缺点：
+</span></span><span style="display:flex;"><span>写多的场景，会导致 read map 缓存失效，需要加锁，冲突变多，性能急剧下降
+</span></span></code></pre></div><h1 id="channel-底层实现原理">Channel 底层实现原理<a hidden class="anchor" aria-hidden="true" href="#channel-底层实现原理">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>通过var声明或者make函数创建的channel变量是一个存储在函数栈帧上的指针，占用8个字节，指向堆上的hchan结构体
+</span></span><span style="display:flex;"><span>type hchan struct {
+</span></span><span style="display:flex;"><span>    closed   uint32   // channel是否关闭的标志
+</span></span><span style="display:flex;"><span>    elemtype *_type   // channel中的元素类型
+</span></span><span style="display:flex;"><span>    // channel分为无缓冲和有缓冲两种。
+</span></span><span style="display:flex;"><span>    // 对于有缓冲的channel存储数据，使用了 ring buffer（环形缓冲区) 来缓存写入的数据，本质是循环数组
+</span></span><span style="display:flex;"><span>    // 为啥是循环数组？普通数组不行吗，普通数组容量固定更适合指定的空间，弹出元素时，普通数组需要全部都前移
+</span></span><span style="display:flex;"><span>    // 当下标超过数组容量后会回到第一个位置，所以需要有两个字段记录当前读和写的下标位置
+</span></span><span style="display:flex;"><span>    buf      unsafe.Pointer // 指向底层循环数组的指针（环形缓冲区）
+</span></span><span style="display:flex;"><span>    qcount   uint           // 循环数组中的元素数量
+</span></span><span style="display:flex;"><span>    dataqsiz uint           // 循环数组的长度
+</span></span><span style="display:flex;"><span>    elemsize uint16                 // 元素的大小
+</span></span><span style="display:flex;"><span>    sendx    uint           // 下一次写下标的位置
+</span></span><span style="display:flex;"><span>    recvx    uint           // 下一次读下标的位置
+</span></span><span style="display:flex;"><span>    // 尝试读取channel或向channel写入数据而被阻塞的goroutine
+</span></span><span style="display:flex;"><span>    recvq    waitq  // 读等待队列
+</span></span><span style="display:flex;"><span>    sendq    waitq  // 写等待队列
+</span></span><span style="display:flex;"><span>    lock mutex //互斥锁，保证读写channel时不存在并发竞争问题
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>等待队列：
+</span></span><span style="display:flex;"><span>双向链表，包含一个头结点和一个尾结点
+</span></span><span style="display:flex;"><span>每个节点是一个sudog结构体变量，记录哪个协程在等待，等待的是哪个channel，等待发送/接收的数据在哪里
+</span></span><span style="display:flex;"><span>type waitq struct {
+</span></span><span style="display:flex;"><span>    first *sudog
+</span></span><span style="display:flex;"><span>    last  *sudog
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>type sudog struct {
+</span></span><span style="display:flex;"><span>    g *g
+</span></span><span style="display:flex;"><span>    next *sudog
+</span></span><span style="display:flex;"><span>    prev *sudog
+</span></span><span style="display:flex;"><span>    elem unsafe.Pointer 
+</span></span><span style="display:flex;"><span>    c        *hchan 
+</span></span><span style="display:flex;"><span>    ...
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>创建时:
+</span></span><span style="display:flex;"><span>创建时会做一些检查:
+</span></span><span style="display:flex;"><span>-   元素大小不能超过 64K
+</span></span><span style="display:flex;"><span>-   元素的对齐大小不能超过 maxAlign 也就是 8 字节
+</span></span><span style="display:flex;"><span>-   计算出来的内存是否超过限制
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>创建时的策略:
+</span></span><span style="display:flex;"><span>-   如果是无缓冲的 channel，会直接给 hchan 分配内存
+</span></span><span style="display:flex;"><span>-   如果是有缓冲的 channel，并且元素不包含指针，那么会为 hchan 和底层数组分配一段连续的地址
+</span></span><span style="display:flex;"><span>-   如果是有缓冲的 channel，并且元素包含指针，那么会为 hchan 和底层数组分别分配地址
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>发送时:
+</span></span><span style="display:flex;"><span>-   如果 channel 的读等待队列存在接收者goroutine
+</span></span><span style="display:flex;"><span>-   将数据**直接发送**给第一个等待的 goroutine， **唤醒接收的 goroutine**
+</span></span><span style="display:flex;"><span>-   如果 channel 的读等待队列不存在接收者goroutine
+</span></span><span style="display:flex;"><span>-   如果循环数组buf未满，那么将会把数据发送到循环数组buf的队尾
+</span></span><span style="display:flex;"><span>-   如果循环数组buf已满，这个时候就会走阻塞发送的流程，将当前 goroutine 加入写等待队列，并**挂起等待唤醒**
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>接收时:
+</span></span><span style="display:flex;"><span>-   如果 channel 的写等待队列存在发送者goroutine
+</span></span><span style="display:flex;"><span>-   如果是无缓冲 channel，**直接**从第一个发送者goroutine那里把数据拷贝给接收变量，**唤醒发送的 goroutine**
+</span></span><span style="display:flex;"><span>-   如果是有缓冲 channel（已满），将循环数组buf的队首元素拷贝给接收变量，将第一个发送者goroutine的数据拷贝到 buf循环数组队尾，**唤醒发送的 goroutine**
+</span></span><span style="display:flex;"><span>-   如果 channel 的写等待队列不存在发送者goroutine
+</span></span><span style="display:flex;"><span>-   如果循环数组buf非空，将循环数组buf的队首元素拷贝给接收变量
+</span></span><span style="display:flex;"><span>-   如果循环数组buf为空，这个时候就会走阻塞接收的流程，将当前 goroutine 加入读等待队列，并**挂起等待唤醒**
+</span></span></code></pre></div><h1 id="channel-有什么特点">Channel 有什么特点<a hidden class="anchor" aria-hidden="true" href="#channel-有什么特点">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>channel有2种类型：无缓冲、有缓冲
+</span></span><span style="display:flex;"><span>channel有3种模式：写操作模式（单向通道）、读操作模式（单向通道）、读写操作模式（双向通道）
+</span></span><span style="display:flex;"><span>写操作模式    make(chan&lt;- int)
+</span></span><span style="display:flex;"><span>读操作模式    make(&lt;-chan int)
+</span></span><span style="display:flex;"><span>读写操作模式    make(chan int)
+</span></span></code></pre></div><p>channel 有 3 种状态：未初始化、正常、关闭</p>
+<table>
+<thead>
+<tr>
+<th>操作 \ 状态</th>
+<th>未初始化</th>
+<th>关闭</th>
+<th>正常</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>关闭</td>
+<td>panic</td>
+<td>panic</td>
+<td>正常</td>
+</tr>
+<tr>
+<td>发送</td>
+<td>永远阻塞导致死锁</td>
+<td>panic</td>
+<td>阻塞或者成功发送</td>
+</tr>
+<tr>
+<td>接收</td>
+<td>永远阻塞导致死锁</td>
+<td>缓冲区为空则为零值，否则可以继续读</td>
+<td>阻塞或者成功接收</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>注意点：
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>一个 channel不能多次关闭，会导致painc
+</span></span><span style="display:flex;"><span>如果多个 goroutine 都监听同一个 channel，那么 channel 上的数据都可能随机被某一个 goroutine 取走进行消费
+</span></span><span style="display:flex;"><span>如果多个 goroutine 监听同一个 channel，如果这个 channel 被关闭，则所有 goroutine 都能收到退出信号
+</span></span></code></pre></div><h1 id="channel-为什么是线程安全的">Channel 为什么是线程安全的<a hidden class="anchor" aria-hidden="true" href="#channel-为什么是线程安全的">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>不同协程通过channel进行通信，本身的使用场景就是多线程，为了保证数据的一致性，必须实现线程安全
+</span></span><span style="display:flex;"><span>channel的底层实现中，hchan结构体中采用Mutex锁来保证数据读写安全。在对循环数组buf中的数据进行入队和出队操作时，必须先获取互斥锁，才能操作channel数据
+</span></span></code></pre></div><h1 id="channel-发送和接收什么情况下会死锁">Channel 发送和接收什么情况下会死锁？<a hidden class="anchor" aria-hidden="true" href="#channel-发送和接收什么情况下会死锁">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>func deadlock1() {    //无缓冲channel只写不读
+</span></span><span style="display:flex;"><span>    ch := make(chan int) 
+</span></span><span style="display:flex;"><span>    ch &lt;- 3 //  这里会发生一直阻塞的情况，执行不到下面一句
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>func deadlock2() { //无缓冲channel读在写后面
+</span></span><span style="display:flex;"><span>    ch := make(chan int)
+</span></span><span style="display:flex;"><span>    ch &lt;- 3  //  这里会发生一直阻塞的情况，执行不到下面一句
+</span></span><span style="display:flex;"><span>    num := &lt;-ch
+</span></span><span style="display:flex;"><span>    fmt.Println(&#34;num=&#34;, num)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>func deadlock3() { //无缓冲channel读在写后面
+</span></span><span style="display:flex;"><span>    ch := make(chan int)
+</span></span><span style="display:flex;"><span>    ch &lt;- 100 //  这里会发生一直阻塞的情况，执行不到下面一句
+</span></span><span style="display:flex;"><span>    go func() {
+</span></span><span style="display:flex;"><span>        num := &lt;-ch
+</span></span><span style="display:flex;"><span>        fmt.Println(&#34;num=&#34;, num)
+</span></span><span style="display:flex;"><span>    }()
+</span></span><span style="display:flex;"><span>    time.Sleep(time.Second)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>func deadlock3() {    //有缓冲channel写入超过缓冲区数量
+</span></span><span style="display:flex;"><span>    ch := make(chan int, 3)
+</span></span><span style="display:flex;"><span>    ch &lt;- 3
+</span></span><span style="display:flex;"><span>    ch &lt;- 4
+</span></span><span style="display:flex;"><span>    ch &lt;- 5
+</span></span><span style="display:flex;"><span>    ch &lt;- 6  //  这里会发生一直阻塞的情况
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>func deadlock4() {    //空读
+</span></span><span style="display:flex;"><span>    ch := make(chan int)
+</span></span><span style="display:flex;"><span>    // ch := make(chan int, 1)
+</span></span><span style="display:flex;"><span>    fmt.Println(&lt;-ch)  //  这里会发生一直阻塞的情况
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>func deadlock5() {    //互相等对方造成死锁
+</span></span><span style="display:flex;"><span>    ch1 := make(chan int)
+</span></span><span style="display:flex;"><span>    ch2 := make(chan int)
+</span></span><span style="display:flex;"><span>    go func() {
+</span></span><span style="display:flex;"><span>        for {
+</span></span><span style="display:flex;"><span>        select {
+</span></span><span style="display:flex;"><span>        case num := &lt;-ch1:
+</span></span><span style="display:flex;"><span>            fmt.Println(&#34;num=&#34;, num)
+</span></span><span style="display:flex;"><span>            ch2 &lt;- 100
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    }()
+</span></span><span style="display:flex;"><span>    for {
+</span></span><span style="display:flex;"><span>        select {
+</span></span><span style="display:flex;"><span>        case num := &lt;-ch2:
+</span></span><span style="display:flex;"><span>            fmt.Println(&#34;num=&#34;, num)
+</span></span><span style="display:flex;"><span>            ch1 &lt;- 300
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h1 id="互斥锁实现原理">互斥锁实现原理<a hidden class="anchor" aria-hidden="true" href="#互斥锁实现原理">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>Go sync包提供了两种锁类型：互斥锁sync.Mutex 和 读写互斥锁sync.RWMutex，都属于悲观锁。
+</span></span><span style="display:flex;"><span>锁的实现一般会依赖于原子操作、信号量，通过atomic 包中的一些原子操作来实现锁的锁定，通过信号量来实现线程的阻塞与唤醒
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>在正常模式下，锁的等待者会按照先进先出的顺序获取锁。但是刚被唤起的 Goroutine 与新创建的 Goroutine 竞争时，大概率会获取不到锁，在这种情况下，这个被唤醒的 Goroutine 会加入到等待队列的前面。 如果一个等待的 Goroutine 超过1ms 没有获取锁，那么它将会把锁转变为饥饿模式。
+</span></span><span style="display:flex;"><span>Go在1.9中引入优化，目的保证互斥锁的公平性。在饥饿模式中，互斥锁会直接交给等待队列最前面的 Goroutine。新的 Goroutine 在该状态下不能获取锁、也不会进入自旋状态，它们只会在队列的末尾等待。如果一个 Goroutine 获得了互斥锁并且它在队列的末尾或者它等待的时间少于 1ms，那么当前的互斥锁就会切换回正常模式。
+</span></span></code></pre></div><h1 id="互斥锁允许自旋的条件">互斥锁允许自旋的条件？<a hidden class="anchor" aria-hidden="true" href="#互斥锁允许自旋的条件">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>线程没有获取到锁时常见有2种处理方式：
+</span></span><span style="display:flex;"><span>-   一种是没有获取到锁的线程就一直循环等待判断该资源是否已经释放锁，这种锁也叫做自旋锁，它不用将线程阻塞起来， 适用于并发低且程序执行时间短的场景，缺点是cpu占用较高
+</span></span><span style="display:flex;"><span>-   另外一种处理方式就是把自己阻塞起来，会释放CPU给其他线程，内核会将线程置为「睡眠」状态，等到锁被释放后，内核会在合适的时机唤醒该线程，适用于高并发场景，缺点是有线程上下文切换的开销
+</span></span><span style="display:flex;"><span>Go语言中的Mutex实现了自旋与阻塞两种场景，当满足不了自旋条件时，就会进入阻塞
+</span></span><span style="display:flex;"><span>**允许自旋的条件：**
+</span></span><span style="display:flex;"><span>1.  锁已被占用，并且锁不处于饥饿模式。
+</span></span><span style="display:flex;"><span>2.  积累的自旋次数小于最大自旋次数（active_spin=4）。
+</span></span><span style="display:flex;"><span>3.  cpu 核数大于 1。
+</span></span><span style="display:flex;"><span>4.  有空闲的 P。
+</span></span><span style="display:flex;"><span>5.  当前 goroutine 所挂载的 P 下，本地待运行队列为空。
+</span></span></code></pre></div><h1 id="读写锁实现原理">读写锁实现原理<a hidden class="anchor" aria-hidden="true" href="#读写锁实现原理">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>读写锁的底层是基于互斥锁实现的。
+</span></span><span style="display:flex;"><span>写锁需要阻塞写锁：一个协程拥有写锁时，其他协程写锁定需要阻塞；
+</span></span><span style="display:flex;"><span>写锁需要阻塞读锁：一个协程拥有写锁时，其他协程读锁定需要阻塞；
+</span></span><span style="display:flex;"><span>读锁需要阻塞写锁：一个协程拥有读锁时，其他协程写锁定需要阻塞；
+</span></span><span style="display:flex;"><span>读锁不能阻塞读锁：一个协程拥有读锁时，其他协程也可以拥有读锁。
+</span></span></code></pre></div><h1 id="原子操作有哪些">原子操作有哪些<a hidden class="anchor" aria-hidden="true" href="#原子操作有哪些">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span>Go atomic<span style="color:#960050;background-color:#1e0010">包是最轻量级的锁（也称无锁结构），可以在不形成临界区和创建互斥量的情况下完成并发安全的值替换操作，不过这个包只支持</span>int32<span style="color:#f92672">/</span>int64<span style="color:#f92672">/</span>uint32<span style="color:#f92672">/</span>uint64<span style="color:#f92672">/</span>uintptr<span style="color:#960050;background-color:#1e0010">这几种数据类型的一些基础操作（增减、交换、载入、存储等）</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">当我们想要对</span><span style="color:#f92672">**</span><span style="color:#960050;background-color:#1e0010">某个变量</span><span style="color:#f92672">**</span><span style="color:#960050;background-color:#1e0010">并发安全的修改，除了使用官方提供的</span> <span style="color:#f92672">`</span>mutex<span style="color:#f92672">`</span><span style="color:#960050;background-color:#1e0010">，还可以使用</span> sync<span style="color:#f92672">/</span>atomic <span style="color:#960050;background-color:#1e0010">包的原子操作，它能够保证对变量的读取或修改期间不被其他的协程所影响。</span>
+</span></span><span style="display:flex;"><span>atomic <span style="color:#960050;background-color:#1e0010">包提供的原子操作能够确保任一时刻只有一个</span>goroutine<span style="color:#960050;background-color:#1e0010">对变量进行操作，善用</span> atomic <span style="color:#960050;background-color:#1e0010">能够避免程序中出现大量的锁操作。</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">**</span><span style="color:#960050;background-color:#1e0010">常见操作：</span><span style="color:#f92672">**</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">-</span>   <span style="color:#960050;background-color:#1e0010">增减</span>Add     AddInt32 AddInt64 AddUint32 AddUint64 AddUintptr
+</span></span><span style="display:flex;"><span><span style="color:#f92672">-</span>   <span style="color:#960050;background-color:#1e0010">载入</span>Load    LoadInt32 LoadInt64    LoadPointer    LoadUint32    LoadUint64    LoadUintptr    
+</span></span><span style="display:flex;"><span><span style="color:#f92672">-</span>   <span style="color:#960050;background-color:#1e0010">比较并交换</span>CompareAndSwap    CompareAndSwapInt32...
+</span></span><span style="display:flex;"><span><span style="color:#f92672">-</span>   <span style="color:#960050;background-color:#1e0010">交换</span>Swap    SwapInt32...
+</span></span><span style="display:flex;"><span><span style="color:#f92672">-</span>   <span style="color:#960050;background-color:#1e0010">存储</span>Store    StoreInt32...
+</span></span></code></pre></div><h1 id="原子操作和锁的区别">原子操作和锁的区别<a hidden class="anchor" aria-hidden="true" href="#原子操作和锁的区别">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>原子操作由底层硬件支持，而锁是基于原子操作+信号量完成的。若实现相同的功能，前者通常会更有效率
+</span></span><span style="display:flex;"><span>原子操作是单个指令的互斥操作；互斥锁/读写锁是一种数据结构，可以完成临界区（多个指令）的互斥操作，扩大原子操作的范围
+</span></span><span style="display:flex;"><span>原子操作是无锁操作，属于乐观锁；说起锁的时候，一般属于悲观锁
+</span></span><span style="display:flex;"><span>原子操作存在于各个指令/语言层级，比如“机器指令层级的原子操作”，“汇编指令层级的原子操作”，“Go语言层级的原子操作”等。
+</span></span><span style="display:flex;"><span>锁也存在于各个指令/语言层级中，比如“机器指令层级的锁”，“汇编指令层级的锁”，“Go语言层级的锁”等
+</span></span></code></pre></div><h1 id="goroutine-的底层实现原理">goroutine 的底层实现原理<a hidden class="anchor" aria-hidden="true" href="#goroutine-的底层实现原理">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>g本质是一个数据结构,真正让 goroutine 运行起来的是调度器
+</span></span><span style="display:flex;"><span>type g struct { 
+</span></span><span style="display:flex;"><span>    goid int64  // 唯一的goroutine的ID 
+</span></span><span style="display:flex;"><span>    sched gobuf // goroutine切换时，用于保存g的上下文 
+</span></span><span style="display:flex;"><span>    stack stack // 栈 
+</span></span><span style="display:flex;"><span>    gopc // pc of go statement that created this goroutine 
+</span></span><span style="display:flex;"><span>    startpc uintptr  // pc of goroutine function ... 
+</span></span><span style="display:flex;"><span>} 
+</span></span><span style="display:flex;"><span>type gobuf struct {     //运行时寄存器
+</span></span><span style="display:flex;"><span>    sp uintptr  // 栈指针位置 
+</span></span><span style="display:flex;"><span>    pc uintptr  // 运行到的程序位置 
+</span></span><span style="display:flex;"><span>    g  guintptr // 指向 goroutine 
+</span></span><span style="display:flex;"><span>    ret uintptr // 保存系统调用的返回值 ... 
+</span></span><span style="display:flex;"><span>} 
+</span></span><span style="display:flex;"><span>type stack struct {     //运行时栈
+</span></span><span style="display:flex;"><span>    lo uintptr  // 栈的下界内存地址 
+</span></span><span style="display:flex;"><span>    hi uintptr  // 栈的上界内存地址 
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h1 id="goroutine-和线程的区别">goroutine 和线程的区别<a hidden class="anchor" aria-hidden="true" href="#goroutine-和线程的区别">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>内存占用:
+</span></span><span style="display:flex;"><span>创建一个 goroutine 的栈内存消耗为 2 KB，实际运行过程中，如果栈空间不够用，会自动进行扩容。创建一个 thread 则需要消耗 1 MB 栈内存。
+</span></span><span style="display:flex;"><span>创建和销毀:
+</span></span><span style="display:flex;"><span>Thread 创建和销毀需要陷入内核,系统调用。而 goroutine 因为是由 Go runtime 负责管理的，创建和销毁的消耗非常小，是用户级。
+</span></span><span style="display:flex;"><span>切换:
+</span></span><span style="display:flex;"><span>当 threads 切换时，需要保存各种寄存器,而 goroutines 切换只需保存三个寄存器：Program Counter, Stack Pointer and BP。一般而言，线程切换会消耗 1000-1500 ns,Goroutine 的切换约为 200 ns,因此，goroutines 切换成本比 threads 要小得多。
+</span></span></code></pre></div><h1 id="goroutine-泄露场景">goroutine 泄露场景<a hidden class="anchor" aria-hidden="true" href="#goroutine-泄露场景">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">泄露原因</span>
+</span></span><span style="display:flex;"><span>Goroutine <span style="color:#960050;background-color:#1e0010">内进行</span>channel<span style="color:#f92672">/</span>mutex <span style="color:#960050;background-color:#1e0010">等读写操作被一直阻塞。</span>
+</span></span><span style="display:flex;"><span>Goroutine <span style="color:#960050;background-color:#1e0010">内的业务逻辑进入死循环，资源一直无法释放。</span>
+</span></span><span style="display:flex;"><span>Goroutine <span style="color:#960050;background-color:#1e0010">内的业务逻辑进入长时间等待，有不断新增的</span> Goroutine <span style="color:#960050;background-color:#1e0010">进入等待</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">泄露场景</span>
+</span></span><span style="display:flex;"><span>channel <span style="color:#960050;background-color:#1e0010">如果忘记初始化，那么无论你是读，还是写操作，都会造成阻塞。</span>
+</span></span><span style="display:flex;"><span>channel <span style="color:#960050;background-color:#1e0010">发送数量</span> <span style="color:#960050;background-color:#1e0010">超过</span> channel<span style="color:#960050;background-color:#1e0010">接收数量，就会造成阻塞</span>
+</span></span><span style="display:flex;"><span>channel <span style="color:#960050;background-color:#1e0010">接收数量</span> <span style="color:#960050;background-color:#1e0010">超过</span> channel<span style="color:#960050;background-color:#1e0010">发送数量，也会造成阻塞</span>
+</span></span><span style="display:flex;"><span>http request body<span style="color:#960050;background-color:#1e0010">未关闭，</span>goroutine<span style="color:#960050;background-color:#1e0010">不会退出</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">互斥锁忘记解锁</span>
+</span></span><span style="display:flex;"><span>sync.WaitGroup<span style="color:#960050;background-color:#1e0010">使用不当</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">如何排查</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">单个函数：调用</span> <span style="color:#f92672">`</span>runtime.NumGoroutine<span style="color:#f92672">`</span> <span style="color:#960050;background-color:#1e0010">方法来打印</span> <span style="color:#960050;background-color:#1e0010">执行代码前后</span>Goroutine <span style="color:#960050;background-color:#1e0010">的运行数量，进行前后比较，就能知道有没有泄露了。</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">生产</span><span style="color:#f92672">/</span><span style="color:#960050;background-color:#1e0010">测试环境：使用</span><span style="color:#f92672">`</span>PProf<span style="color:#f92672">`</span><span style="color:#960050;background-color:#1e0010">实时监测</span>Goroutine<span style="color:#960050;background-color:#1e0010">的数量</span>
+</span></span></code></pre></div><h1 id="如何查看正在运行的-goroutine-数量">如何查看正在运行的 goroutine 数量<a hidden class="anchor" aria-hidden="true" href="#如何查看正在运行的-goroutine-数量">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;net/http&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">_</span> <span style="color:#e6db74">&#34;net/http/pprof&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">100</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">select</span> {}
+</span></span><span style="display:flex;"><span>        }()
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ListenAndServe</span>(<span style="color:#e6db74">&#34;localhost:6060&#34;</span>, <span style="color:#66d9ef">nil</span>)
+</span></span><span style="display:flex;"><span>    }()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">select</span> {}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">执行程序之后，命令运行以下命令，会自动打开浏览器显示一系列目前还看不懂的图，提示</span><span style="color:#a6e22e">Could</span> <span style="color:#a6e22e">not</span> <span style="color:#a6e22e">execute</span> <span style="color:#a6e22e">dot</span>; <span style="color:#a6e22e">may</span> <span style="color:#a6e22e">need</span> <span style="color:#a6e22e">to</span> <span style="color:#a6e22e">install</span> <span style="color:#a6e22e">graphviz</span>.<span style="color:#960050;background-color:#1e0010">则需要安装</span><span style="color:#a6e22e">graphviz</span><span style="color:#960050;background-color:#1e0010">，需要</span><span style="color:#a6e22e">python</span><span style="color:#960050;background-color:#1e0010">环境</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">go</span> <span style="color:#a6e22e">tool</span> <span style="color:#a6e22e">pprof</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">http</span>=:<span style="color:#ae81ff">1248</span> <span style="color:#a6e22e">http</span>:<span style="color:#75715e">//127.0.0.1:6060/debug/pprof/goroutine
+</span></span></span></code></pre></div><h1 id="如何控制并发的-goroutine-数量">如何控制并发的 goroutine 数量？<a hidden class="anchor" aria-hidden="true" href="#如何控制并发的-goroutine-数量">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>在开发过程中，如果不对goroutine加以控制而进行滥用的话，可能会导致服务整体崩溃。比如耗尽系统资源导致程序崩溃，或者CPU使用率过高导致系统忙不过来。
+</span></span><span style="display:flex;"><span>解决方案：
+</span></span><span style="display:flex;"><span>有缓冲channel:利用缓冲满时发送阻塞的特性
+</span></span><span style="display:flex;"><span>无缓冲channel:任务发送和执行分离，指定消费者并发协程数
+</span></span></code></pre></div><h1 id="go-线程模型如何实现">GO 线程模型如何实现<a hidden class="anchor" aria-hidden="true" href="#go-线程模型如何实现">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>M个线程对应N个内核线程
+</span></span><span style="display:flex;"><span>优点：
+</span></span><span style="display:flex;"><span>-   能够利用多核
+</span></span><span style="display:flex;"><span>-   上下文切换成本低
+</span></span><span style="display:flex;"><span>-   如果进程中的一个线程被阻塞，不会阻塞其他线程，是能够切换同一进程内的其他线程继续执行
+</span></span></code></pre></div><h1 id="gmp-和-gm-模型">GMP 和 GM 模型<a hidden class="anchor" aria-hidden="true" href="#gmp-和-gm-模型">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span>G<span style="color:#960050;background-color:#1e0010">：</span>Goroutine
+</span></span><span style="display:flex;"><span>M: <span style="color:#960050;background-color:#1e0010">线程</span>
+</span></span><span style="display:flex;"><span>P: Processor <span style="color:#960050;background-color:#1e0010">本地队列</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>GM<span style="color:#960050;background-color:#1e0010">模型：</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2012</span><span style="color:#960050;background-color:#1e0010">年前的调度器模型，使用了</span><span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">年果断被抛弃，缺点如下：</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span>.  <span style="color:#960050;background-color:#1e0010">创建、销毁、调度</span>G<span style="color:#960050;background-color:#1e0010">都需要每个</span>M<span style="color:#960050;background-color:#1e0010">获取锁，这就形成了激烈的锁竞争。</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2</span>.  M<span style="color:#960050;background-color:#1e0010">转移</span>G<span style="color:#960050;background-color:#1e0010">会造成延迟和额外的系统负载。比如当</span>G<span style="color:#960050;background-color:#1e0010">中包含创建新协程的时候，</span>M<span style="color:#960050;background-color:#1e0010">创建了</span>G<span style="color:#960050;background-color:#1e0010">’，为了继续执行</span>G<span style="color:#960050;background-color:#1e0010">，需要把</span>G<span style="color:#960050;background-color:#1e0010">’交给</span>M<span style="color:#960050;background-color:#1e0010">’执行，也造成了很差的局部性，因为</span>G<span style="color:#960050;background-color:#1e0010">’和</span>G<span style="color:#960050;background-color:#1e0010">是相关的，最好放在</span>M<span style="color:#960050;background-color:#1e0010">上执行，而不是其他</span>M<span style="color:#e6db74">&#39;。
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">3.  系统调用(CPU在M之间的切换)导致频繁的线程阻塞和取消阻塞操作增加了系统开销。
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">GMP模型：
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">P的数量：
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">由启动时环境变量`$GOMAXPROCS`或者是由`runtime`的方法`GOMAXPROCS()`决定
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">M的数量:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">go语言本身的限制：go程序启动时，会设置M的最大数量，默认10000.但是内核很难支持这么多的线程数
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">runtime/debug中的SetMaxThreads函数，设置M的最大数量
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">一个M阻塞了，会创建新的M。
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">P何时创建：在确定了P的最大数量n后，运行时系统会根据这个数量创建n个P。
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">M何时创建：没有足够的M来关联P并运行其中的可运行的G。比如所有的M此时都阻塞住了，而P中还有很多就绪任务，就会去寻找空闲的M，而没有空闲的，就会去创建新的M。
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">全场景解析：
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">1.P拥有G1，M1获取P后开始运行G1，G1创建了G2，为了局部性G2优先加入到P1的本地队列。
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">2.G1运行完成后，M上运行的goroutine切换为G0，G0负责调度时协程的切换。从P的本地队列取G2，从G0切换到G2，并开始运行G2。实现了线程M1的复用。
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">3.假设每个P的本地队列只能存4个G。G2要创建了6个G，前4个G（G3, G4, G5, G6）已经加入p1的本地队列，p1本地队列满了。
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">4.G2在创建G7的时候，发现P1的本地队列已满，需要执行负载均衡(把P1中本地队列中前一半的G，还有新创建G转移到全局队列)，这些G被转移到全局队列时，会被打乱顺序
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">5.G2创建G8时，P1的本地队列未满，所以G8会被加入到P1的本地队列。
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">6.在创建G时，运行的G会尝试唤醒其他空闲的P和M组合去执行。假定G2唤醒了M2，M2绑定了P2，并运行G0，但P2本地队列没有G，M2此时为自旋线程
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">7.M2尝试从全局队列取一批G放到P2的本地队列，至少从全局队列取1个g，但每次不要从全局队列移动太多的g到p本地队列，给其他p留点。
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">8.假设G2一直在M1上运行，经过2轮后，M2已经把G7、G4从全局队列获取到了P2的本地队列并完成运行，全局队列和P2的本地队列都空了,那m就要执行work stealing(偷取)：从其他有G的P哪里偷取一半G过来，放到自己的P本地队列。P2从P1的本地队列尾部取一半的G
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">9.G1本地队列G5、G6已经被其他M偷走并运行完成，当前M1和M2分别在运行G2和G8，M3和M4没有goroutine可以运行，M3和M4处于自旋状态，它们不断寻找goroutine。系统中最多有GOMAXPROCS个自旋的线程，多余的没事做线程会让他们休眠。
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">10.假定当前除了M3和M4为自旋线程，还有M5和M6为空闲的线程，G8创建了G9，G8进行了阻塞的系统调用，M2和P2立即解绑，P2会执行以下判断：如果P2本地队列有G、全局队列有G或有空闲的M，P2都会立马唤醒1个M和它绑定，否则P2则会加入到空闲P列表，等待M来获取可用的p。
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">11.G8创建了G9，假如G8进行了非阻塞系统调用。M2和P2会解绑，但M2会记住P2，然后G8和M2进入系统调用状态。当G8和M2退出系统调用时，会尝试获取P2，如果无法获取，则获取空闲的P，如果依然没有，G8会被记为可运行状态，并加入到全局队列,M2因为没有P的绑定而变成休眠状态
+</span></span></span></code></pre></div><h1 id="work-stealing-机制">work stealing 机制？<a hidden class="anchor" aria-hidden="true" href="#work-stealing-机制">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>当线程M⽆可运⾏的G时，尝试从其他M绑定的P偷取G，减少空转，提高了线程利用率（避免闲着不干活）。
+</span></span><span style="display:flex;"><span>当从本线程绑定 P 本地 队列、全局G队列、netpoller都找不到可执行的 g，会从别的 P 里窃取G并放到当前P上面。
+</span></span><span style="display:flex;"><span>从netpoller 中拿到的G是_Gwaiting状态（ 存放的是因为网络IO被阻塞的G），从其它地方拿到的G是_Grunnable状态
+</span></span><span style="display:flex;"><span>从全局队列取的G数量：N = min(len(GRQ)/GOMAXPROCS + 1, len(GRQ/2)) （根据GOMAXPROCS负载均衡）
+</span></span><span style="display:flex;"><span>从其它P本地队列窃取的G数量：N = len(LRQ)/2（平分）
+</span></span></code></pre></div><h1 id="hand-off-机制">hand off 机制？<a hidden class="anchor" aria-hidden="true" href="#hand-off-机制">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>也称为P分离机制，当本线程 M 因为 G 进行的系统调用阻塞时，线程释放绑定的 P，把 P 转移给其他空闲的 M 执行，也提高了线程利用率（避免站着茅坑不拉shi）。
+</span></span></code></pre></div><h1 id="如何查看运行时调度信息">如何查看运行时调度信息？<a hidden class="anchor" aria-hidden="true" href="#如何查看运行时调度信息">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>有 2 种方式可以查看一个程序的调度GMP信息，分别是go tool trace和GODEBUG
+</span></span></code></pre></div><h1 id="内存分配机制">内存分配机制<a hidden class="anchor" aria-hidden="true" href="#内存分配机制">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>额，这个不太了解！
+</span></span><span style="display:flex;"><span>好的你回去等通知吧！
+</span></span></code></pre></div><h1 id="内存逃逸机制">内存逃逸机制<a hidden class="anchor" aria-hidden="true" href="#内存逃逸机制">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>编译器会根据变量是否被外部引用来决定是否逃逸：
+</span></span><span style="display:flex;"><span>如果函数外部没有引用，则优先放到栈中；
+</span></span><span style="display:flex;"><span>如果函数外部存在引用，则必定放到堆中;
+</span></span><span style="display:flex;"><span>如果栈上放不下，则必定放到堆上;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>案例：
+</span></span><span style="display:flex;"><span>指针逃逸：函数返回值为局部变量的指针，函数虽然退出了，但是因为指针的存在，指向的内存不能随着函数结束而回收，因此只能分配在堆上。
+</span></span><span style="display:flex;"><span>栈空间不足：当栈空间足够时，不会发生逃逸，但是当变量过大时，已经完全超过栈空间的大小时，将会发生逃逸到堆上分配内存。局部变量s占用内存过大，编译器会将其分配到堆上
+</span></span><span style="display:flex;"><span>变量大小不确定：编译期间无法确定slice的长度，这种情况为了保证内存的安全，编译器也会触发逃逸，在堆上进行分配内存
+</span></span><span style="display:flex;"><span>动态类型：动态类型就是编译期间不确定参数的类型、参数的长度也不确定的情况下就会发生逃逸
+</span></span><span style="display:flex;"><span>闭包引用对象：闭包函数中局部变量i在后续函数是继续使用的，编译器将其分配到堆上
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>总结：
+</span></span><span style="display:flex;"><span>1.  栈上分配内存比在堆中分配内存效率更高
+</span></span><span style="display:flex;"><span>2.  栈上分配的内存不需要 GC 处理，而堆需要
+</span></span><span style="display:flex;"><span>3.  逃逸分析目的是决定内分配地址是栈还是堆
+</span></span><span style="display:flex;"><span>4.  逃逸分析在编译阶段完成
+</span></span><span style="display:flex;"><span>因为无论变量的大小，只要是指针变量都会在堆上分配，所以对于小变量我们还是使用传值效率（而不是传指针）更高一点。
+</span></span></code></pre></div><h1 id="go-内存对齐机制">GO 内存对齐机制<a hidden class="anchor" aria-hidden="true" href="#go-内存对齐机制">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>什么是内存对齐
+</span></span><span style="display:flex;"><span>为了能让CPU可以更快的存取到各个字段，Go编译器会帮你把struct结构体做数据的对齐。所谓的数据对齐，是指内存地址是所存储数据大小（按字节为单位）的整数倍，以便CPU可以一次将该数据从内存中读取出来。编译器通过在结构体的各个字段之间填充一些空白已达到对齐的目的。存在内存空间的浪费，实际上是空间换时间
+</span></span><span style="display:flex;"><span>对齐原则：
+</span></span><span style="display:flex;"><span>1.  结构体变量中成员的偏移量必须是成员大小的整数倍
+</span></span><span style="display:flex;"><span>2.  整个结构体的地址必须是最大字节的整数倍
+</span></span></code></pre></div><h1 id="gc-实现原理">GC 实现原理<a hidden class="anchor" aria-hidden="true" href="#gc-实现原理">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>在应用程序中会使用到两种内存，分别为堆（Heap）和栈（Stack），GC负责回收堆内存，而不负责回收栈中的内存
+</span></span><span style="display:flex;"><span>常用GC算法
+</span></span><span style="display:flex;"><span>1.引用计数：python,swift,php
+</span></span><span style="display:flex;"><span>2.分代收集：Java
+</span></span><span style="display:flex;"><span>3.标记清除：GO 三色标记法+混合屏障 停顿时间在0.5ms左右
+</span></span></code></pre></div><h1 id="gc-如何调优">GC 如何调优<a hidden class="anchor" aria-hidden="true" href="#gc-如何调优">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>1.控制内存分配的速度，限制 Goroutine 的数量，提高赋值器 mutator 的 CPU 利用率（降低GC的CPU利用率）
+</span></span><span style="display:flex;"><span>2.少量使用+连接string
+</span></span><span style="display:flex;"><span>3.slice提前分配足够的内存来降低扩容带来的拷贝
+</span></span><span style="display:flex;"><span>4.避免map key对象过多，导致扫描时间增加
+</span></span><span style="display:flex;"><span>5.变量复用，减少对象分配，例如使用 sync.Pool 来复用需要频繁创建临时对象、使用全局变量等
+</span></span><span style="display:flex;"><span>6.增大 GOGC 的值，降低 GC 的运行频率 (不太用这个)
+</span></span></code></pre></div><h1 id="如何查看-gc-信息">如何查看 GC 信息<a hidden class="anchor" aria-hidden="true" href="#如何查看-gc-信息">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>1. GODEBUG=&#39;gctrace=1&#39; go run main.go
+</span></span><span style="display:flex;"><span>2. go tool trace trace.out
+</span></span><span style="display:flex;"><span>3. debug.ReadGCStats
+</span></span><span style="display:flex;"><span>4. runtime.ReadMemStats
+</span></span></code></pre></div><h1 id="go-有哪些并发同步原语">Go 有哪些并发同步原语？<a hidden class="anchor" aria-hidden="true" href="#go-有哪些并发同步原语">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>额，这个不太了解！
+</span></span><span style="display:flex;"><span>好的你回去等通知吧！
+</span></span></code></pre></div><h1 id="go-如何排查数据竞争问题">Go 如何排查数据竞争问题？<a hidden class="anchor" aria-hidden="true" href="#go-如何排查数据竞争问题">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>go run -race main.go
+</span></span></code></pre></div><h1 id="go-限制协程数按顺序打印-catdogfish-各-100-次">Go 限制协程数、按顺序打印 cat、dog、fish 各 100 次<a hidden class="anchor" aria-hidden="true" href="#go-限制协程数按顺序打印-catdogfish-各-100-次">#</a></h1>
+<blockquote>
+<p>好无聊的面试题，正常人谁这么写代码</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;sync&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wg</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">dog</span>(<span style="color:#a6e22e">dogChan</span> <span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">bool</span>, <span style="color:#a6e22e">catChan</span> <span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">bool</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">select</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">dogChan</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;dog&#34;</span>, <span style="color:#a6e22e">i</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">catChan</span> <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">default</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">cat</span>(<span style="color:#a6e22e">catChan</span> <span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">bool</span>, <span style="color:#a6e22e">fishChan</span> <span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">bool</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">select</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">catChan</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;cat&#34;</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">fishChan</span> <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">default</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">fish</span>(<span style="color:#a6e22e">fishChan</span> <span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">bool</span>, <span style="color:#a6e22e">dogChan</span> <span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">bool</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">select</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">fishChan</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;fish&#34;</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> <span style="color:#75715e">// 计数，打印完之后就溜溜结束了。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">i</span> &gt; <span style="color:#ae81ff">9</span> {
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">dogChan</span> <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">default</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">dogChan</span>, <span style="color:#a6e22e">catChan</span>, <span style="color:#a6e22e">fishChan</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">bool</span>), make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">bool</span>), make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">bool</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">go</span> <span style="color:#a6e22e">dog</span>(<span style="color:#a6e22e">dogChan</span>, <span style="color:#a6e22e">catChan</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">go</span> <span style="color:#a6e22e">cat</span>(<span style="color:#a6e22e">catChan</span>, <span style="color:#a6e22e">fishChan</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">go</span> <span style="color:#a6e22e">fish</span>(<span style="color:#a6e22e">fishChan</span>, <span style="color:#a6e22e">dogChan</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">dogChan</span> <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">true</span> <span style="color:#75715e">// 记得这里进行启动条件，不然就没法启动了。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></blockquote>
+<h1 id="代码题">代码题<a hidden class="anchor" aria-hidden="true" href="#代码题">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>func main() {
+</span></span><span style="display:flex;"><span>    a := [3]int{1, 2, 3}
+</span></span><span style="display:flex;"><span>    for k, v := range a {
+</span></span><span style="display:flex;"><span>        if k == 0 {
+</span></span><span style="display:flex;"><span>            a[0], a[1] = 100, 200
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        a[k] = 100 + v
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    fmt.Print(a)  //数组    101  102  103
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>func main() {
+</span></span><span style="display:flex;"><span>    a := []int{1, 2, 3}
+</span></span><span style="display:flex;"><span>    for k, v := range a {
+</span></span><span style="display:flex;"><span>        if k == 0 {
+</span></span><span style="display:flex;"><span>            a[0], a[1] = 100, 200
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        a[k] = 100 + v
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    fmt.Print(a)  //切片    101 300 103
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">a</span> <span style="color:#66d9ef">uint</span> = <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">b</span> <span style="color:#66d9ef">uint</span> = <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">b</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Print</span>(<span style="color:#a6e22e">c</span>)    <span style="color:#75715e">//18446744073709551615     64位CPU  2^64-1 32位CPU 2^32-1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div>
+
+        </div>
+
+        <footer class="post-footer">
+            
+<nav class="paginav">
+  <a class="prev" href="https://liiqii.github.io/posts/tech/go/go_iris/">
+    <span class="title">« 上一页</span>
+    <br>
+    <span>Go 框架 Iris 文档</span>
+  </a>
+  <a class="next" href="https://liiqii.github.io/posts/tech/go/go_command/">
+    <span class="title">下一页 »</span>
+    <br>
+    <span>Go 命令</span>
+  </a>
+</nav>
+
+
+<div class="share-buttons">
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Go 面试题集锦快答 on twitter"
+       href="https://twitter.com/intent/tweet/?text=Go%20%e9%9d%a2%e8%af%95%e9%a2%98%e9%9b%86%e9%94%a6%e5%bf%ab%e7%ad%94&amp;url=https%3a%2f%2fliiqii.github.io%2fposts%2ftech%2fgo%2fgo_interview_questions_quick_answer%2f&amp;hashtags=Go%2c%e9%9d%a2%e8%af%95">
+    <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve">
+            <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-253.927,424.544c135.939,0 210.268,-112.643 210.268,-210.268c0,-3.218 0,-6.437 -0.153,-9.502c14.406,-10.421 26.973,-23.448 36.935,-38.314c-13.18,5.824 -27.433,9.809 -42.452,11.648c15.326,-9.196 26.973,-23.602 32.49,-40.92c-14.252,8.429 -30.038,14.56 -46.896,17.931c-13.487,-14.406 -32.644,-23.295 -53.946,-23.295c-40.767,0 -73.87,33.104 -73.87,73.87c0,5.824 0.613,11.494 1.992,16.858c-61.456,-3.065 -115.862,-32.49 -152.337,-77.241c-6.284,10.881 -9.962,23.601 -9.962,37.088c0,25.594 13.027,48.276 32.95,61.456c-12.107,-0.307 -23.448,-3.678 -33.41,-9.196l0,0.92c0,35.862 25.441,65.594 59.311,72.49c-6.13,1.686 -12.72,2.606 -19.464,2.606c-4.751,0 -9.348,-0.46 -13.946,-1.38c9.349,29.426 36.628,50.728 68.965,51.341c-25.287,19.771 -57.164,31.571 -91.8,31.571c-5.977,0 -11.801,-0.306 -17.625,-1.073c32.337,21.15 71.264,33.41 112.95,33.41Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Go 面试题集锦快答 on linkedin"
+       href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fliiqii.github.io%2fposts%2ftech%2fgo%2fgo_interview_questions_quick_answer%2f&amp;title=Go%20%e9%9d%a2%e8%af%95%e9%a2%98%e9%9b%86%e9%94%a6%e5%bf%ab%e7%ad%94&amp;summary=Go%20%e9%9d%a2%e8%af%95%e9%a2%98%e9%9b%86%e9%94%a6%e5%bf%ab%e7%ad%94&amp;source=https%3a%2f%2fliiqii.github.io%2fposts%2ftech%2fgo%2fgo_interview_questions_quick_answer%2f">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve">
+            <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Go 面试题集锦快答 on reddit"
+       href="https://reddit.com/submit?url=https%3a%2f%2fliiqii.github.io%2fposts%2ftech%2fgo%2fgo_interview_questions_quick_answer%2f&title=Go%20%e9%9d%a2%e8%af%95%e9%a2%98%e9%9b%86%e9%94%a6%e5%bf%ab%e7%ad%94">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve">
+            <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Go 面试题集锦快答 on facebook"
+       href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fliiqii.github.io%2fposts%2ftech%2fgo%2fgo_interview_questions_quick_answer%2f">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve">
+            <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Go 面试题集锦快答 on whatsapp"
+       href="https://api.whatsapp.com/send?text=Go%20%e9%9d%a2%e8%af%95%e9%a2%98%e9%9b%86%e9%94%a6%e5%bf%ab%e7%ad%94%20-%20https%3a%2f%2fliiqii.github.io%2fposts%2ftech%2fgo%2fgo_interview_questions_quick_answer%2f">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve">
+            <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Go 面试题集锦快答 on telegram"
+       href="https://telegram.me/share/url?text=Go%20%e9%9d%a2%e8%af%95%e9%a2%98%e9%9b%86%e9%94%a6%e5%bf%ab%e7%ad%94&amp;url=https%3a%2f%2fliiqii.github.io%2fposts%2ftech%2fgo%2fgo_interview_questions_quick_answer%2f">
+        <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28">
+            <path
+                    d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+        </svg>
+    </a>
+</div>
+
+        </footer>
+    </div>
+
+<style>
+    .comments_details summary::marker {
+        font-size: 20px;
+        content: '👉展开评论';
+        color: var(--content);
+    }
+    .comments_details[open] summary::marker{
+        font-size: 20px;
+        content: '👇关闭评论';
+        color: var(--content);
+    }
+</style>
+
+
+<div>
+    <details class="comments_details">
+        <summary style="cursor: pointer; margin: 50px 0 20px 0;width: 130px;">
+            <span style="font-size: 20px;color: var(--content);">...</span>
+        </summary>
+        <div id="tcomment"></div>
+    </details>
+    <script src="https://cdn.staticfile.org/twikoo/1.5.8/twikoo.all.min.js">
+    </script>
+    <script>
+        twikoo.init({
+            envId:  null ,
+        el: "#tcomment",
+            lang: 'zh-CN',
+            region:  null ,
+        path: window.TWIKOO_MAGIC_PATH||window.location.pathname,
+        })
+    </script>
+</div>
+</article>
+</main>
+
+<footer class="footer">
+    <span>
+        &copy;
+        -2023
+        <a href="https://liiqii.github.io/" style="color:#939393;">liiqii</a>
+    </span>
+    
+    <span>Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &amp;
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+    
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

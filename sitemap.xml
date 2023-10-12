@@ -2,29 +2,116 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://liiqii.github.io/posts/tech/mongo/mongo_query/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://liiqii.github.io/posts/tech/mongo/mongo_edit/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://liiqii.github.io/posts/tech/mongo/mongo_shell/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://liiqii.github.io/posts/tech/</loc>
-    <lastmod>2023-09-28T00:00:00+00:00</lastmod>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://liiqii.github.io/posts/</loc>
-    <lastmod>2023-09-28T00:00:00+00:00</lastmod>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://liiqii.github.io/tags/crontab/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://liiqii.github.io/tags/git/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://liiqii.github.io/posts/tech/git/git/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://liiqii.github.io/tags/go/</loc>
-    <lastmod>2023-09-28T00:00:00+00:00</lastmod>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://liiqii.github.io/posts/tech/go/command/</loc>
-    <lastmod>2023-09-28T00:00:00+00:00</lastmod>
+    <loc>https://liiqii.github.io/posts/tech/go/go_design_mode/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://liiqii.github.io/posts/tech/go/sort_algo/</loc>
-    <lastmod>2023-09-28T00:00:00+00:00</lastmod>
+    <loc>https://liiqii.github.io/posts/tech/go/go_channel/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://liiqii.github.io/posts/tech/go/regexp/</loc>
-    <lastmod>2023-09-28T00:00:00+00:00</lastmod>
+    <loc>https://liiqii.github.io/posts/tech/go/go_http/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://liiqii.github.io/posts/tech/go/go_rpc/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://liiqii.github.io/posts/tech/go/go_iris/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://liiqii.github.io/posts/tech/go/go_interview_questions_quick_answer/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://liiqii.github.io/posts/tech/go/go_command/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://liiqii.github.io/posts/tech/go/go_sort_algo/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://liiqii.github.io/posts/tech/go/go_file/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://liiqii.github.io/posts/tech/go/go_regexp/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://liiqii.github.io/posts/tech/go/go_interview_questions/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://liiqii.github.io/tags/go%E6%A1%86%E6%9E%B6/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://liiqii.github.io/tags/http/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://liiqii.github.io/</loc>
-    <lastmod>2023-09-28T00:00:00+00:00</lastmod>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://liiqii.github.io/tags/linux/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://liiqii.github.io/posts/tech/linux/linux_crontab/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://liiqii.github.io/posts/tech/go/linux_install_go/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://liiqii.github.io/posts/tech/linux/linux_delete_php/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://liiqii.github.io/tags/mongo/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://liiqii.github.io/tags/php/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://liiqii.github.io/tags/regexp/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://liiqii.github.io/tags/rpc/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://liiqii.github.io/tags/vim/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://liiqii.github.io/posts/tech/linux/vim/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://liiqii.github.io/tags/</loc>
-    <lastmod>2023-09-28T00:00:00+00:00</lastmod>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://liiqii.github.io/tags/%E9%9D%A2%E8%AF%95/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://liiqii.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://liiqii.github.io/tags/%E7%AE%97%E6%B3%95/</loc>
+    <lastmod>2023-10-10T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://liiqii.github.io/posts/read/</loc>
     <lastmod>2023-01-01T00:00:00+00:00</lastmod>

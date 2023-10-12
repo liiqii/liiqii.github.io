@@ -6,32 +6,176 @@
     <description>Recent content in 👨🏻‍💻 技术 on liiqii</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <lastBuildDate>Thu, 28 Sep 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://liiqii.github.io/posts/tech/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 10 Oct 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://liiqii.github.io/posts/tech/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【Mongo】MongoDB文档查询</title>
+      <link>https://liiqii.github.io/posts/tech/mongo/mongo_query/</link>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://liiqii.github.io/posts/tech/mongo/mongo_query/</guid>
+      <description>【Mongo】MongoDB文档查询</description>
+    </item>
+    
+    <item>
+      <title>【Mongo】MongoDB文档的增删改操作</title>
+      <link>https://liiqii.github.io/posts/tech/mongo/mongo_edit/</link>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://liiqii.github.io/posts/tech/mongo/mongo_edit/</guid>
+      <description>【Mongo】MongoDB文档的增删改操作</description>
+    </item>
+    
+    <item>
+      <title>【Mongo】初步认识MongoDB shell</title>
+      <link>https://liiqii.github.io/posts/tech/mongo/mongo_shell/</link>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://liiqii.github.io/posts/tech/mongo/mongo_shell/</guid>
+      <description>【Mongo】初步认识MongoDB shell</description>
+    </item>
+    
+    <item>
+      <title>Git 命令详解</title>
+      <link>https://liiqii.github.io/posts/tech/git/git/</link>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://liiqii.github.io/posts/tech/git/git/</guid>
+      <description>Git 命令详解，是目前世界上最先进的分布式版本控制系统</description>
+    </item>
+    
+    <item>
+      <title>Go 23种设计模式</title>
+      <link>https://liiqii.github.io/posts/tech/go/go_design_mode/</link>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://liiqii.github.io/posts/tech/go/go_design_mode/</guid>
+      <description>Go 23种设计模式</description>
+    </item>
+    
+    <item>
+      <title>Go Channel详解</title>
+      <link>https://liiqii.github.io/posts/tech/go/go_channel/</link>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://liiqii.github.io/posts/tech/go/go_channel/</guid>
+      <description>Channel是Go语言中的一种并发原语，用于在goroutine之间传递数据和同步执行。Channel实际上是一种特殊类型的数据结构，可以将其想象成一个管道，通过它可以发送和接收数据，实现goroutine之间的通信和同步。</description>
+    </item>
+    
+    <item>
+      <title>Go net http包</title>
+      <link>https://liiqii.github.io/posts/tech/go/go_http/</link>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://liiqii.github.io/posts/tech/go/go_http/</guid>
+      <description>在Go中，搭建一个HTTP server简单到令人难以置信。只需要引入net/http包，写几行代码，一个HTTP服务器就可以正常运行并接受访问请求。</description>
+    </item>
+    
+    <item>
+      <title>GO RPC 工作原理</title>
+      <link>https://liiqii.github.io/posts/tech/go/go_rpc/</link>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://liiqii.github.io/posts/tech/go/go_rpc/</guid>
+      <description>RPC（Remote Procedure Call Protocol）—— 远程过程调用协议，是一种通过网络从远程计算机程序上请求服务，而不需要了解底层网络技术的协议</description>
+    </item>
+    
+    <item>
+      <title>Go 框架 Iris 文档</title>
+      <link>https://liiqii.github.io/posts/tech/go/go_iris/</link>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://liiqii.github.io/posts/tech/go/go_iris/</guid>
+      <description>Go 框架 Iris 文档翻译，Iris是一个跨平台的软件。</description>
+    </item>
+    
+    <item>
+      <title>Go 面试题集锦快答</title>
+      <link>https://liiqii.github.io/posts/tech/go/go_interview_questions_quick_answer/</link>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://liiqii.github.io/posts/tech/go/go_interview_questions_quick_answer/</guid>
+      <description>Linux安装指定版本golang</description>
+    </item>
+    
     <item>
       <title>Go 命令</title>
-      <link>https://liiqii.github.io/posts/tech/go/command/</link>
-      <pubDate>Thu, 28 Sep 2023 00:00:00 +0000</pubDate>
+      <link>https://liiqii.github.io/posts/tech/go/go_command/</link>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://liiqii.github.io/posts/tech/go/command/</guid>
-      <description>go build 这个命令主要用于编译代码。在包的编译过程中，若有必要，会同时编译与之相关联的包。 如果是普通包，就像我们在1.2节中编写的mymath包那样，当你执行go build之后，它不会产生任何文件。如果你需要在$GOPATH/pkg下生成相应的文件，那就得执行go install。 如果是</description>
+      <guid>https://liiqii.github.io/posts/tech/go/go_command/</guid>
+      <description>Go 命令详解，可以使用`go help 命令`获取更详细的帮助信息。</description>
     </item>
     
     <item>
       <title>Go 排序算法实现</title>
-      <link>https://liiqii.github.io/posts/tech/go/sort_algo/</link>
-      <pubDate>Thu, 28 Sep 2023 00:00:00 +0000</pubDate>
+      <link>https://liiqii.github.io/posts/tech/go/go_sort_algo/</link>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://liiqii.github.io/posts/tech/go/sort_algo/</guid>
-      <description>1.冒泡排序 从头开始两两互比然后进行交换。将最大值/最小值 冒到最后一位。依次循环 func bubbleSort(nums []int){ for i:=0;i&amp;lt;len(nums)-1;i++{ // 循环次数 for j:=0;j&amp;lt;len(nums)-1-i;j++{ // 数组内相邻元素比较 if nums[j]&amp;gt;nums[j+1]{ // 交换条件 nums[j],nums[j+1]=nums[j+1],nums[j] // 元素交换 } } } } 2.选择排序 在未排序序列中找到最小（大）元素，存放到排序序列的起始位置; 再从剩余未排序元素中继续寻找最小（大）元素，然后放</description>
+      <guid>https://liiqii.github.io/posts/tech/go/go_sort_algo/</guid>
+      <description>Go 排序算法实现:冒泡排序、选择排序、插入排序、希尔排序、归并排序、快速排序、堆排序、计数排序、桶排序、基数排序</description>
+    </item>
+    
+    <item>
+      <title>Go 文件和目录</title>
+      <link>https://liiqii.github.io/posts/tech/go/go_file/</link>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://liiqii.github.io/posts/tech/go/go_file/</guid>
+      <description>Go 文件和目录</description>
     </item>
     
     <item>
       <title>Go 正则表达式</title>
-      <link>https://liiqii.github.io/posts/tech/go/regexp/</link>
-      <pubDate>Thu, 28 Sep 2023 00:00:00 +0000</pubDate>
+      <link>https://liiqii.github.io/posts/tech/go/go_regexp/</link>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://liiqii.github.io/posts/tech/go/regexp/</guid>
-      <description>1. 正则表达式语法 正则表达式是一种用于匹配和操作文本的强大工具，它使用特殊的字符和语法来定义模式。在 Golang 的 regexp 包中，使用的正则表达式语法是基于标准的 POSIX 正则表达式语法的一个子集。 以下是一些常用的正则表达式元字符： . ：匹配任意单个字符，除了换行符。 * ：匹配前面的元素零次或多次。 + ：匹配前面</description>
+      <guid>https://liiqii.github.io/posts/tech/go/go_regexp/</guid>
+      <description>正则表达式是一种用于匹配和操作文本的强大工具，它使用特殊的字符和语法来定义模式。</description>
+    </item>
+    
+    <item>
+      <title>Go常见面试题</title>
+      <link>https://liiqii.github.io/posts/tech/go/go_interview_questions/</link>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://liiqii.github.io/posts/tech/go/go_interview_questions/</guid>
+      <description>Linux安装指定版本golang</description>
+    </item>
+    
+    <item>
+      <title>Linux 定时任务</title>
+      <link>https://liiqii.github.io/posts/tech/linux/linux_crontab/</link>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://liiqii.github.io/posts/tech/linux/linux_crontab/</guid>
+      <description>Linux 定时任务</description>
+    </item>
+    
+    <item>
+      <title>Linux安装指定版本golang</title>
+      <link>https://liiqii.github.io/posts/tech/go/linux_install_go/</link>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://liiqii.github.io/posts/tech/go/linux_install_go/</guid>
+      <description>Linux安装指定版本golang</description>
+    </item>
+    
+    <item>
+      <title>Linux系统完全卸载删除PHP的方法</title>
+      <link>https://liiqii.github.io/posts/tech/linux/linux_delete_php/</link>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://liiqii.github.io/posts/tech/linux/linux_delete_php/</guid>
+      <description>Linux系统完全卸载删除PHP的方法</description>
+    </item>
+    
+    <item>
+      <title>Vim 配置</title>
+      <link>https://liiqii.github.io/posts/tech/linux/vim/</link>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://liiqii.github.io/posts/tech/linux/vim/</guid>
+      <description>Vim 配置</description>
     </item>
     
   </channel>

@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Go net http包 | liiqii</title>
+<meta name="keywords" content="">
+<meta name="description" content="在Go中，搭建一个HTTP server简单到令人难以置信。只需要引入net/http包，写几行代码，一个HTTP服务器就可以正常运行并接受访问请求。">
+<meta name="author" content="liiqii">
+<link rel="canonical" href="https://liiqii.github.io/posts/tech/go/go_http/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.css" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.js" onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://liiqii.github.io/img/icon.jpg">
+<link rel="icon" type="image/png" sizes="16x16" href="https://liiqii.github.io/img/icon.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="https://liiqii.github.io/img/icon.jpg">
+<link rel="apple-touch-icon" href="https://liiqii.github.io/img/icon.jpg">
+<link rel="mask-icon" href="https://liiqii.github.io/img/icon.jpg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js"></script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = ""; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<meta property="og:title" content="Go net http包" />
+<meta property="og:description" content="在Go中，搭建一个HTTP server简单到令人难以置信。只需要引入net/http包，写几行代码，一个HTTP服务器就可以正常运行并接受访问请求。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liiqii.github.io/posts/tech/go/go_http/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-10-10T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-10-10T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go net http包"/>
+<meta name="twitter:description" content="在Go中，搭建一个HTTP server简单到令人难以置信。只需要引入net/http包，写几行代码，一个HTTP服务器就可以正常运行并接受访问请求。"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+
+        {
+          "@type": "ListItem",
+          "position":  1 ,
+          "name": "📚文章",
+          "item": "https://liiqii.github.io/posts/"
+        },
+
+        {
+          "@type": "ListItem",
+          "position":  2 ,
+          "name": "👨🏻‍💻 技术",
+          "item": "https://liiqii.github.io/posts/tech/"
+        }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "Go net http包",
+      "item": "https://liiqii.github.io/posts/tech/go/go_http/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Go net http包",
+  "name": "Go net http包",
+  "description": "在Go中，搭建一个HTTP server简单到令人难以置信。只需要引入net/http包，写几行代码，一个HTTP服务器就可以正常运行并接受访问请求。",
+  "keywords": [
+    ""
+  ],
+  "articleBody": "在Go中，搭建一个HTTP server简单到令人难以置信。只需要引入net/http包，写几行代码，一个HTTP服务器就可以正常运行并接受访问请求。\n下面就是Go最简单的HTTP服务器：\npackage main import ( \"fmt\" \"net/http\" ) func myfunc(w http.ResponseWriter, r *http.Request) { fmt.Fprintf(w, \"hi\") } func main() { http.HandleFunc(\"/\", myfunc) http.ListenAndServe(\":8080\", nil) } 编译运行程序，然后打开浏览器访问 http://localhost:8080/ , 我们可以看到网页输出\"hi\" ! 就这么简单，我们实现了一个HTTPserver！\n下面我们通过分析net/http的源代码，来深入理解这个包的实现原理。在net/http源代码中，我们可以深深体会到Go语言的结构体（以及自定义类型）、接口、方法简单组合的设计哲学。这个包最主要的文件有4个，分别是： client.go server.go request.go response.go\n这四个文件也分别代表了HTTP中最重要的4个部分，HTTP Request 请求、 HTTP Response 响应、HTTP Client客户端和HTTP Server 服务端，所以我们先从这四个方面来了解net/http包：\n1 Request HTTP Request请求是由客户端发出的消息, 用来使服务器执行动作.发出的消息包括起始行, Headers, Body。\n在net/http包中，request.go文件定义了结构：\ntype Request struct HTTP Request请求是HTTP Client客户端向HTTP Server服务端发出的消息，或者是HTTP Server服务端收到的一个请求，但是HTTP Server服务端和HTTP Client客户端使用Request时语义区别很大。我们一般使用 http.NewRequest来构造一个HTTP Request请求，可能包括HTTP Headers信息，cookies信息等，然后发给服务端：\n// 利用指定的method, url以及可选的body返回一个新的请求.如果body参数实现了 // io.Closer接口，Request返回值的Body 字段会被设置为body，并会被Client // 类型的Do、Post和PostForm方法以及Transport.RoundTrip方法关闭。 func NewRequest(method, urlStr string, body io.Reader) (*Request, error) // 从b中读取和解析一个请求. func ReadRequest(b *bufio.Reader) (req *Request, err error) // 给request添加cookie, AddCookie向请求中添加一个cookie.按照RFC 6265 // section 5.4的规则, AddCookie不会添加超过一个Cookie头字段. // 这表示所有的cookie都写在同一行, 用分号分隔（cookie内部用逗号分隔属性） func (r *Request) AddCookie(c *Cookie) // 返回request中指定名name的cookie，如果没有发现，返回ErrNoCookie func (r *Request) Cookie(name string) (*Cookie, error) // 返回该请求的所有cookies func (r *Request) Cookies() []*Cookie // 利用提供的用户名和密码给http基本权限提供具有一定权限的header。 // 当使用http基本授权时，用户名和密码是不加密的 func (r *Request) SetBasicAuth(username, password string) // 如果在request中发送，该函数返回客户端的user-Agent func (r *Request) UserAgent() string // 对于指定格式的key，FormFile返回符合条件的第一个文件，如果有必要的话， // 该函数会调用ParseMultipartForm和ParseForm。 func (r *Request) FormFile(key string) (multipart.File, *multipart.FileHeader, error) // 返回key获取的队列中第一个值。在查询过程中post和put中的主题参数优先级 // 高于url中的value。为了访问相同key的多个值，调用ParseForm然后直接 // 检查RequestForm。 func (r *Request) FormValue(key string) string // 如果这是一个有多部分组成的post请求，该函数将会返回一个MIME 多部分reader， // 否则的话将会返回一个nil和error。使用本函数代替ParseMultipartForm // 可以将请求body当做流stream来处理。 func (r *Request) MultipartReader() (*multipart.Reader, error) // 解析URL中的查询字符串，并将解析结果更新到r.Form字段。对于POST或PUT // 请求，ParseForm还会将body当作表单解析，并将结果既更新到r.PostForm也 // 更新到r.Form。解析结果中，POST或PUT请求主体要优先于URL查询字符串 // （同名变量，主体的值在查询字符串的值前面）。如果请求的主体的大小没有被 // MaxBytesReader函数设定限制，其大小默认限制为开头10MB。 // ParseMultipartForm会自动调用ParseForm。重复调用本方法是无意义的。 func (r *Request) ParseForm() error // ParseMultipartForm将请求的主体作为multipart/form-data解析。 // 请求的整个主体都会被解析，得到的文件记录最多 maxMemery字节保存在内存， // 其余部分保存在硬盘的temp文件里。如果必要，ParseMultipartForm会 // 自行调用 ParseForm。重复调用本方法是无意义的。 func (r *Request) ParseMultipartForm(maxMemory int64) error // 返回post或者put请求body指定元素的第一个值，其中url中的参数被忽略。 func (r *Request) PostFormValue(key string) string // 检测在request中使用的http协议是否至少是major.minor func (r *Request) ProtoAtLeast(major，minor int) bool // 如果request中有refer，那么refer返回相应的url。Referer在request // 中是拼错的，这个错误从http初期就已经存在了。该值也可以从Headermap中 // 利用Header[\"Referer\"]获取；在使用过程中利用Referer这个方法而 // 不是map的形式的好处是在编译过程中可以检查方法的错误，而无法检查map中 // key的错误。 func (r *Request) Referer() string // Write方法以有线格式将HTTP/1.1请求写入w（用于将请求写入下层TCPConn等） // 。本方法会考虑请求的如下字段：Host URL Method (defaults to \"GET\") // Header ContentLength TransferEncoding Body如果存在Body， // ContentLength字段\u003c= 0且TransferEncoding字段未显式设置为 // [\"identity\"]，Write方法会显式添加”Transfer-Encoding: chunked” // 到请求的头域。Body字段会在发送完请求后关闭。 func (r *Request) Write(w io.Writer) error // 该函数与Write方法类似，但是该方法写的request是按照http代理的格式去写。 // 尤其是，按照RFC 2616 Section 5.1.2，WriteProxy会使用绝对URI // （包括协议和主机名）来初始化请求的第1行（Request-URI行）。无论何种情况， // WriteProxy都会使用r.Host或r.URL.Host设置Host头。 func (r *Request) WriteProxy(w io.Writer) error 2 Response HTTP Response响应是由HTTP Server服务端发出的消息，用来响应HTTP Client端发出的HTTP Request请求。发出的消息包括起始行, Headers, Body。\n// 注意是在response.go中定义的，而在server.go有一个 // type response struct ，注意大小写。这个结构是体现在server端的功能。 type Response struct // ReadResponse从r读取并返回一个HTTP 回复。req参数是可选的，指定该回复 // 对应的请求（即是对该请求的回复）。如果是nil，将假设请 求是GET请求。 // 客户端必须在结束resp.Body的读取后关闭它。读取完毕并关闭后，客户端可以 // 检查resp.Trailer字段获取回复的 trailer的键值对。 func ReadResponse(r *bufio.Reader, req *Request) (*Response, error) // 解析cookie并返回在header中利用set-Cookie设定的cookie值。 func (r *Response) Cookies() []*Cookie // 返回response中Location的header值的url。如果该值存在的话，则对于 // 请求问题可以解决相对重定向的问题，如果该值为nil，则返回ErrNOLocation。 func (r *Response) Location() (*url.URL，error) // 判定在response中使用的http协议是否至少是major.minor的形式。 func (r *Response) ProtoAtLeast(major, minor int) bool // 将response中信息按照线性格式写入w中。 func (r *Response) Write(w io.Writer) error 3 client HTTP Client客户端主要用来发送HTTP Request请求给HTTP Server服务端，比如以Do方法，Get方法以及Post或PostForm方法发送HTTP Request请求。\n// Client具有Do，Get，Head，Post以及PostForm等方法。 其中Do方法可以对 // Request进行一系列的设定，而其他的对request设定较少。如果Client使用默认的 // Client，则其中的Get，Head，Post以及PostForm方法相当于默认的http.Get, // http.Post, http.Head以及http.PostForm函数。 type Client struct // 利用GET方法对一个指定的URL进行请求，如果response是如下重定向中的一个 // 代码，则Get之后将会调用重定向内容，最多10次重定向。 // 301 (永久重定向，告诉客户端以后应该从新地址访问) // 302 (暂时性重定向，作为HTTP1.0的标准，PHP的默认Location重定向用到 // 也是302)，注：303和307其实是对302的细化。 // 303 (对于Post请求，它表示请求已经被处理，客户端可以接着使用GET方法去 // 请求Location里的URl) // 307 (临时重定向，对于Post请求，表示请求还没有被处理，客户端应该向 // Location里的URL重新发起Post请求) func Get(url string) (resp *Response, err error) // 该函数功能见net中Head方法功能。该方法与默认的defaultClient中 // Head方法一致。 func Head(url string) (resp *Response, err error) // 该方法与默认的defaultClient中Post方法一致。 func Post(url string, bodyType string, body io.Reader) (resp *Response, err error) // 该方法与默认的defaultClient中PostForm方法一致。 func PostForm(url string, data url.Values) (resp *Response, err error) // Do发送http请求并且返回一个http响应, 遵守client的策略, 如重定向, // cookies以及auth等.错误经常是由于策略引起的, 当err是nil时, resp // 总会包含一个非nil的resp.body.当调用者读完resp.body之后应该关闭它, // 如果resp.body没有关闭, 则Client底层RoundTripper将无法重用存在的 // TCP连接去服务接下来的请求, 如果resp.body非nil, 则必须对其进行关闭. // 通常来说, 经常使用Get, Post, 或者PostForm来替代Do. func (c *Client) Do(req *Request) (resp *Response, err error) // 利用get方法请求指定的url.Get请求指定的页面信息，并返回实体主体。 func (c *Client) Get(url string) (resp *Response, err error) // 利用head方法请求指定的url，Head只返回页面的首部。 func (c *Client) Head(url string) (resp *Response, err error) // post方法请求指定的URl, 如果body也是一个io.Closer, 则在请求之后关闭它 func (c *Client) Post(url string, bodyType string, body io.Reader) (resp *Response, err error) // 利用post方法请求指定的url, 利用data的key和value作为请求体. func (c *Client) PostForm(url string, data url.Values) (resp *Response, err error) http.NewRequest可以灵活的对http Request进行配置，然后再使用http.Client的Do方法发送这个http Request请求。注意：如果使用Post或者PostForm方法，是不能使用http.NewRequest配置请求的，只有Do方法可以定制http.NewRequest。\n利用http.Client以及http.NewRequest就可以完整模拟一个HTTP Request请求，包括自定义的HTTP Request请求的头部信息。有了前面介绍的 HTTP Request 请求、HTTP Response 响应、HTTP Client 客户端 三个部分，我们已经可以模拟各种HTTP Request 请求的发送，接收HTTP Response 响应了。\n下面我们来模拟HTTP Request请求，请求中附带有cookie信息，通过http.Client的Do方法发送这个请求。\n先配置http.NewRequest，然后我们通过http.Client的Do方法来发送任何HTTP Request请求。示例如下：\n模拟任何HTTP Request请求： package main import ( \"compress/gzip\" \"fmt\" \"io/ioutil\" \"net/http\" \"strconv\" ) func main() { // 简式声明一个http.Client空结构体指针对象 client := \u0026http.Client{} // 使用http.NewRequest构建http Request请求 request, err := http.NewRequest(\"GET\", \"http://www.baidu.com\", nil) if err != nil { fmt.Println(err) } // 使用http.Cookie结构体初始化一个cookie键值对 cookie := \u0026http.Cookie{Name: \"userId\", Value: strconv.Itoa(12345)} // 使用前面构建的request方法AddCookie往请求中添加cookie request.AddCookie(cookie) // 设置request的Header，具体可参考http协议 request.Header.Set(\"Accept\", \"text/html, application/xhtml+xml, application/xml;q=0.9, */*;q=0.8\") request.Header.Set(\"Accept-Charset\", \"GBK, utf-8;q=0.7, *;q=0.3\") request.Header.Set(\"Accept-Encoding\", \"gzip, deflate, sdch\") request.Header.Set(\"Accept-Language\", \"zh-CN, zh;q=0.8\") request.Header.Set(\"Cache-Control\", \"max-age=0\") request.Header.Set(\"Connection\", \"keep-alive\") // 使用http.Client 来发送request，这里使用了Do方法。 response, err := client.Do(request) if err != nil { fmt.Println(err) return } // 程序结束时关闭response.Body响应流 defer response.Body.Close() // 接收到的http Response 状态值 fmt.Println(response.StatusCode) if response.StatusCode == 200 { // 200意味成功得到http Server返回的http Response信息 // gzip.NewReader对压缩的返回信息解压（考虑网络传输量，http Server // 一般都会对响应压缩后再返回） body, err := gzip.NewReader(response.Body) if err != nil { fmt.Println(err) } defer body.Close() r, err := ioutil.ReadAll(body) if err != nil { fmt.Println(err) } // 打印出http Server返回的http Response信息 fmt.Println(string(r)) } } 使用http.Get 发送HTTP Get请求非常简单，在一般简单不需要对http.Request配置的场景下我们可以使用，只需要提供URL即可。\n发送一个HTTP Get请求： package main import ( \"fmt\" \"io/ioutil\" \"net/http\" ) func main() { // var DefaultClient = \u0026Client{} // func Get(url string) (resp *Response, err error) { // return DefaultClient.Get(url) // } /* func (c *Client) Get(url string) (resp *Response, err error) { req, err := NewRequest(\"GET\", url, nil) if err != nil { return nil, err } return c.Do(req) } */ // http.Get实际上是DefaultClient.Get(url)，Get函数是高度封装的，只有一个参数url。 // 对于一般的http Request是可以使用，但是不能定制Request response, err := http.Get(\"http://www.baidu.com\") if err != nil { fmt.Println(err) } //程序在使用完回复后必须关闭回复的主体。 defer response.Body.Close() body, _ := ioutil.ReadAll(response.Body) fmt.Println(string(body)) } 使用http.Post 发送HTTP Post请求也非常简单，在一般简单不需要对http.Request配置的场景下我们可以使用。\n发送一个http.Post请求： package main import ( \"fmt\" \"io/ioutil\" \"net/http\" \"strings\" ) func main() { // application/x-www-form-urlencoded：为POST的contentType // strings.NewReader(\"mobile=xxxxxxxxxx\u0026isRemberPwd=1\") 理解为传递的参数 resp, err := http.Post(\"http://localhost:8080/login.do\", \"application/x-www-form-urlencoded\", strings.NewReader(\"mobile=xxxxxxxxxx\u0026isRemberPwd=1\")) if err != nil { fmt.Println(err) return } defer resp.Body.Close() body, err := ioutil.ReadAll(resp.Body) if err != nil { fmt.Println(err) return } fmt.Println(string(body)) } 使用http.PostForm 发送HTTP Request请求也非常简单，而且可以附带参数的键值对作为请求的body传递到服务端。\n发送一个http.PostForm请求： package main import ( \"fmt\" \"io/ioutil\" \"net/http\" \"net/url\" ) func main() { postParam := url.Values{ \"mobile\": {\"xxxxxx\"}, \"isRemberPwd\": {\"1\"}, } // 数据的键值会经过URL编码后作为请求的body传递 resp, err := http.PostForm(\"http://localhost：8080/login.do\", postParam) if err != nil { fmt.Println(err) return } defer resp.Body.Close() body, err := ioutil.ReadAll(resp.Body) if err != nil { fmt.Println(err) return } fmt.Println(string(body)) } 上面列举了四种HTTP Client客户端发送HTTP Request请求的方式，其中只有Do方法最灵活。\nhttp.Client与http.NewRequest结合可以模拟任何HTTP Request请求，方法是Do。像Get方法，Post方法和PostForm方法，http.NewRequest都是定制好的，所以使用方便但灵活性不够。不过好在有Do方法，我们可以更灵活来配置http.NewRequest。\nfunc NewRequest(method, url string, body io.Reader) (*Request, error) func (c *Client) Get(url string) (resp *Response, err error) { req, err := NewRequest(\"GET\", url, nil) ...... func (c *Client) Post(url string, contentType string, body io.Reader) (resp *Response, err error) { req, err := NewRequest(\"POST\", url, body) ...... 4 HTTP Server 服务端 HTTP Server服务端用来接收并响应HTTP Client端发出的HTTP Request请求，是net/http包中非常重要和关键的一个功能。我们在Go语言中简单就能搭建HTTP服务器，就是因为它的存在。\n在server.go文件中还定义了一个非常重要的接口：Handler，另外还有一个结构体response，这和http.Response结构体只有首字母大小写不一致，不过这个response 也是响应，只不过是专门用在服务端，和http.Response结构体是完全两回事。\ntype Handler interface { ServeHTTP(ResponseWriter, *Request) } type Server struct // 监听TCP网络地址srv.Addr然后调用Serve来处理接下来连接的请求。 // 如果srv.Addr是空的话，则使用“:http”。 func (srv *Server) ListenAndServe() error // ListenAndServeTLS监听srv.Addr确定的TCP地址，并且会调用Serve // 方法处理接收到的连接。必须提供证书文件和对应的私钥文 件。如果证书是由 // 权威机构签发的，certFile参数必须是顺序串联的服务端证书和CA证书。 // 如果srv.Addr为空字符串，会使 用”:https”。 func (srv *Server) ListenAndServeTLS(certFile, keyFile string) error // 接受Listener l的连接，创建一个新的服务协程。该服务协程读取请求然后调用 // srv.Handler来应答。实际上就是实现了对某个端口进行监听，然后创建相应的连接。 func (srv *Server) Serve(l net.Listener) error // 该函数控制是否http的keep-alives能够使用，默认情况下，keep-alives总是可用的。 // 只有资源非常紧张的环境或者服务端在关闭进程中时，才应该关闭该功能。 func (s *Server) SetKeepAlivesEnabled(v bool) // 是一个http请求多路复用器，它将每一个请求的URL和 // 一个注册模式的列表进行匹配，然后调用和URL最匹配的模式的处理器进行后续操作。 type ServeMux // 初始化一个新的ServeMux func NewServeMux() *ServeMux // 将handler注册为指定的模式，如果该模式已经有了handler，则会出错panic。 func (mux *ServeMux) Handle(pattern string, handler Handler) // 将handler注册为指定的模式 func (mux *ServeMux) HandleFunc(pattern string, handler func(ResponseWriter, *Request)) // 根据指定的r.Method, r.Host以及r.RUL.Path返回一个用来处理给定请求的handler。 // 该函数总是返回一个非nil的 handler，如果path不是一个规范格式，则handler会 // 重定向到其规范path。Handler总是返回匹配该请求的的已注册模式；在内建重定向 // 处理器的情况下，pattern会在重定向后进行匹配。如果没有已注册模式可以应用于该请求， // 本方法将返回一个内建的”404 page not found”处理器和一个空字符串模式。 func (mux *ServeMux) Handler(r *Request) (h Handler, pattern string) // 该函数用于将最接近请求url模式的handler分配给指定的请求。 func (mux *ServeMux) ServeHTTP(w ResponseWriter, r *Request) Handler接口应该算是server.go中最关键的接口了，如果我们仔细看这个文件的源代码，将会发现很多结构体实现了这个接口的ServeHTTP方法。\n注意这个接口的注释：Handler响应HTTP请求。没错，最终我们的HTTP服务是通过实现ServeHTTP(ResponseWriter, *Request)来达到服务端接收客户端请求并响应。\n理解 HTTP 构建的网络应用只要关注两个端—客户端（Clinet）和服务端（Server），两个端的交互来自 Clinet 的 Request，以及Server端的Response。HTTP服务器，主要在于如何接受 Clinet端的 Request，Server端向Client端返回Response。\n那这个过程是什么样的呢？要讲清楚这个过程，还需要回到开始的HTTP服务器程序。这里以前面我们了解到的HTTP Request、HTTP Response、HTTP Client作为基础，并重点分析server.go源代码才能讲清楚：\nfunc main() { http.HandleFunc(\"/\", myfunc) http.ListenAndServe(\":8080\", nil) } 以上两行代码，就成功启动了一个HTTP服务器。我们通过net/http 包源代码分析发现，调用Http.HandleFunc，按顺序做了几件事：\n1.Http.HandleFunc调用了DefaultServeMux的HandleFunc\nfunc HandleFunc(pattern string, handler func(ResponseWriter, *Request)) { DefaultServeMux.HandleFunc(pattern, handler) } 2.DefaultServeMux.HandleFunc调用了DefaultServeMux的Handle，DefaultServeMux是一个ServeMux 指针变量。而ServeMux 是Go语言中的Multiplexer（多路复用器），通过Handle匹配pattern 和我们定义的handler（其实就是http.HandlerFunc函数类型变量）。\nvar DefaultServeMux = \u0026defaultServeMux var defaultServeMux ServeMux func (mux *ServeMux) HandleFunc(pattern string, handler func(ResponseWriter, *Request)) { mux.Handle(pattern, HandlerFunc(handler)) } 注意： 上面的方法命名Handle，HandleFunc和HandlerFunc，Handler（接口），他们很相似，容易混淆。记住Handle和HandleFunc和pattern 匹配有关，也即往DefaultServeMux的map[string]muxEntry中增加对应的handler和路由规则。\n接着我们看看myfunc的声明和定义：\nfunc myfunc(w http.ResponseWriter, r *http.Request) { fmt.Fprintf(w, \"hi\") } 而type HandlerFunc func(ResponseWriter, *Request) 是一个函数类型，而我们定义的myfunc的函数签名刚好符合这个函数类型。\n所以http.HandleFunc(\"/\", myfunc)，实际上是mux.Handle(\"/\", HandlerFunc(myfunc))。\nHandlerFunc(myfunc) 让myfunc成为了HandlerFunc类型，我们称myfunc为handler。而HandlerFunc类型是具有ServeHTTP方法的，而有了ServeHTTP方法也就是实现了Handler接口。\nfunc (f HandlerFunc) ServeHTTP(w ResponseWriter, r *Request) { f(w, r) // 这相当于自身的调用 } 现在ServeMux和Handler都和我们的myfunc联系上了，myfunc是一个Handler接口变量也是HandlerFunc类型变量，接下来和结构体server有关了。\n从http.ListenAndServe的源码可以看出，它创建了一个server对象，并调用server对象的ListenAndServe方法：\nfunc ListenAndServe(addr string, handler Handler) error { server := \u0026Server{Addr: addr, Handler: handler} return server.ListenAndServe() } 而我们HTTP服务器中第二行代码：\nhttp.ListenAndServe(\":8080\", nil) 创建了一个server对象，并调用server对象的ListenAndServe方法，这里没有直接传递Handler，而是默认使用DefautServeMux作为multiplexer，myfunc是存在于handler和路由规则中的。\nServer的ListenAndServe方法中，会初始化监听地址Addr，同时调用Listen方法设置监听。\nfor { rw, e := l.Accept() ... c := srv.newConn(rw) c.setState(c.rwc, StateNew) go c.serve(ctx) } 监听开启之后，一旦客户端请求过来，Go就开启一个协程go c.serve(ctx)处理请求，主要逻辑都在serve方法之中。\nfunc (c *conn) serve(ctx context.Context)，这个方法很长，里面主要的一句：serverHandler{c.server}.ServeHTTP(w, w.req)。其中w由w, err := c.readRequest(ctx)得到，因为有传递context。\n还是来看源代码：\ntype serverHandler struct { srv *Server } func (sh serverHandler) ServeHTTP(rw ResponseWriter, req Request) { handler := sh.srv.Handler if handler == nil { handler = DefaultServeMux } if req.RequestURI == \"\" \u0026\u0026 req.Method == \"OPTIONS\" { handler = globalOptionsHandler{} } handler.ServeHTTP(rw, req) } 从http.ListenAndServe(\":8080\", nil)开始，handler是nil，所以最后实际ServeHTTP方法是DefaultServeMux.ServeHTTP(rw, req)。\nfunc (mux *ServeMux) ServeHTTP(w ResponseWriter, r *Request) { if r.RequestURI == \"*\" { if r.ProtoAtLeast(1, 1) { w.Header().Set(\"Connection\", \"close\") } w.WriteHeader(StatusBadRequest) return } h, _ := mux.Handler(r) h.ServeHTTP(w, r) } 通过func (mux *ServeMux) Handler(r *Request) (h Handler, pattern string)，我们得到Handler h，然后执行h.ServeHTTP(w, r)方法，也就是执行我们的myfunc函数（别忘了myfunc是HandlerFunc类型，而他的ServeHTTP(w, r)方法这里其实就是自己调用自己），把response写到http.ResponseWriter对象返回给客户端，fmt.Fprintf(w, “hi”)，我们在客户端会接收到hi 。至此整个HTTP服务执行完成。\n总结下，HTTP服务整个过程大概是这样：\nRequest -\u003e ServeMux(Multiplexer) -\u003e handler-\u003e Response 我们再看下面代码：\nhttp.ListenAndServe(\":8080\", nil) func ListenAndServe(addr string, handler Handler) error { server := \u0026Server{Addr: addr, Handler: handler} return server.ListenAndServe() } 上面代码实际上就是server.ListenAndServe()执行的实际效果，只不过简单声明了一个结构体Server{Addr: addr, Handler: handler}实例。如果我们声明一个Server实例，完全可以达到深度自定义 http.Server的目的：\npackage main import ( \"fmt\" \"net/http\" ) func myfunc(w http.ResponseWriter, r *http.Request) { fmt.Fprintf(w, \"hi\") } func main() { // 更多http.Server的字段可以根据情况初始化 server := http.Server{ Addr: \":8080\", ReadTimeout: 0, WriteTimeout: 0, } http.HandleFunc(\"/\", myfunc) server.ListenAndServe() } 这样服务也能跑起来，而且我们完全可以根据情况来自定义我们的Server！ 还可以指定Servemux的用法: GOPATH\\src\\go42\\chapter-15\\15.3\\7\\main.go package main import ( \"fmt\" \"net/http\" ) func myfunc(w http.ResponseWriter, r *http.Request) { fmt.Fprintf(w, \"hi\") } func main() { mux := http.NewServeMux() mux.HandleFunc(\"/\", myfunc) http.ListenAndServe(\":8080\", mux) } 如果既指定Servemux又自定义 http.Server，因为Server中有字段Handler，所以我们可以直接把Servemux变量作为Server.Handler：\npackage main import ( \"fmt\" \"net/http\" ) func myfunc(w http.ResponseWriter, r *http.Request) { fmt.Fprintf(w, \"hi\") } func main() { server := http.Server{ Addr: \":8080\", ReadTimeout: 0, WriteTimeout: 0, } mux := http.NewServeMux() server.Handler = mux mux.HandleFunc(\"/\", myfunc) server.ListenAndServe() } 在前面pprof 包的内容中我们也用了本章开头这段代码，当我们访问http://localhost:8080/debug/pprof/ 时可以看到对应的性能分析报告。 因为我们这样导入 _“net/http/pprof” 包时，在文件 pprof.go 文件中init 函数已经定义好了handler：\nfunc init() { http.HandleFunc(\"/debug/pprof/\", Index) http.HandleFunc(\"/debug/pprof/cmdline\", Cmdline) http.HandleFunc(\"/debug/pprof/profile\", Profile) http.HandleFunc(\"/debug/pprof/symbol\", Symbol) http.HandleFunc(\"/debug/pprof/trace\", Trace) } 所以，我们就可以通过浏览器访问上面地址来看到报告。现在再来看这些代码，我们就明白怎么回事了！\n5 自定义处理器（Custom Handlers） 自定义的Handler：\n标准库http提供了Handler接口，用于开发者实现自己的handler。只要实现接口的ServeHTTP方法即可。\npackage main import ( \"log\" \"net/http\" \"time\" ) type timeHandler struct { format string } func (th *timeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) { tm := time.Now().Format(th.format) w.Write([]byte(\"The time is: \" + tm)) } func main() { mux := http.NewServeMux() th := \u0026timeHandler{format: time.RFC1123} mux.Handle(\"/time\", th) log.Println(\"Listening...\") http.ListenAndServe(\":3000\", mux) } 我们知道，NewServeMux可以创建一个ServeMux实例，ServeMux同时也实现了ServeHTTP方法，因此代码中的mux也是一种handler。把它当成参数传给http.ListenAndServe方法，后者会把mux传给Server实例。因为指定了handler，因此整个http服务就不再是DefaultServeMux，而是mux，无论是在注册路由还是提供请求服务的时候。\n任何有 func(http.ResponseWriter，*http.Request) 签名的函数都能转化为一个 HandlerFunc 类型。这很有用，因为 HandlerFunc 对象内置了 ServeHTTP 方法，后者可以聪明又方便的调用我们最初提供的函数内容。\n6 将函数作为处理器 package main import ( \"log\" \"net/http\" \"time\" ) func timeHandler(w http.ResponseWriter, r *http.Request) { tm := time.Now().Format(time.RFC1123) w.Write([]byte(\"The time is: \" + tm)) } func main() { mux := http.NewServeMux() // Convert the timeHandler function to a HandlerFunc type th := http.HandlerFunc(timeHandler) // And add it to the ServeMux mux.Handle(\"/time\", th) log.Println(\"Listening...\") http.ListenAndServe(\":3000\", mux) } 创建新的server：\nfunc index(w http.ResponseWriter, r *http.Request) { w.Header().Set(\"Content-Type\", \"text/html\") html := ` Hello World Welcome ` fmt.Fprintln(w, html) } func main(){ http.HandleFunc(\"/\", index) server := \u0026http.Server{ Addr: \":8000\", ReadTimeout: 60 * time.Second, WriteTimeout: 60 * time.Second, } server.ListenAndServe() } 7 中间件Middleware 所谓中间件，就是连接上下级不同功能的函数或者软件，通常进行一些包裹函数的行为，为被包裹函数提供添加一些功能或行为。前文的HandleFunc就能把签名为 func(w http.ResponseWriter, r *http.Reqeust)的函数包裹成handler。这个函数也算是中间件。\nGo的HTTP中间件很简单，只要实现一个函数签名为func(http.Handler) http.Handler的函数即可。http.Handler是一个接口，接口方法我们熟悉的为serveHTTP。返回也是一个handler。因为Go中的函数也可以当成变量传递或者或者返回，因此也可以在中间件函数中传递定义好的函数，只要这个函数是一个handler即可，即实现或者被handlerFunc包裹成为handler处理器。\nfunc index(w http.ResponseWriter, r *http.Request) { w.Header().Set(\"Content-Type\", \"text/html\") html := ` Hello World Welcome ` fmt.Fprintln(w, html) } func middlewareHandler(next http.Handler) http.Handler{ return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request){ // 执行handler之前的逻辑 next.ServeHTTP(w, r) // 执行完毕handler后的逻辑 }) } func loggingHandler(next http.Handler) http.Handler { return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { start := time.Now() log.Printf(\"Started %s %s\", r.Method, r.URL.Path) next.ServeHTTP(w, r) log.Printf(\"Completed %s in %v\", r.URL.Path, time.Since(start)) }) } func main() { http.Handle(\"/\", loggingHandler(http.HandlerFunc(index))) http.ListenAndServe(\":8000\", nil) } 8 静态站点 下面代码通过指定目录，作为静态站点：\npackage main import ( \"net/http\" ) func main() { http.Handle(\"/\", http.FileServer(http.Dir(\"D:/html/static/\"))) http.ListenAndServe(\":8080\", nil) } ",
+  "wordCount" : "11036",
+  "inLanguage": "zh",
+  "datePublished": "2023-10-10T00:00:00Z",
+  "dateModified": "2023-10-10T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "liiqii"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://liiqii.github.io/posts/tech/go/go_http/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "liiqii",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://liiqii.github.io/img/icon.jpg"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    (function () {
+        let  arr,reg = new RegExp("(^| )"+"change-themes"+"=([^;]*)(;|$)");
+        if(arr = document.cookie.match(reg)) {
+        } else {
+            if (new Date().getHours() >= 19 || new Date().getHours() < 6) {
+                document.body.classList.add('dark');
+                localStorage.setItem("pref-theme", 'dark');
+            } else {
+                document.body.classList.remove('dark');
+                localStorage.setItem("pref-theme", 'light');
+            }
+        }
+    })()
+
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://liiqii.github.io/" accesskey="h" title="Home (Alt + H)">Home</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://liiqii.github.io/search" title="🔍 搜索 (Alt &#43; /)" accesskey=/>
+                <span>🔍 搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://liiqii.github.io/posts" title="📚 文章">
+                <span>📚 文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://liiqii.github.io/tags" title="🧩 标签">
+                <span>🧩 标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://liiqii.github.io/archives/" title="⏱️ 时间轴">
+                <span>⏱️ 时间轴</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main page">
+<style>
+    i[id*="post_meta_style"] {
+        display: flex;
+        align-items: center;
+        margin: 0 0 10px 0;
+    }
+</style>
+
+<article class="post-single">
+    <div id="single-content">
+        <header class="post-header">
+            <div class="breadcrumbs"><a href="https://liiqii.github.io/">🏠 主页</a>&nbsp;»&nbsp;<a href="https://liiqii.github.io/posts/">📚文章</a>&nbsp;»&nbsp;<a href="https://liiqii.github.io/posts/tech/">👨🏻‍💻 技术</a></div>
+            <h1 class="post-title">
+                Go net http包
+            </h1>
+            <div class="post-description">
+                在Go中，搭建一个HTTP server简单到令人难以置信。只需要引入net/http包，写几行代码，一个HTTP服务器就可以正常运行并接受访问请求。
+            </div>
+            <div class="post-meta">
+
+<style>
+    i[id*="post_meta_style"] {
+        display: flex;
+        align-items: center;
+        margin: 0 0 10px 0;
+    }
+
+    .parent-post-meta {
+        display: flex;
+        flex-wrap: wrap;
+        opacity: 0.8;
+    }
+</style>
+
+<span class="parent-post-meta">
+    <span id="post_meta_style_1">
+        <span class="fa fa-calendar-check-o"></span>
+        <span>2023-10-10
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    
+    
+    
+    
+    
+    
+    
+    <span id="post_meta_style_3">
+        <span class="fa fa-file-word-o"></span>
+        <span>11036字
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_4">
+        <span class="fa fa-clock-o"></span>
+        <span>23分钟
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_5">
+        <span class="fa fa-user-o"></span>
+        <span>liiqii
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_6">
+        <span class="fa fa-tags" style="opacity: 0.8"></span>
+        <span>
+            <span class="post-tags-meta">
+                <a href="https://liiqii.github.io/tags/go/" style="color: var(--secondary)!important;">Go</a>
+                &nbsp;<a href="https://liiqii.github.io/tags/http/" style="color: var(--secondary)!important;">http</a>
+            </span>
+        </span>
+    </span>
+</span>
+<span style="opacity: 0.8;">
+                    <span id="post_meta_style_7">
+                        &nbsp;&nbsp;
+                        <span class="fa fa-eye" ></span>
+                        <span>
+                            <span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+                            &nbsp;&nbsp;
+                        </span>
+                    </span>
+                    <span id="post_meta_style_8">
+                        <span class="fa fa-commenting-o"></span>
+                        <span>
+                            <script src="https://cdn.staticfile.org/twikoo/1.5.8/twikoo.all.min.js"></script>
+                            <script>
+                                let url = document.documentURI
+                                
+                                let dnsUrl = "https://liiqii.github.io/"
+                                let urlSplit = url.split(dnsUrl)
+                                let finalUrl = urlSplit[1]
+                                if (finalUrl[0] !== '/') {
+                                    finalUrl = '/'+finalUrl
+                                }
+                                twikoo.getCommentsCount({
+                                    envId:  null , 
+                                region:  null , 
+                                urls: [ 
+                                    
+                                    finalUrl,
+                                ],
+                                    includeReply: false 
+                                }).then(function (res) {
+                                    let count = res[0].count
+                                    const obj = document.getElementById("comment_count");
+                                    obj.innerText = count
+                                    
+                                    
+                                    
+                                }).catch(function (err) {
+                                    
+                                    console.error(err);
+                                });
+                            </script>
+                            <span id="comment_count"></span>
+                        </span>
+                    </span>
+                </span>
+
+</div>
+        </header> <aside id="toc-container" class="toc-container wide">
+    <div class="toc">
+        <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">目录</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#1-request" aria-label="1 Request">1 Request</a></li>
+                <li>
+                    <a href="#2-response" aria-label="2 Response">2 Response</a></li>
+                <li>
+                    <a href="#3-client" aria-label="3 client">3 client</a></li>
+                <li>
+                    <a href="#4-http-server-%e6%9c%8d%e5%8a%a1%e7%ab%af" aria-label="4 HTTP Server 服务端">4 HTTP Server 服务端</a></li>
+                <li>
+                    <a href="#5-%e8%87%aa%e5%ae%9a%e4%b9%89%e5%a4%84%e7%90%86%e5%99%a8custom-handlers" aria-label="5 自定义处理器（Custom Handlers）">5 自定义处理器（Custom Handlers）</a></li>
+                <li>
+                    <a href="#6-%e5%b0%86%e5%87%bd%e6%95%b0%e4%bd%9c%e4%b8%ba%e5%a4%84%e7%90%86%e5%99%a8" aria-label="6 将函数作为处理器">6 将函数作为处理器</a></li>
+                <li>
+                    <a href="#7-%e4%b8%ad%e9%97%b4%e4%bb%b6middleware" aria-label="7 中间件Middleware">7 中间件Middleware</a></li>
+                <li>
+                    <a href="#8-%e9%9d%99%e6%80%81%e7%ab%99%e7%82%b9" aria-label="8 静态站点">8 静态站点</a>
+                </li>
+            </ul>
+        </div>
+        </details>
+    </div>
+</aside>
+<script>
+    let activeElement;
+    let elements;
+    window.addEventListener('DOMContentLoaded', function (event) {
+        checkTocPosition();
+
+        elements = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]');
+        
+        activeElement = elements[0];
+        const id = encodeURI(activeElement.getAttribute('id')).toLowerCase();
+        document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+    }, false);
+
+    window.addEventListener('resize', function(event) {
+        checkTocPosition();
+    }, false);
+
+    window.addEventListener('scroll', () => {
+        
+        if (elements) {
+            activeElement = Array.from(elements).find((element) => {
+                if ((getOffsetTop(element) - window.pageYOffset) > 0 &&
+                    (getOffsetTop(element) - window.pageYOffset) < window.innerHeight/2) {
+                    return element;
+                }
+            }) || activeElement
+
+            elements.forEach(element => {
+                const id = encodeURI(element.getAttribute('id')).toLowerCase();
+                if (element === activeElement){
+                    document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+                } else {
+                    document.querySelector(`.inner ul li a[href="#${id}"]`).classList.remove('active');
+                }
+            })
+        }
+    }, false);
+
+    const main = parseInt(getComputedStyle(document.body).getPropertyValue('--article-width'), 10);
+    const toc = parseInt(getComputedStyle(document.body).getPropertyValue('--toc-width'), 10);
+    const gap = parseInt(getComputedStyle(document.body).getPropertyValue('--gap'), 10);
+
+    function checkTocPosition() {
+        const width = document.body.scrollWidth;
+        if (width - main - (toc * 2) - (gap * 4) > 0) {
+            document.getElementById("toc-container").classList.add("wide");
+        } else {
+            document.getElementById("toc-container").classList.remove("wide");
+        }
+    }
+
+    function getOffsetTop(element) {
+        if (!element.getClientRects().length) {
+            return 0;
+        }
+        let rect = element.getBoundingClientRect();
+        let win = element.ownerDocument.defaultView;
+        return rect.top + win.pageYOffset;
+    }
+</script>
+        <div class="post-content"><p>在Go中，搭建一个HTTP server简单到令人难以置信。只需要引入net/http包，写几行代码，一个HTTP服务器就可以正常运行并接受访问请求。</p>
+<p>下面就是Go最简单的HTTP服务器：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;net/http&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">myfunc</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Fprintf</span>(<span style="color:#a6e22e">w</span>, <span style="color:#e6db74">&#34;hi&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">HandleFunc</span>(<span style="color:#e6db74">&#34;/&#34;</span>, <span style="color:#a6e22e">myfunc</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ListenAndServe</span>(<span style="color:#e6db74">&#34;:8080&#34;</span>, <span style="color:#66d9ef">nil</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>编译运行程序，然后打开浏览器访问 http://localhost:8080/  , 我们可以看到网页输出&quot;hi&quot; ! 就这么简单，我们实现了一个HTTPserver！</p>
+<p>下面我们通过分析net/http的源代码，来深入理解这个包的实现原理。在net/http源代码中，我们可以深深体会到Go语言的结构体（以及自定义类型）、接口、方法简单组合的设计哲学。这个包最主要的文件有4个，分别是：
+client.go
+server.go
+request.go
+response.go</p>
+<p>这四个文件也分别代表了HTTP中最重要的4个部分，HTTP Request 请求、 HTTP Response 响应、HTTP Client客户端和HTTP Server 服务端，所以我们先从这四个方面来了解net/http包：</p>
+<h2 id="1-request">1 Request<a hidden class="anchor" aria-hidden="true" href="#1-request">#</a></h2>
+<p>HTTP Request请求是由客户端发出的消息, 用来使服务器执行动作.发出的消息包括起始行, Headers, Body。</p>
+<p>在net/http包中，request.go文件定义了结构：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Request</span> <span style="color:#66d9ef">struct</span> 
+</span></span></code></pre></div><p>HTTP Request请求是HTTP Client客户端向HTTP Server服务端发出的消息，或者是HTTP Server服务端收到的一个请求，但是HTTP Server服务端和HTTP Client客户端使用Request时语义区别很大。我们一般使用 http.NewRequest来构造一个HTTP Request请求，可能包括HTTP Headers信息，cookies信息等，然后发给服务端：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// 利用指定的method, url以及可选的body返回一个新的请求.如果body参数实现了
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// io.Closer接口，Request返回值的Body 字段会被设置为body，并会被Client
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 类型的Do、Post和PostForm方法以及Transport.RoundTrip方法关闭。 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">NewRequest</span>(<span style="color:#a6e22e">method</span>, <span style="color:#a6e22e">urlStr</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">body</span> <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Reader</span>) (<span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>, <span style="color:#66d9ef">error</span>) 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 从b中读取和解析一个请求. 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">ReadRequest</span>(<span style="color:#a6e22e">b</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">bufio</span>.<span style="color:#a6e22e">Reader</span>) (<span style="color:#a6e22e">req</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>, <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 给request添加cookie, AddCookie向请求中添加一个cookie.按照RFC 6265 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// section 5.4的规则, AddCookie不会添加超过一个Cookie头字段.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 这表示所有的cookie都写在同一行, 用分号分隔（cookie内部用逗号分隔属性） 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>) <span style="color:#a6e22e">AddCookie</span>(<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Cookie</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 返回request中指定名name的cookie，如果没有发现，返回ErrNoCookie 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>) <span style="color:#a6e22e">Cookie</span>(<span style="color:#a6e22e">name</span> <span style="color:#66d9ef">string</span>) (<span style="color:#f92672">*</span><span style="color:#a6e22e">Cookie</span>, <span style="color:#66d9ef">error</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 返回该请求的所有cookies 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>) <span style="color:#a6e22e">Cookies</span>() []<span style="color:#f92672">*</span><span style="color:#a6e22e">Cookie</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 利用提供的用户名和密码给http基本权限提供具有一定权限的header。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 当使用http基本授权时，用户名和密码是不加密的 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>) <span style="color:#a6e22e">SetBasicAuth</span>(<span style="color:#a6e22e">username</span>, <span style="color:#a6e22e">password</span> <span style="color:#66d9ef">string</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 如果在request中发送，该函数返回客户端的user-Agent
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>) <span style="color:#a6e22e">UserAgent</span>() <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 对于指定格式的key，FormFile返回符合条件的第一个文件，如果有必要的话，
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 该函数会调用ParseMultipartForm和ParseForm。 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>) <span style="color:#a6e22e">FormFile</span>(<span style="color:#a6e22e">key</span> <span style="color:#66d9ef">string</span>) (<span style="color:#a6e22e">multipart</span>.<span style="color:#a6e22e">File</span>, <span style="color:#f92672">*</span><span style="color:#a6e22e">multipart</span>.<span style="color:#a6e22e">FileHeader</span>, <span style="color:#66d9ef">error</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 返回key获取的队列中第一个值。在查询过程中post和put中的主题参数优先级
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 高于url中的value。为了访问相同key的多个值，调用ParseForm然后直接
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 检查RequestForm。 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>) <span style="color:#a6e22e">FormValue</span>(<span style="color:#a6e22e">key</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 如果这是一个有多部分组成的post请求，该函数将会返回一个MIME 多部分reader，
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 否则的话将会返回一个nil和error。使用本函数代替ParseMultipartForm
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 可以将请求body当做流stream来处理。 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>) <span style="color:#a6e22e">MultipartReader</span>() (<span style="color:#f92672">*</span><span style="color:#a6e22e">multipart</span>.<span style="color:#a6e22e">Reader</span>, <span style="color:#66d9ef">error</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 解析URL中的查询字符串，并将解析结果更新到r.Form字段。对于POST或PUT
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 请求，ParseForm还会将body当作表单解析，并将结果既更新到r.PostForm也
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 更新到r.Form。解析结果中，POST或PUT请求主体要优先于URL查询字符串
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// （同名变量，主体的值在查询字符串的值前面）。如果请求的主体的大小没有被
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// MaxBytesReader函数设定限制，其大小默认限制为开头10MB。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// ParseMultipartForm会自动调用ParseForm。重复调用本方法是无意义的。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>) <span style="color:#a6e22e">ParseForm</span>() <span style="color:#66d9ef">error</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// ParseMultipartForm将请求的主体作为multipart/form-data解析。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 请求的整个主体都会被解析，得到的文件记录最多 maxMemery字节保存在内存，
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 其余部分保存在硬盘的temp文件里。如果必要，ParseMultipartForm会
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 自行调用 ParseForm。重复调用本方法是无意义的。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>) <span style="color:#a6e22e">ParseMultipartForm</span>(<span style="color:#a6e22e">maxMemory</span> <span style="color:#66d9ef">int64</span>) <span style="color:#66d9ef">error</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 返回post或者put请求body指定元素的第一个值，其中url中的参数被忽略。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>) <span style="color:#a6e22e">PostFormValue</span>(<span style="color:#a6e22e">key</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">string</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 检测在request中使用的http协议是否至少是major.minor 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>) <span style="color:#a6e22e">ProtoAtLeast</span>(<span style="color:#a6e22e">major</span><span style="color:#960050;background-color:#1e0010">，</span><span style="color:#a6e22e">minor</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">bool</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 如果request中有refer，那么refer返回相应的url。Referer在request
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 中是拼错的，这个错误从http初期就已经存在了。该值也可以从Headermap中
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 利用Header[&#34;Referer&#34;]获取；在使用过程中利用Referer这个方法而
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 不是map的形式的好处是在编译过程中可以检查方法的错误，而无法检查map中
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// key的错误。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>) <span style="color:#a6e22e">Referer</span>() <span style="color:#66d9ef">string</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Write方法以有线格式将HTTP/1.1请求写入w（用于将请求写入下层TCPConn等）
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 。本方法会考虑请求的如下字段：Host URL Method (defaults to &#34;GET&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//  Header ContentLength TransferEncoding Body如果存在Body，
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// ContentLength字段&lt;= 0且TransferEncoding字段未显式设置为
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// [&#34;identity&#34;]，Write方法会显式添加”Transfer-Encoding: chunked”
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 到请求的头域。Body字段会在发送完请求后关闭。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>) <span style="color:#a6e22e">Write</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Writer</span>) <span style="color:#66d9ef">error</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 该函数与Write方法类似，但是该方法写的request是按照http代理的格式去写。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 尤其是，按照RFC 2616 Section 5.1.2，WriteProxy会使用绝对URI
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// （包括协议和主机名）来初始化请求的第1行（Request-URI行）。无论何种情况，
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// WriteProxy都会使用r.Host或r.URL.Host设置Host头。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>) <span style="color:#a6e22e">WriteProxy</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Writer</span>) <span style="color:#66d9ef">error</span> 
+</span></span></code></pre></div><h2 id="2-response">2 Response<a hidden class="anchor" aria-hidden="true" href="#2-response">#</a></h2>
+<p>HTTP Response响应是由HTTP Server服务端发出的消息，用来响应HTTP Client端发出的HTTP Request请求。发出的消息包括起始行, Headers, Body。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// 注意是在response.go中定义的，而在server.go有一个
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// type response struct  ，注意大小写。这个结构是体现在server端的功能。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Response</span> <span style="color:#66d9ef">struct</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// ReadResponse从r读取并返回一个HTTP 回复。req参数是可选的，指定该回复
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 对应的请求（即是对该请求的回复）。如果是nil，将假设请 求是GET请求。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 客户端必须在结束resp.Body的读取后关闭它。读取完毕并关闭后，客户端可以
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 检查resp.Trailer字段获取回复的 trailer的键值对。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">ReadResponse</span>(<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">bufio</span>.<span style="color:#a6e22e">Reader</span>, <span style="color:#a6e22e">req</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>) (<span style="color:#f92672">*</span><span style="color:#a6e22e">Response</span>, <span style="color:#66d9ef">error</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 解析cookie并返回在header中利用set-Cookie设定的cookie值。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Response</span>) <span style="color:#a6e22e">Cookies</span>() []<span style="color:#f92672">*</span><span style="color:#a6e22e">Cookie</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 返回response中Location的header值的url。如果该值存在的话，则对于
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 请求问题可以解决相对重定向的问题，如果该值为nil，则返回ErrNOLocation。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Response</span>) <span style="color:#a6e22e">Location</span>() (<span style="color:#f92672">*</span><span style="color:#a6e22e">url</span>.<span style="color:#a6e22e">URL</span><span style="color:#960050;background-color:#1e0010">，</span><span style="color:#66d9ef">error</span>) 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 判定在response中使用的http协议是否至少是major.minor的形式。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Response</span>) <span style="color:#a6e22e">ProtoAtLeast</span>(<span style="color:#a6e22e">major</span>, <span style="color:#a6e22e">minor</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">bool</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 将response中信息按照线性格式写入w中。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Response</span>) <span style="color:#a6e22e">Write</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Writer</span>) <span style="color:#66d9ef">error</span> 
+</span></span></code></pre></div><h2 id="3-client">3 client<a hidden class="anchor" aria-hidden="true" href="#3-client">#</a></h2>
+<p>HTTP Client客户端主要用来发送HTTP Request请求给HTTP Server服务端，比如以Do方法，Get方法以及Post或PostForm方法发送HTTP Request请求。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// Client具有Do，Get，Head，Post以及PostForm等方法。 其中Do方法可以对
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// Request进行一系列的设定，而其他的对request设定较少。如果Client使用默认的
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// Client，则其中的Get，Head，Post以及PostForm方法相当于默认的http.Get, 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// http.Post, http.Head以及http.PostForm函数。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Client</span> <span style="color:#66d9ef">struct</span>
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 利用GET方法对一个指定的URL进行请求，如果response是如下重定向中的一个
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 代码，则Get之后将会调用重定向内容，最多10次重定向。 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 301 (永久重定向，告诉客户端以后应该从新地址访问) 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 302 (暂时性重定向，作为HTTP1.0的标准，PHP的默认Location重定向用到
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 也是302)，注：303和307其实是对302的细化。 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 303 (对于Post请求，它表示请求已经被处理，客户端可以接着使用GET方法去
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 请求Location里的URl) 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 307 (临时重定向，对于Post请求，表示请求还没有被处理，客户端应该向
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// Location里的URL重新发起Post请求)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Get</span>(<span style="color:#a6e22e">url</span> <span style="color:#66d9ef">string</span>) (<span style="color:#a6e22e">resp</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Response</span>, <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>) 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 该函数功能见net中Head方法功能。该方法与默认的defaultClient中
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// Head方法一致。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Head</span>(<span style="color:#a6e22e">url</span> <span style="color:#66d9ef">string</span>) (<span style="color:#a6e22e">resp</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Response</span>, <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>) 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 该方法与默认的defaultClient中Post方法一致。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Post</span>(<span style="color:#a6e22e">url</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">bodyType</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">body</span> <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Reader</span>) (<span style="color:#a6e22e">resp</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Response</span>, <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>)
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 该方法与默认的defaultClient中PostForm方法一致。 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">PostForm</span>(<span style="color:#a6e22e">url</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">data</span> <span style="color:#a6e22e">url</span>.<span style="color:#a6e22e">Values</span>) (<span style="color:#a6e22e">resp</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Response</span>, <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Do发送http请求并且返回一个http响应, 遵守client的策略, 如重定向, 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// cookies以及auth等.错误经常是由于策略引起的, 当err是nil时, resp
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 总会包含一个非nil的resp.body.当调用者读完resp.body之后应该关闭它, 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 如果resp.body没有关闭, 则Client底层RoundTripper将无法重用存在的
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// TCP连接去服务接下来的请求, 如果resp.body非nil, 则必须对其进行关闭.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 通常来说, 经常使用Get, Post, 或者PostForm来替代Do. 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Client</span>) <span style="color:#a6e22e">Do</span>(<span style="color:#a6e22e">req</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>) (<span style="color:#a6e22e">resp</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Response</span>, <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 利用get方法请求指定的url.Get请求指定的页面信息，并返回实体主体。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Client</span>) <span style="color:#a6e22e">Get</span>(<span style="color:#a6e22e">url</span> <span style="color:#66d9ef">string</span>) (<span style="color:#a6e22e">resp</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Response</span>, <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>) 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 利用head方法请求指定的url，Head只返回页面的首部。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Client</span>) <span style="color:#a6e22e">Head</span>(<span style="color:#a6e22e">url</span> <span style="color:#66d9ef">string</span>) (<span style="color:#a6e22e">resp</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Response</span>, <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>) 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// post方法请求指定的URl, 如果body也是一个io.Closer, 则在请求之后关闭它 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Client</span>) <span style="color:#a6e22e">Post</span>(<span style="color:#a6e22e">url</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">bodyType</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">body</span> <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Reader</span>) (<span style="color:#a6e22e">resp</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Response</span>, <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 利用post方法请求指定的url, 利用data的key和value作为请求体. 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Client</span>) <span style="color:#a6e22e">PostForm</span>(<span style="color:#a6e22e">url</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">data</span> <span style="color:#a6e22e">url</span>.<span style="color:#a6e22e">Values</span>) (<span style="color:#a6e22e">resp</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Response</span>, <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>)
+</span></span></code></pre></div><p>http.NewRequest可以灵活的对http Request进行配置，然后再使用http.Client的Do方法发送这个http Request请求。注意：如果使用Post或者PostForm方法，是不能使用http.NewRequest配置请求的，只有Do方法可以定制http.NewRequest。</p>
+<p>利用http.Client以及http.NewRequest就可以完整模拟一个HTTP Request请求，包括自定义的HTTP Request请求的头部信息。有了前面介绍的 HTTP Request 请求、HTTP Response 响应、HTTP Client 客户端 三个部分，我们已经可以模拟各种HTTP Request 请求的发送，接收HTTP Response 响应了。</p>
+<p>下面我们来模拟HTTP Request请求，请求中附带有cookie信息，通过http.Client的Do方法发送这个请求。</p>
+<p>先配置http.NewRequest，然后我们通过http.Client的Do方法来发送任何HTTP Request请求。示例如下：</p>
+<ul>
+<li>模拟任何HTTP Request请求：</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;compress/gzip&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;io/ioutil&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;net/http&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;strconv&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 简式声明一个http.Client空结构体指针对象
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">client</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Client</span>{}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 使用http.NewRequest构建http Request请求
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">request</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewRequest</span>(<span style="color:#e6db74">&#34;GET&#34;</span>, <span style="color:#e6db74">&#34;http://www.baidu.com&#34;</span>, <span style="color:#66d9ef">nil</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 使用http.Cookie结构体初始化一个cookie键值对
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">cookie</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Cookie</span>{<span style="color:#a6e22e">Name</span>: <span style="color:#e6db74">&#34;userId&#34;</span>, <span style="color:#a6e22e">Value</span>: <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">Itoa</span>(<span style="color:#ae81ff">12345</span>)}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 使用前面构建的request方法AddCookie往请求中添加cookie
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">request</span>.<span style="color:#a6e22e">AddCookie</span>(<span style="color:#a6e22e">cookie</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 设置request的Header，具体可参考http协议
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">request</span>.<span style="color:#a6e22e">Header</span>.<span style="color:#a6e22e">Set</span>(<span style="color:#e6db74">&#34;Accept&#34;</span>, <span style="color:#e6db74">&#34;text/html, application/xhtml+xml, application/xml;q=0.9, */*;q=0.8&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">request</span>.<span style="color:#a6e22e">Header</span>.<span style="color:#a6e22e">Set</span>(<span style="color:#e6db74">&#34;Accept-Charset&#34;</span>, <span style="color:#e6db74">&#34;GBK, utf-8;q=0.7, *;q=0.3&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">request</span>.<span style="color:#a6e22e">Header</span>.<span style="color:#a6e22e">Set</span>(<span style="color:#e6db74">&#34;Accept-Encoding&#34;</span>, <span style="color:#e6db74">&#34;gzip, deflate, sdch&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">request</span>.<span style="color:#a6e22e">Header</span>.<span style="color:#a6e22e">Set</span>(<span style="color:#e6db74">&#34;Accept-Language&#34;</span>, <span style="color:#e6db74">&#34;zh-CN, zh;q=0.8&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">request</span>.<span style="color:#a6e22e">Header</span>.<span style="color:#a6e22e">Set</span>(<span style="color:#e6db74">&#34;Cache-Control&#34;</span>, <span style="color:#e6db74">&#34;max-age=0&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">request</span>.<span style="color:#a6e22e">Header</span>.<span style="color:#a6e22e">Set</span>(<span style="color:#e6db74">&#34;Connection&#34;</span>, <span style="color:#e6db74">&#34;keep-alive&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 使用http.Client 来发送request，这里使用了Do方法。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">response</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">Do</span>(<span style="color:#a6e22e">request</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 程序结束时关闭response.Body响应流
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">response</span>.<span style="color:#a6e22e">Body</span>.<span style="color:#a6e22e">Close</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 接收到的http Response 状态值
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">response</span>.<span style="color:#a6e22e">StatusCode</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">response</span>.<span style="color:#a6e22e">StatusCode</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">200</span> { <span style="color:#75715e">// 200意味成功得到http Server返回的http Response信息
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// gzip.NewReader对压缩的返回信息解压（考虑网络传输量，http Server
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// 一般都会对响应压缩后再返回）
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">body</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">gzip</span>.<span style="color:#a6e22e">NewReader</span>(<span style="color:#a6e22e">response</span>.<span style="color:#a6e22e">Body</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">body</span>.<span style="color:#a6e22e">Close</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">r</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">ReadAll</span>(<span style="color:#a6e22e">body</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// 打印出http Server返回的http Response信息
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(string(<span style="color:#a6e22e">r</span>))
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>使用http.Get 发送HTTP Get请求非常简单，在一般简单不需要对http.Request配置的场景下我们可以使用，只需要提供URL即可。</p>
+<ul>
+<li>发送一个HTTP Get请求：</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;io/ioutil&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;net/http&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// var DefaultClient = &amp;Client{}
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// func Get(url string) (resp *Response, err error) {
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// return DefaultClient.Get(url)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// }
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">		func (c *Client) Get(url string) (resp *Response, err error) {
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">			req, err := NewRequest(&#34;GET&#34;, url, nil)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">			if err != nil {
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">				return nil, err
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">			}
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">			return c.Do(req)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">		}
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	*/</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// http.Get实际上是DefaultClient.Get(url)，Get函数是高度封装的，只有一个参数url。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// 对于一般的http Request是可以使用，但是不能定制Request
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">response</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Get</span>(<span style="color:#e6db74">&#34;http://www.baidu.com&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//程序在使用完回复后必须关闭回复的主体。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">response</span>.<span style="color:#a6e22e">Body</span>.<span style="color:#a6e22e">Close</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">body</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">ReadAll</span>(<span style="color:#a6e22e">response</span>.<span style="color:#a6e22e">Body</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(string(<span style="color:#a6e22e">body</span>))
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>使用http.Post 发送HTTP Post请求也非常简单，在一般简单不需要对http.Request配置的场景下我们可以使用。</p>
+<ul>
+<li>发送一个http.Post请求：</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;io/ioutil&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;net/http&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;strings&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// application/x-www-form-urlencoded：为POST的contentType
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// strings.NewReader(&#34;mobile=xxxxxxxxxx&amp;isRemberPwd=1&#34;) 理解为传递的参数
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">resp</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Post</span>(<span style="color:#e6db74">&#34;http://localhost:8080/login.do&#34;</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;application/x-www-form-urlencoded&#34;</span>, <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">NewReader</span>(<span style="color:#e6db74">&#34;mobile=xxxxxxxxxx&amp;isRemberPwd=1&#34;</span>))
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">Body</span>.<span style="color:#a6e22e">Close</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">body</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">ReadAll</span>(<span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">Body</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(string(<span style="color:#a6e22e">body</span>))
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>使用http.PostForm 发送HTTP Request请求也非常简单，而且可以附带参数的键值对作为请求的body传递到服务端。</p>
+<ul>
+<li>发送一个http.PostForm请求：</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;io/ioutil&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;net/http&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;net/url&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">postParam</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">url</span>.<span style="color:#a6e22e">Values</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;mobile&#34;</span>:      {<span style="color:#e6db74">&#34;xxxxxx&#34;</span>},
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;isRemberPwd&#34;</span>: {<span style="color:#e6db74">&#34;1&#34;</span>},
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 数据的键值会经过URL编码后作为请求的body传递
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">resp</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">PostForm</span>(<span style="color:#e6db74">&#34;http://localhost：8080/login.do&#34;</span>, <span style="color:#a6e22e">postParam</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">Body</span>.<span style="color:#a6e22e">Close</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">body</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">ReadAll</span>(<span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">Body</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(string(<span style="color:#a6e22e">body</span>))
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>上面列举了四种HTTP Client客户端发送HTTP Request请求的方式，其中只有Do方法最灵活。</p>
+<p>http.Client与http.NewRequest结合可以模拟任何HTTP Request请求，方法是Do。像Get方法，Post方法和PostForm方法，http.NewRequest都是定制好的，所以使用方便但灵活性不够。不过好在有Do方法，我们可以更灵活来配置http.NewRequest。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">NewRequest</span>(<span style="color:#a6e22e">method</span>, <span style="color:#a6e22e">url</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">body</span> <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Reader</span>) (<span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>, <span style="color:#66d9ef">error</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Client</span>) <span style="color:#a6e22e">Get</span>(<span style="color:#a6e22e">url</span> <span style="color:#66d9ef">string</span>) (<span style="color:#a6e22e">resp</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Response</span>, <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">NewRequest</span>(<span style="color:#e6db74">&#34;GET&#34;</span>, <span style="color:#a6e22e">url</span>, <span style="color:#66d9ef">nil</span>)
+</span></span><span style="display:flex;"><span><span style="color:#f92672">......</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Client</span>) <span style="color:#a6e22e">Post</span>(<span style="color:#a6e22e">url</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">contentType</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">body</span> <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Reader</span>) (<span style="color:#a6e22e">resp</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Response</span>, <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">NewRequest</span>(<span style="color:#e6db74">&#34;POST&#34;</span>, <span style="color:#a6e22e">url</span>, <span style="color:#a6e22e">body</span>)
+</span></span><span style="display:flex;"><span><span style="color:#f92672">......</span>
+</span></span></code></pre></div><h2 id="4-http-server-服务端">4 HTTP Server 服务端<a hidden class="anchor" aria-hidden="true" href="#4-http-server-服务端">#</a></h2>
+<p>HTTP Server服务端用来接收并响应HTTP Client端发出的HTTP Request请求，是net/http包中非常重要和关键的一个功能。我们在Go语言中简单就能搭建HTTP服务器，就是因为它的存在。</p>
+<p>在server.go文件中还定义了一个非常重要的接口：Handler，另外还有一个结构体response，这和http.Response结构体只有首字母大小写不一致，不过这个response 也是响应，只不过是专门用在服务端，和http.Response结构体是完全两回事。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Handler</span> <span style="color:#66d9ef">interface</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ServeHTTP</span>(<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Server</span> <span style="color:#66d9ef">struct</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 监听TCP网络地址srv.Addr然后调用Serve来处理接下来连接的请求。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 如果srv.Addr是空的话，则使用“:http”。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">srv</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Server</span>) <span style="color:#a6e22e">ListenAndServe</span>() <span style="color:#66d9ef">error</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// ListenAndServeTLS监听srv.Addr确定的TCP地址，并且会调用Serve
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 方法处理接收到的连接。必须提供证书文件和对应的私钥文 件。如果证书是由
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 权威机构签发的，certFile参数必须是顺序串联的服务端证书和CA证书。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 如果srv.Addr为空字符串，会使 用”:https”。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">srv</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Server</span>) <span style="color:#a6e22e">ListenAndServeTLS</span>(<span style="color:#a6e22e">certFile</span>, <span style="color:#a6e22e">keyFile</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">error</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 接受Listener l的连接，创建一个新的服务协程。该服务协程读取请求然后调用
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// srv.Handler来应答。实际上就是实现了对某个端口进行监听，然后创建相应的连接。 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">srv</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Server</span>) <span style="color:#a6e22e">Serve</span>(<span style="color:#a6e22e">l</span> <span style="color:#a6e22e">net</span>.<span style="color:#a6e22e">Listener</span>) <span style="color:#66d9ef">error</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 该函数控制是否http的keep-alives能够使用，默认情况下，keep-alives总是可用的。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 只有资源非常紧张的环境或者服务端在关闭进程中时，才应该关闭该功能。 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">s</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Server</span>) <span style="color:#a6e22e">SetKeepAlivesEnabled</span>(<span style="color:#a6e22e">v</span> <span style="color:#66d9ef">bool</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 是一个http请求多路复用器，它将每一个请求的URL和
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 一个注册模式的列表进行匹配，然后调用和URL最匹配的模式的处理器进行后续操作。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">ServeMux</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 初始化一个新的ServeMux 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">NewServeMux</span>() <span style="color:#f92672">*</span><span style="color:#a6e22e">ServeMux</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 将handler注册为指定的模式，如果该模式已经有了handler，则会出错panic。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">mux</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">ServeMux</span>) <span style="color:#a6e22e">Handle</span>(<span style="color:#a6e22e">pattern</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">handler</span> <span style="color:#a6e22e">Handler</span>) 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 将handler注册为指定的模式 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">mux</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">ServeMux</span>) <span style="color:#a6e22e">HandleFunc</span>(<span style="color:#a6e22e">pattern</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">handler</span> <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 根据指定的r.Method, r.Host以及r.RUL.Path返回一个用来处理给定请求的handler。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 该函数总是返回一个非nil的 handler，如果path不是一个规范格式，则handler会
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 重定向到其规范path。Handler总是返回匹配该请求的的已注册模式；在内建重定向
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 处理器的情况下，pattern会在重定向后进行匹配。如果没有已注册模式可以应用于该请求，
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 本方法将返回一个内建的”404 page not found”处理器和一个空字符串模式。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">mux</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">ServeMux</span>) <span style="color:#a6e22e">Handler</span>(<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>) (<span style="color:#a6e22e">h</span> <span style="color:#a6e22e">Handler</span>, <span style="color:#a6e22e">pattern</span> <span style="color:#66d9ef">string</span>) 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 该函数用于将最接近请求url模式的handler分配给指定的请求。 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">mux</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">ServeMux</span>) <span style="color:#a6e22e">ServeHTTP</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>)
+</span></span></code></pre></div><p>Handler接口应该算是server.go中最关键的接口了，如果我们仔细看这个文件的源代码，将会发现很多结构体实现了这个接口的ServeHTTP方法。</p>
+<p>注意这个接口的注释：Handler响应HTTP请求。没错，最终我们的HTTP服务是通过实现ServeHTTP(ResponseWriter, *Request)来达到服务端接收客户端请求并响应。</p>
+<p>理解 HTTP 构建的网络应用只要关注两个端&mdash;客户端（Clinet）和服务端（Server），两个端的交互来自 Clinet 的 Request，以及Server端的Response。HTTP服务器，主要在于如何接受 Clinet端的 Request，Server端向Client端返回Response。</p>
+<p>那这个过程是什么样的呢？要讲清楚这个过程，还需要回到开始的HTTP服务器程序。这里以前面我们了解到的HTTP Request、HTTP Response、HTTP Client作为基础，并重点分析server.go源代码才能讲清楚：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">HandleFunc</span>(<span style="color:#e6db74">&#34;/&#34;</span>, <span style="color:#a6e22e">myfunc</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ListenAndServe</span>(<span style="color:#e6db74">&#34;:8080&#34;</span>, <span style="color:#66d9ef">nil</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>以上两行代码，就成功启动了一个HTTP服务器。我们通过net/http 包源代码分析发现，调用Http.HandleFunc，按顺序做了几件事：</p>
+<p>1.Http.HandleFunc调用了DefaultServeMux的HandleFunc</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">HandleFunc</span>(<span style="color:#a6e22e">pattern</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">handler</span> <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>)) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">DefaultServeMux</span>.<span style="color:#a6e22e">HandleFunc</span>(<span style="color:#a6e22e">pattern</span>, <span style="color:#a6e22e">handler</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>2.DefaultServeMux.HandleFunc调用了DefaultServeMux的Handle，DefaultServeMux是一个ServeMux 指针变量。而ServeMux 是Go语言中的Multiplexer（多路复用器），通过Handle匹配pattern 和我们定义的handler（其实就是http.HandlerFunc函数类型变量）。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">DefaultServeMux</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">defaultServeMux</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">defaultServeMux</span> <span style="color:#a6e22e">ServeMux</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">mux</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">ServeMux</span>) <span style="color:#a6e22e">HandleFunc</span>(<span style="color:#a6e22e">pattern</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">handler</span> <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>)) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">mux</span>.<span style="color:#a6e22e">Handle</span>(<span style="color:#a6e22e">pattern</span>, <span style="color:#a6e22e">HandlerFunc</span>(<span style="color:#a6e22e">handler</span>))
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>注意：
+上面的方法命名Handle，HandleFunc和HandlerFunc，Handler（接口），他们很相似，容易混淆。记住Handle和HandleFunc和pattern 匹配有关，也即往DefaultServeMux的map[string]muxEntry中增加对应的handler和路由规则。</p>
+<p>接着我们看看myfunc的声明和定义：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">myfunc</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Fprintf</span>(<span style="color:#a6e22e">w</span>, <span style="color:#e6db74">&#34;hi&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>而type HandlerFunc func(ResponseWriter, *Request) 是一个函数类型，而我们定义的myfunc的函数签名刚好符合这个函数类型。</p>
+<p>所以http.HandleFunc(&quot;/&quot;, myfunc)，实际上是mux.Handle(&quot;/&quot;, HandlerFunc(myfunc))。</p>
+<p>HandlerFunc(myfunc) 让myfunc成为了HandlerFunc类型，我们称myfunc为handler。而HandlerFunc类型是具有ServeHTTP方法的，而有了ServeHTTP方法也就是实现了Handler接口。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">f</span> <span style="color:#a6e22e">HandlerFunc</span>) <span style="color:#a6e22e">ServeHTTP</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">f</span>(<span style="color:#a6e22e">w</span>, <span style="color:#a6e22e">r</span>) <span style="color:#75715e">// 这相当于自身的调用
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>现在ServeMux和Handler都和我们的myfunc联系上了，myfunc是一个Handler接口变量也是HandlerFunc类型变量，接下来和结构体server有关了。</p>
+<p>从http.ListenAndServe的源码可以看出，它创建了一个server对象，并调用server对象的ListenAndServe方法：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">ListenAndServe</span>(<span style="color:#a6e22e">addr</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">handler</span> <span style="color:#a6e22e">Handler</span>) <span style="color:#66d9ef">error</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">server</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">Server</span>{<span style="color:#a6e22e">Addr</span>: <span style="color:#a6e22e">addr</span>, <span style="color:#a6e22e">Handler</span>: <span style="color:#a6e22e">handler</span>}
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">ListenAndServe</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>而我们HTTP服务器中第二行代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ListenAndServe</span>(<span style="color:#e6db74">&#34;:8080&#34;</span>, <span style="color:#66d9ef">nil</span>)
+</span></span></code></pre></div><p>创建了一个server对象，并调用server对象的ListenAndServe方法，这里没有直接传递Handler，而是默认使用DefautServeMux作为multiplexer，myfunc是存在于handler和路由规则中的。</p>
+<p>Server的ListenAndServe方法中，会初始化监听地址Addr，同时调用Listen方法设置监听。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">for</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">rw</span>, <span style="color:#a6e22e">e</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">Accept</span>()
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">srv</span>.<span style="color:#a6e22e">newConn</span>(<span style="color:#a6e22e">rw</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">setState</span>(<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">rwc</span>, <span style="color:#a6e22e">StateNew</span>) 
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">go</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">serve</span>(<span style="color:#a6e22e">ctx</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>监听开启之后，一旦客户端请求过来，Go就开启一个协程go c.serve(ctx)处理请求，主要逻辑都在serve方法之中。</p>
+<p>func (c *conn) serve(ctx context.Context)，这个方法很长，里面主要的一句：serverHandler{c.server}.ServeHTTP(w, w.req)。其中w由w, err := c.readRequest(ctx)得到，因为有传递context。</p>
+<p>还是来看源代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">serverHandler</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">srv</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Server</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">sh</span> <span style="color:#a6e22e">serverHandler</span>) <span style="color:#a6e22e">ServeHTTP</span>(<span style="color:#a6e22e">rw</span> <span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">req</span> <span style="color:#a6e22e">Request</span>) {
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">handler</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sh</span>.<span style="color:#a6e22e">srv</span>.<span style="color:#a6e22e">Handler</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">handler</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">handler</span> = <span style="color:#a6e22e">DefaultServeMux</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">RequestURI</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">Method</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;OPTIONS&#34;</span> {
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">handler</span> = <span style="color:#a6e22e">globalOptionsHandler</span>{}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">handler</span>.<span style="color:#a6e22e">ServeHTTP</span>(<span style="color:#a6e22e">rw</span>, <span style="color:#a6e22e">req</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>从http.ListenAndServe(&quot;:8080&quot;, nil)开始，handler是nil，所以最后实际ServeHTTP方法是DefaultServeMux.ServeHTTP(rw, req)。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">mux</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">ServeMux</span>) <span style="color:#a6e22e">ServeHTTP</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">RequestURI</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;*&#34;</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">ProtoAtLeast</span>(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>) {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">w</span>.<span style="color:#a6e22e">Header</span>().<span style="color:#a6e22e">Set</span>(<span style="color:#e6db74">&#34;Connection&#34;</span>, <span style="color:#e6db74">&#34;close&#34;</span>)
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">w</span>.<span style="color:#a6e22e">WriteHeader</span>(<span style="color:#a6e22e">StatusBadRequest</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">h</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">mux</span>.<span style="color:#a6e22e">Handler</span>(<span style="color:#a6e22e">r</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">h</span>.<span style="color:#a6e22e">ServeHTTP</span>(<span style="color:#a6e22e">w</span>, <span style="color:#a6e22e">r</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>通过func (mux *ServeMux) Handler(r *Request) (h Handler, pattern string)，我们得到Handler h，然后执行h.ServeHTTP(w, r)方法，也就是执行我们的myfunc函数（别忘了myfunc是HandlerFunc类型，而他的ServeHTTP(w, r)方法这里其实就是自己调用自己），把response写到http.ResponseWriter对象返回给客户端，fmt.Fprintf(w, &ldquo;hi&rdquo;)，我们在客户端会接收到hi 。至此整个HTTP服务执行完成。</p>
+<p>总结下，HTTP服务整个过程大概是这样：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">Request</span> <span style="color:#f92672">-</span>&gt; <span style="color:#a6e22e">ServeMux</span>(<span style="color:#a6e22e">Multiplexer</span>) <span style="color:#f92672">-</span>&gt; <span style="color:#a6e22e">handler</span><span style="color:#f92672">-</span>&gt; <span style="color:#a6e22e">Response</span>
+</span></span></code></pre></div><p>我们再看下面代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ListenAndServe</span>(<span style="color:#e6db74">&#34;:8080&#34;</span>, <span style="color:#66d9ef">nil</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">ListenAndServe</span>(<span style="color:#a6e22e">addr</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">handler</span> <span style="color:#a6e22e">Handler</span>) <span style="color:#66d9ef">error</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">server</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">Server</span>{<span style="color:#a6e22e">Addr</span>: <span style="color:#a6e22e">addr</span>, <span style="color:#a6e22e">Handler</span>: <span style="color:#a6e22e">handler</span>}
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">ListenAndServe</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>上面代码实际上就是server.ListenAndServe()执行的实际效果，只不过简单声明了一个结构体Server{Addr: addr, Handler: handler}实例。如果我们声明一个Server实例，完全可以达到深度自定义 http.Server的目的：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;net/http&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">myfunc</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Fprintf</span>(<span style="color:#a6e22e">w</span>, <span style="color:#e6db74">&#34;hi&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 更多http.Server的字段可以根据情况初始化
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">server</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Server</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">Addr</span>:         <span style="color:#e6db74">&#34;:8080&#34;</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">ReadTimeout</span>:  <span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">WriteTimeout</span>: <span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">HandleFunc</span>(<span style="color:#e6db74">&#34;/&#34;</span>, <span style="color:#a6e22e">myfunc</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">ListenAndServe</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">这样服务也能跑起来，而且我们完全可以根据情况来自定义我们的</span><span style="color:#a6e22e">Server</span><span style="color:#960050;background-color:#1e0010">！</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">还可以指定</span><span style="color:#a6e22e">Servemux</span><span style="color:#960050;background-color:#1e0010">的用法</span>:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">GOPATH</span><span style="color:#960050;background-color:#1e0010">\</span><span style="color:#a6e22e">src</span><span style="color:#960050;background-color:#1e0010">\</span><span style="color:#a6e22e">go42</span><span style="color:#960050;background-color:#1e0010">\</span><span style="color:#a6e22e">chapter</span><span style="color:#f92672">-</span><span style="color:#ae81ff">15</span><span style="color:#960050;background-color:#1e0010">\</span><span style="color:#ae81ff">15.3</span><span style="color:#960050;background-color:#1e0010">\</span><span style="color:#ae81ff">7</span><span style="color:#960050;background-color:#1e0010">\</span><span style="color:#a6e22e">main</span>.<span style="color:#66d9ef">go</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;net/http&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">myfunc</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Fprintf</span>(<span style="color:#a6e22e">w</span>, <span style="color:#e6db74">&#34;hi&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">mux</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewServeMux</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">mux</span>.<span style="color:#a6e22e">HandleFunc</span>(<span style="color:#e6db74">&#34;/&#34;</span>, <span style="color:#a6e22e">myfunc</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ListenAndServe</span>(<span style="color:#e6db74">&#34;:8080&#34;</span>, <span style="color:#a6e22e">mux</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>如果既指定Servemux又自定义 http.Server，因为Server中有字段Handler，所以我们可以直接把Servemux变量作为Server.Handler：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;net/http&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">myfunc</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Fprintf</span>(<span style="color:#a6e22e">w</span>, <span style="color:#e6db74">&#34;hi&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">server</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Server</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">Addr</span>:         <span style="color:#e6db74">&#34;:8080&#34;</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">ReadTimeout</span>:  <span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">WriteTimeout</span>: <span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">mux</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewServeMux</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">Handler</span> = <span style="color:#a6e22e">mux</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">mux</span>.<span style="color:#a6e22e">HandleFunc</span>(<span style="color:#e6db74">&#34;/&#34;</span>, <span style="color:#a6e22e">myfunc</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">ListenAndServe</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>在前面pprof 包的内容中我们也用了本章开头这段代码，当我们访问http://localhost:8080/debug/pprof/ 时可以看到对应的性能分析报告。
+因为我们这样导入 _&ldquo;net/http/pprof&rdquo; 包时，在文件 pprof.go 文件中init 函数已经定义好了handler：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">init</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">HandleFunc</span>(<span style="color:#e6db74">&#34;/debug/pprof/&#34;</span>, <span style="color:#a6e22e">Index</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">HandleFunc</span>(<span style="color:#e6db74">&#34;/debug/pprof/cmdline&#34;</span>, <span style="color:#a6e22e">Cmdline</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">HandleFunc</span>(<span style="color:#e6db74">&#34;/debug/pprof/profile&#34;</span>, <span style="color:#a6e22e">Profile</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">HandleFunc</span>(<span style="color:#e6db74">&#34;/debug/pprof/symbol&#34;</span>, <span style="color:#a6e22e">Symbol</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">HandleFunc</span>(<span style="color:#e6db74">&#34;/debug/pprof/trace&#34;</span>, <span style="color:#a6e22e">Trace</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>所以，我们就可以通过浏览器访问上面地址来看到报告。现在再来看这些代码，我们就明白怎么回事了！</p>
+<h2 id="5-自定义处理器custom-handlers">5 自定义处理器（Custom Handlers）<a hidden class="anchor" aria-hidden="true" href="#5-自定义处理器custom-handlers">#</a></h2>
+<p>自定义的Handler：</p>
+<p>标准库http提供了Handler接口，用于开发者实现自己的handler。只要实现接口的ServeHTTP方法即可。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;log&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;net/http&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;time&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">timeHandler</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">format</span> <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">th</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">timeHandler</span>) <span style="color:#a6e22e">ServeHTTP</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">tm</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>().<span style="color:#a6e22e">Format</span>(<span style="color:#a6e22e">th</span>.<span style="color:#a6e22e">format</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">w</span>.<span style="color:#a6e22e">Write</span>([]byte(<span style="color:#e6db74">&#34;The time is: &#34;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">tm</span>))
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">mux</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewServeMux</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">th</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">timeHandler</span>{<span style="color:#a6e22e">format</span>: <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">RFC1123</span>}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">mux</span>.<span style="color:#a6e22e">Handle</span>(<span style="color:#e6db74">&#34;/time&#34;</span>, <span style="color:#a6e22e">th</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Listening...&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ListenAndServe</span>(<span style="color:#e6db74">&#34;:3000&#34;</span>, <span style="color:#a6e22e">mux</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>我们知道，NewServeMux可以创建一个ServeMux实例，ServeMux同时也实现了ServeHTTP方法，因此代码中的mux也是一种handler。把它当成参数传给http.ListenAndServe方法，后者会把mux传给Server实例。因为指定了handler，因此整个http服务就不再是DefaultServeMux，而是mux，无论是在注册路由还是提供请求服务的时候。</p>
+<p>任何有 func(http.ResponseWriter，*http.Request) 签名的函数都能转化为一个 HandlerFunc 类型。这很有用，因为 HandlerFunc 对象内置了 ServeHTTP 方法，后者可以聪明又方便的调用我们最初提供的函数内容。</p>
+<h2 id="6-将函数作为处理器">6 将函数作为处理器<a hidden class="anchor" aria-hidden="true" href="#6-将函数作为处理器">#</a></h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;log&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;net/http&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;time&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">timeHandler</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">tm</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>().<span style="color:#a6e22e">Format</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">RFC1123</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">w</span>.<span style="color:#a6e22e">Write</span>([]byte(<span style="color:#e6db74">&#34;The time is: &#34;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">tm</span>))
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">mux</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewServeMux</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Convert the timeHandler function to a HandlerFunc type
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">th</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">HandlerFunc</span>(<span style="color:#a6e22e">timeHandler</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// And add it to the ServeMux
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">mux</span>.<span style="color:#a6e22e">Handle</span>(<span style="color:#e6db74">&#34;/time&#34;</span>, <span style="color:#a6e22e">th</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Listening...&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ListenAndServe</span>(<span style="color:#e6db74">&#34;:3000&#34;</span>, <span style="color:#a6e22e">mux</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>创建新的server：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">index</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">w</span>.<span style="color:#a6e22e">Header</span>().<span style="color:#a6e22e">Set</span>(<span style="color:#e6db74">&#34;Content-Type&#34;</span>, <span style="color:#e6db74">&#34;text/html&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">html</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">`&lt;doctype html&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &lt;html&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &lt;head&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          &lt;title&gt;Hello World&lt;/title&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &lt;/head&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &lt;body&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &lt;p&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          Welcome
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &lt;/p&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &lt;/body&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&lt;/html&gt;`</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Fprintln</span>(<span style="color:#a6e22e">w</span>, <span style="color:#a6e22e">html</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>(){
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">HandleFunc</span>(<span style="color:#e6db74">&#34;/&#34;</span>, <span style="color:#a6e22e">index</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">server</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Server</span>{
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">Addr</span>: <span style="color:#e6db74">&#34;:8000&#34;</span>, 
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">ReadTimeout</span>: <span style="color:#ae81ff">60</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>, 
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">WriteTimeout</span>: <span style="color:#ae81ff">60</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>, 
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">ListenAndServe</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="7-中间件middleware">7 中间件Middleware<a hidden class="anchor" aria-hidden="true" href="#7-中间件middleware">#</a></h2>
+<p>所谓中间件，就是连接上下级不同功能的函数或者软件，通常进行一些包裹函数的行为，为被包裹函数提供添加一些功能或行为。前文的HandleFunc就能把签名为 func(w http.ResponseWriter, r *http.Reqeust)的函数包裹成handler。这个函数也算是中间件。</p>
+<p>Go的HTTP中间件很简单，只要实现一个函数签名为func(http.Handler) http.Handler的函数即可。http.Handler是一个接口，接口方法我们熟悉的为serveHTTP。返回也是一个handler。因为Go中的函数也可以当成变量传递或者或者返回，因此也可以在中间件函数中传递定义好的函数，只要这个函数是一个handler即可，即实现或者被handlerFunc包裹成为handler处理器。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">index</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">w</span>.<span style="color:#a6e22e">Header</span>().<span style="color:#a6e22e">Set</span>(<span style="color:#e6db74">&#34;Content-Type&#34;</span>, <span style="color:#e6db74">&#34;text/html&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">html</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">`&lt;doctype html&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &lt;html&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &lt;head&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          &lt;title&gt;Hello World&lt;/title&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &lt;/head&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &lt;body&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &lt;p&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          Welcome
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &lt;/p&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &lt;/body&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&lt;/html&gt;`</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Fprintln</span>(<span style="color:#a6e22e">w</span>, <span style="color:#a6e22e">html</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">middlewareHandler</span>(<span style="color:#a6e22e">next</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Handler</span>) <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Handler</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">HandlerFunc</span>(<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>){
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 执行handler之前的逻辑
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#a6e22e">next</span>.<span style="color:#a6e22e">ServeHTTP</span>(<span style="color:#a6e22e">w</span>, <span style="color:#a6e22e">r</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 执行完毕handler后的逻辑
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    })
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">loggingHandler</span>(<span style="color:#a6e22e">next</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Handler</span>) <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Handler</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">HandlerFunc</span>(<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">start</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>()
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Started %s %s&#34;</span>, <span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">Method</span>, <span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">URL</span>.<span style="color:#a6e22e">Path</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">next</span>.<span style="color:#a6e22e">ServeHTTP</span>(<span style="color:#a6e22e">w</span>, <span style="color:#a6e22e">r</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Completed %s in %v&#34;</span>, <span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">URL</span>.<span style="color:#a6e22e">Path</span>, <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Since</span>(<span style="color:#a6e22e">start</span>))
+</span></span><span style="display:flex;"><span>    })
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Handle</span>(<span style="color:#e6db74">&#34;/&#34;</span>, <span style="color:#a6e22e">loggingHandler</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">HandlerFunc</span>(<span style="color:#a6e22e">index</span>)))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ListenAndServe</span>(<span style="color:#e6db74">&#34;:8000&#34;</span>, <span style="color:#66d9ef">nil</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="8-静态站点">8 静态站点<a hidden class="anchor" aria-hidden="true" href="#8-静态站点">#</a></h2>
+<p>下面代码通过指定目录，作为静态站点：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;net/http&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Handle</span>(<span style="color:#e6db74">&#34;/&#34;</span>, <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">FileServer</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Dir</span>(<span style="color:#e6db74">&#34;D:/html/static/&#34;</span>)))
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ListenAndServe</span>(<span style="color:#e6db74">&#34;:8080&#34;</span>, <span style="color:#66d9ef">nil</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
+
+        </div>
+
+        <footer class="post-footer">
+            
+<nav class="paginav">
+  <a class="prev" href="https://liiqii.github.io/posts/tech/go/go_channel/">
+    <span class="title">« 上一页</span>
+    <br>
+    <span>Go Channel详解</span>
+  </a>
+  <a class="next" href="https://liiqii.github.io/posts/tech/go/go_rpc/">
+    <span class="title">下一页 »</span>
+    <br>
+    <span>GO RPC 工作原理</span>
+  </a>
+</nav>
+
+
+<div class="share-buttons">
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Go net http包 on twitter"
+       href="https://twitter.com/intent/tweet/?text=Go%20net%20http%e5%8c%85&amp;url=https%3a%2f%2fliiqii.github.io%2fposts%2ftech%2fgo%2fgo_http%2f&amp;hashtags=Go%2chttp">
+    <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve">
+            <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-253.927,424.544c135.939,0 210.268,-112.643 210.268,-210.268c0,-3.218 0,-6.437 -0.153,-9.502c14.406,-10.421 26.973,-23.448 36.935,-38.314c-13.18,5.824 -27.433,9.809 -42.452,11.648c15.326,-9.196 26.973,-23.602 32.49,-40.92c-14.252,8.429 -30.038,14.56 -46.896,17.931c-13.487,-14.406 -32.644,-23.295 -53.946,-23.295c-40.767,0 -73.87,33.104 -73.87,73.87c0,5.824 0.613,11.494 1.992,16.858c-61.456,-3.065 -115.862,-32.49 -152.337,-77.241c-6.284,10.881 -9.962,23.601 -9.962,37.088c0,25.594 13.027,48.276 32.95,61.456c-12.107,-0.307 -23.448,-3.678 -33.41,-9.196l0,0.92c0,35.862 25.441,65.594 59.311,72.49c-6.13,1.686 -12.72,2.606 -19.464,2.606c-4.751,0 -9.348,-0.46 -13.946,-1.38c9.349,29.426 36.628,50.728 68.965,51.341c-25.287,19.771 -57.164,31.571 -91.8,31.571c-5.977,0 -11.801,-0.306 -17.625,-1.073c32.337,21.15 71.264,33.41 112.95,33.41Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Go net http包 on linkedin"
+       href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fliiqii.github.io%2fposts%2ftech%2fgo%2fgo_http%2f&amp;title=Go%20net%20http%e5%8c%85&amp;summary=Go%20net%20http%e5%8c%85&amp;source=https%3a%2f%2fliiqii.github.io%2fposts%2ftech%2fgo%2fgo_http%2f">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve">
+            <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Go net http包 on reddit"
+       href="https://reddit.com/submit?url=https%3a%2f%2fliiqii.github.io%2fposts%2ftech%2fgo%2fgo_http%2f&title=Go%20net%20http%e5%8c%85">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve">
+            <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Go net http包 on facebook"
+       href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fliiqii.github.io%2fposts%2ftech%2fgo%2fgo_http%2f">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve">
+            <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Go net http包 on whatsapp"
+       href="https://api.whatsapp.com/send?text=Go%20net%20http%e5%8c%85%20-%20https%3a%2f%2fliiqii.github.io%2fposts%2ftech%2fgo%2fgo_http%2f">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve">
+            <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Go net http包 on telegram"
+       href="https://telegram.me/share/url?text=Go%20net%20http%e5%8c%85&amp;url=https%3a%2f%2fliiqii.github.io%2fposts%2ftech%2fgo%2fgo_http%2f">
+        <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28">
+            <path
+                    d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+        </svg>
+    </a>
+</div>
+
+        </footer>
+    </div>
+
+<style>
+    .comments_details summary::marker {
+        font-size: 20px;
+        content: '👉展开评论';
+        color: var(--content);
+    }
+    .comments_details[open] summary::marker{
+        font-size: 20px;
+        content: '👇关闭评论';
+        color: var(--content);
+    }
+</style>
+
+
+<div>
+    <details class="comments_details">
+        <summary style="cursor: pointer; margin: 50px 0 20px 0;width: 130px;">
+            <span style="font-size: 20px;color: var(--content);">...</span>
+        </summary>
+        <div id="tcomment"></div>
+    </details>
+    <script src="https://cdn.staticfile.org/twikoo/1.5.8/twikoo.all.min.js">
+    </script>
+    <script>
+        twikoo.init({
+            envId:  null ,
+        el: "#tcomment",
+            lang: 'zh-CN',
+            region:  null ,
+        path: window.TWIKOO_MAGIC_PATH||window.location.pathname,
+        })
+    </script>
+</div>
+</article>
+</main>
+
+<footer class="footer">
+    <span>
+        &copy;
+        -2023
+        <a href="https://liiqii.github.io/" style="color:#939393;">liiqii</a>
+    </span>
+    
+    <span>Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &amp;
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+    
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

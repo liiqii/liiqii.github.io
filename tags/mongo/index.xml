@@ -1,19 +1,37 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>mongo on Klaus</title>
+    <title>Mongo on liiqii</title>
     <link>https://liiqii.github.io/tags/mongo/</link>
-    <description>Recent content in mongo on Klaus</description>
+    <description>Recent content in Mongo on liiqii</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <lastBuildDate>Fri, 01 Sep 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://liiqii.github.io/tags/mongo/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 10 Oct 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://liiqii.github.io/tags/mongo/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>mongo 查询</title>
+      <title>【Mongo】MongoDB文档查询</title>
       <link>https://liiqii.github.io/posts/tech/mongo/mongo_query/</link>
-      <pubDate>Fri, 01 Sep 2023 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
       
       <guid>https://liiqii.github.io/posts/tech/mongo/mongo_query/</guid>
-      <description>数据查询 find()方法 方法说明 find()方法没有参数时会匹配集合中的所有内容，find({})和find()功能一样 find({&amp;quot;_id&amp;quot;:1})表示查询_id字段为 1 的文档；find({&amp;quot;_id&amp;quot;:1,&amp;quot;name&amp;quot;</description>
+      <description>【Mongo】MongoDB文档查询</description>
+    </item>
+    
+    <item>
+      <title>【Mongo】MongoDB文档的增删改操作</title>
+      <link>https://liiqii.github.io/posts/tech/mongo/mongo_edit/</link>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://liiqii.github.io/posts/tech/mongo/mongo_edit/</guid>
+      <description>【Mongo】MongoDB文档的增删改操作</description>
+    </item>
+    
+    <item>
+      <title>【Mongo】初步认识MongoDB shell</title>
+      <link>https://liiqii.github.io/posts/tech/mongo/mongo_shell/</link>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://liiqii.github.io/posts/tech/mongo/mongo_shell/</guid>
+      <description>【Mongo】初步认识MongoDB shell</description>
     </item>
     
   </channel>

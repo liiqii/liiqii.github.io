@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Go框架 on liiqii</title>
+    <link>https://liiqii.github.io/tags/go%E6%A1%86%E6%9E%B6/</link>
+    <description>Recent content in Go框架 on liiqii</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Tue, 10 Oct 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://liiqii.github.io/tags/go%E6%A1%86%E6%9E%B6/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Go 框架 Iris 文档</title>
+      <link>https://liiqii.github.io/posts/tech/go/go_iris/</link>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://liiqii.github.io/posts/tech/go/go_iris/</guid>
+      <description>Go 框架 Iris 文档翻译，Iris是一个跨平台的软件。</description>
+    </item>
+    
+  </channel>
+</rss>

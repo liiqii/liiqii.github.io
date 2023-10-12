@@ -1,0 +1,1812 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Go常见面试题 | liiqii</title>
+<meta name="keywords" content="">
+<meta name="description" content="Linux安装指定版本golang">
+<meta name="author" content="liiqii">
+<link rel="canonical" href="https://liiqii.github.io/posts/tech/go/go_interview_questions/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.css" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.js" onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://liiqii.github.io/img/icon.jpg">
+<link rel="icon" type="image/png" sizes="16x16" href="https://liiqii.github.io/img/icon.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="https://liiqii.github.io/img/icon.jpg">
+<link rel="apple-touch-icon" href="https://liiqii.github.io/img/icon.jpg">
+<link rel="mask-icon" href="https://liiqii.github.io/img/icon.jpg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js"></script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = ""; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<meta property="og:title" content="Go常见面试题" />
+<meta property="og:description" content="Linux安装指定版本golang" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liiqii.github.io/posts/tech/go/go_interview_questions/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-10-10T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-10-10T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go常见面试题"/>
+<meta name="twitter:description" content="Linux安装指定版本golang"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+
+        {
+          "@type": "ListItem",
+          "position":  1 ,
+          "name": "📚文章",
+          "item": "https://liiqii.github.io/posts/"
+        },
+
+        {
+          "@type": "ListItem",
+          "position":  2 ,
+          "name": "👨🏻‍💻 技术",
+          "item": "https://liiqii.github.io/posts/tech/"
+        }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "Go常见面试题",
+      "item": "https://liiqii.github.io/posts/tech/go/go_interview_questions/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Go常见面试题",
+  "name": "Go常见面试题",
+  "description": "Linux安装指定版本golang",
+  "keywords": [
+    ""
+  ],
+  "articleBody": "转自：Go常见面试题【由浅入深】2022版\n基础语法 01 = 和 := 的区别？ =是赋值变量，:=是定义变量。\n02 指针的作用 一个指针可以指向任意变量的地址，它所指向的地址在32位或64位机器上分别固定占4或8个字节。指针的作用有：\n获取变量的值 import fmt ​ func main(){ a := 1 p := \u0026a//取址\u0026 fmt.Printf(\"%d\\n\", *p);//取值* } 改变变量的值 // 交换函数 func swap(a, b *int) { *a, *b = *b, *a } 用指针替代值传入函数，比如类的接收器就是这样的。 type A struct{} ​ func (a *A) fun(){} 03 Go 允许多个返回值吗？ 可以。通常函数除了一般返回值还会返回一个error。\n04 Go 有异常类型吗？ 有。Go用error类型代替try…catch语句，这样可以节省资源。同时增加代码可读性：\n_, err := funcDemo() if err != nil { fmt.Println(err) return } 也可以用errors.New()来定义自己的异常。errors.Error()会返回异常的字符串表示。只要实现error接口就可以定义自己的异常，\ntype errorString struct { s string } ​ func (e *errorString) Error() string { return e.s } ​ // 多一个函数当作构造函数 func New(text string) error { return \u0026errorString{text} } 05 什么是协程（Goroutine） 协程是用户态轻量级线程，它是线程调度的基本单位。通常在函数前加上go关键字就能实现并发。一个Goroutine会以一个很小的栈启动2KB或4KB，当遇到栈空间不足时，栈会自动伸缩， 因此可以轻易实现成千上万个goroutine同时启动。\n06 ❤ 如何高效地拼接字符串 拼接字符串的方式有：+ , fmt.Sprintf , strings.Builder, bytes.Buffer, strings.Join\n1 “+”\n使用+操作符进行拼接时，会对字符串进行遍历，计算并开辟一个新的空间来存储原来的两个字符串。\n2 fmt.Sprintf\n由于采用了接口参数，必须要用反射获取值，因此有性能损耗。\n3 strings.Builder：\n用WriteString()进行拼接，内部实现是指针+切片，同时String()返回拼接后的字符串，它是直接把[]byte转换为string，从而避免变量拷贝。\n4 bytes.Buffer\nbytes.Buffer是一个一个缓冲byte类型的缓冲器，这个缓冲器里存放着都是byte，\nbytes.buffer底层也是一个[]byte切片。\n5 strings.join\nstrings.join也是基于strings.builder来实现的,并且可以自定义分隔符，在join方法内调用了b.Grow(n)方法，这个是进行初步的容量分配，而前面计算的n的长度就是我们要拼接的slice的长度，因为我们传入切片长度固定，所以提前进行容量分配可以减少内存分配，很高效。\n性能比较：\nstrings.Join ≈ strings.Builder \u003e bytes.Buffer \u003e “+” \u003e fmt.Sprintf\n5种拼接方法的实例代码\nfunc main(){ a := []string{\"a\", \"b\", \"c\"} //方式1：+ ret := a[0] + a[1] + a[2] //方式2：fmt.Sprintf ret := fmt.Sprintf(\"%s%s%s\", a[0],a[1],a[2]) //方式3：strings.Builder var sb strings.Builder sb.WriteString(a[0]) sb.WriteString(a[1]) sb.WriteString(a[2]) ret := sb.String() //方式4：bytes.Buffer buf := new(bytes.Buffer) buf.Write(a[0]) buf.Write(a[1]) buf.Write(a[2]) ret := buf.String() //方式5：strings.Join ret := strings.Join(a,\"\") } 参考资料：字符串拼接性能及原理 | Go 语言高性能编程 | 极客兔兔\n07 什么是 rune 类型 ASCII 码只需要 7 bit 就可以完整地表示，但只能表示英文字母在内的128个字符，为了表示世界上大部分的文字系统，发明了 Unicode， 它是ASCII的超集，包含世界上书写系统中存在的所有字符，并为每个代码分配一个标准编号（称为Unicode CodePoint），在 Go 语言中称之为 rune，是 int32 类型的别名。\nGo 语言中，字符串的底层表示是 byte (8 bit) 序列，而非 rune (32 bit) 序列。\nsample := \"我爱GO\" runeSamp := []rune(sample) runeSamp[0] = '你' fmt.Println(string(runeSamp)) // \"你爱GO\" fmt.Println(len(runeSamp)) // 4 08 如何判断 map 中是否包含某个 key ？ var sample map[int]int if _, ok := sample[10]; ok { } else { } 09 Go 支持默认参数或可选参数吗？ 不支持。但是可以利用结构体参数，或者…传入参数切片数组。\n// 这个函数可以传入任意数量的整型参数 func sum(nums ...int) { total := 0 for _, num := range nums { total += num } fmt.Println(total) } 10 defer 的执行顺序 defer执行顺序和调用顺序相反，类似于栈后进先出(LIFO)。\ndefer在return之后执行，但在函数退出之前，defer可以修改返回值。下面是一个例子：\nfunc test() int { i := 0 defer func() { fmt.Println(\"defer1\") }() defer func() { i += 1 fmt.Println(\"defer2\") }() return i } func main() { fmt.Println(\"return\", test()) } // defer2 // defer1 // return 0 上面这个例子中，test返回值并没有修改，这是由于Go的返回机制决定的，执行Return语句后，Go会创建一个临时变量保存返回值。如果是有名返回（也就是指明返回值func test() (i int)）\nfunc test() (i int) { i = 0 defer func() { i += 1 fmt.Println(\"defer2\") }() return i } func main() { fmt.Println(\"return\", test()) } // defer2 // return 1 这个例子中，返回值被修改了。对于有名返回值的函数，执行 return 语句时，并不会再创建临时变量保存，因此，defer 语句修改了 i，即对返回值产生了影响。\n11 如何交换 2 个变量的值？ 对于变量而言a,b = b,a； 对于指针而言*a,*b = *b, *a\n12 Go 语言 tag 的用处？ tag可以为结构体成员提供属性。常见的：\njson序列化或反序列化时字段的名称 db: sqlx模块中对应的数据库字段名 form: gin框架中对应的前端的数据字段名 binding: 搭配 form 使用, 默认如果没查找到结构体中的某个字段则不报错值为空, binding为 required 代表没找到返回错误给前端 13 如何获取一个结构体的所有tag？ 利用反射：\nimport reflect type Author struct { Name int `json:Name` Publications []string `json:Publication,omitempty` } func main() { t := reflect.TypeOf(Author{}) for i := 0; i \u003c t.NumField(); i++ { name := t.Field(i).Name s, _ := t.FieldByName(name) fmt.Println(name, s.Tag) } } 上述例子中，reflect.TypeOf方法获取对象的类型，之后NumField()获取结构体成员的数量。 通过Field(i)获取第i个成员的名字。 再通过其Tag 方法获得标签。\n14 如何判断 2 个字符串切片（slice) 是相等的？ reflect.DeepEqual() ， 但反射非常影响性能。\n15 结构体打印时，%v 和 %+v 的区别 %v输出结构体各成员的值；\n%+v输出结构体各成员的名称和值；\n%#v输出结构体名称和结构体各成员的名称和值\n16 Go 语言中如何表示枚举值(enums)？ 在常量中用iota可以表示枚举。iota从0开始。\nconst ( B = 1 \u003c\u003c (10 * iota) KiB MiB GiB TiB PiB EiB ) 17 空 struct{} 的用途 用map模拟一个set，那么就要把值置为struct{}，struct{}本身不占任何空间，可以避免任何多余的内存分配。 type Set map[string]struct{} func main() { set := make(Set) for _, item := range []string{\"A\", \"A\", \"B\", \"C\"} { set[item] = struct{}{} } fmt.Println(len(set)) // 3 if _, ok := set[\"A\"]; ok { fmt.Println(\"A exists\") // A exists } } 有时候给通道发送一个空结构体,channel\u003c-struct{}{}，也是节省了空间。 func main() { ch := make(chan struct{}, 1) go func() { \u003c-ch // do something }() ch \u003c- struct{}{} // ... } 仅有方法的结构体 type Lamp struct{} 18 go里面的int和int32是同一个概念吗？ 不是一个概念！千万不能混淆。go语言中的int的大小是和操作系统位数相关的，如果是32位操作系统，int类型的大小就是4字节。如果是64位操作系统，int类型的大小就是8个字节。除此之外uint也与操作系统有关。\nint8占1个字节，int16占2个字节，int32占4个字节，int64占8个字节。\n实现原理 01 init() 函数是什么时候执行的？ 简答： 在main函数之前执行。\n详细：init()函数是go初始化的一部分，由runtime初始化每个导入的包，初始化不是按照从上到下的导入顺序，而是按照解析的依赖关系，没有依赖的包最先初始化。\n每个包首先初始化包作用域的常量和变量（常量优先于变量），然后执行包的init()函数。同一个包，甚至是同一个源文件可以有多个init()函数。init()函数没有入参和返回值，不能被其他函数调用，同一个包内多个init()函数的执行顺序不作保证。\n执行顺序：import –\u003e const –\u003e var –\u003einit()–\u003emain()\n一个文件可以有多个init()函数！\n02 ❤如何知道一个对象是分配在栈上还是堆上？ Go和C++不同，Go局部变量会进行逃逸分析。如果变量离开作用域后没有被引用，则优先分配到栈上，否则分配到堆上。那么如何判断是否发生了逃逸呢？\ngo build -gcflags '-m -m -l' xxx.go.\n关于逃逸的可能情况：变量大小不确定，变量类型不确定，变量分配的内存超过用户栈最大值，暴露给了外部指针。\n03 2 个 interface 可以比较吗 ？ Go 语言中，interface 的内部实现包含了 2 个字段，类型 T 和 值 V，interface 可以使用 == 或 != 比较。2 个 interface 相等有以下 2 种情况\n两个 interface 均等于 nil（此时 V 和 T 都处于 unset 状态） 类型 T 相同，且对应的值 V 相等。 看下面的例子：\ntype Stu struct { Name string } type StuInt interface{} func main() { var stu1, stu2 StuInt = \u0026Stu{\"Tom\"}, \u0026Stu{\"Tom\"} var stu3, stu4 StuInt = Stu{\"Tom\"}, Stu{\"Tom\"} fmt.Println(stu1 == stu2) // false fmt.Println(stu3 == stu4) // true } stu1 和 stu2 对应的类型是 *Stu，值是 Stu 结构体的地址，两个地址不同，因此结果为 false。\nstu3 和 stu4 对应的类型是 Stu，值是 Stu 结构体，且各字段相等，因此结果为 true。\n04 2 个 nil 可能不相等吗？ 可能不等。interface在运行时绑定值，只有值为nil接口值才为nil，但是与指针的nil不相等。举个例子：\nvar p *int = nil var i interface{} = nil if(p == i){ fmt.Println(\"Equal\") } 两者并不相同。总结：两个nil只有在类型相同时才相等。\n05 ❤简述 Go 语言GC(垃圾回收)的工作原理 垃圾回收机制是Go一大特(nan)色(dian)。Go1.3采用标记清除法， Go1.5采用三色标记法，Go1.8采用三色标记法+混合写屏障。\n标记清除法\n分为两个阶段：标记和清除\n标记阶段：从根对象出发寻找并标记所有存活的对象。\n清除阶段：遍历堆中的对象，回收未标记的对象，并加入空闲链表。\n缺点是需要暂停程序STW。\n三色标记法：\n将对象标记为白色，灰色或黑色。\n白色：不确定对象（默认色）；黑色：存活对象。灰色：存活对象，子对象待处理。\n标记开始时，先将所有对象加入白色集合（需要STW）。首先将根对象标记为灰色，然后将一个对象从灰色集合取出，遍历其子对象，放入灰色集合。同时将取出的对象放入黑色集合，直到灰色集合为空。最后的白色集合对象就是需要清理的对象。\n这种方法有一个缺陷，如果对象的引用被用户修改了，那么之前的标记就无效了。因此Go采用了写屏障技术，当对象新增或者更新会将其着色为灰色。\n一次完整的GC分为四个阶段：\n准备标记（需要STW），开启写屏障。 开始标记 标记结束（STW），关闭写屏障 清理（并发） 基于插入写屏障和删除写屏障在结束时需要STW来重新扫描栈，带来性能瓶颈。混合写屏障分为以下四步：\nGC开始时，将栈上的全部对象标记为黑色（不需要二次扫描，无需STW）； GC期间，任何栈上创建的新对象均为黑色 被删除引用的对象标记为灰色 被添加引用的对象标记为灰色 总而言之就是确保黑色对象不能引用白色对象，这个改进直接使得GC时间从 2s降低到2us。\n06 函数返回局部变量的指针是否安全？ 这一点和C++不同，在Go里面返回局部变量的指针是安全的。因为Go会进行逃逸分析，如果发现局部变量的作用域超过该函数则会把指针分配到堆区，避免内存泄漏。\n07 非接口的任意类型 T() 都能够调用 *T 的方法吗？反过来呢？ 一个T类型的值可以调用*T类型声明的方法，当且仅当T是可寻址的。\n反之：*T 可以调用T()的方法，因为指针可以解引用。\n08 go slice是怎么扩容的？ Go \u003c= 1.17\n如果当前容量小于1024，则判断所需容量是否大于原来容量2倍，如果大于，当前容量加上所需容量；否则当前容量乘2。\n如果当前容量大于1024，则每次按照1.25倍速度递增容量，也就是每次加上cap/4。\nGo1.18之后，引入了新的扩容规则：浅谈 Go 1.18.1的切片扩容机制\n并发编程 01 ❤无缓冲的 channel 和有缓冲的 channel 的区别？ （这个问题笔者也纠结了很久，直到看到一篇文章，阻塞与否是分别针对发送接收方而言的，才茅塞顿开）\n对于无缓冲区channel：\n发送的数据如果没有被接收方接收，那么**发送方阻塞；**如果一直接收不到发送方的数据，接收方阻塞；\n有缓冲的channel：\n发送方在缓冲区满的时候阻塞，接收方不阻塞；接收方在缓冲区为空的时候阻塞，发送方不阻塞。\n可以类比生产者与消费者问题。\n![](data:image/svg+xml;utf8,)\n02 为什么有协程泄露(Goroutine Leak)？ 协程泄漏是指协程创建之后没有得到释放。主要原因有：\n缺少接收器，导致发送阻塞 缺少发送器，导致接收阻塞 死锁。多个协程由于竞争资源导致死锁。 创建协程的没有回收。 03 Go 可以限制运行时操作系统线程的数量吗？ 常见的goroutine操作函数有哪些？ 可以，使用runtime.GOMAXPROCS(num int)可以设置线程数目。该值默认为CPU逻辑核数，如果设的太大，会引起频繁的线程切换，降低性能。\nruntime.Gosched()，用于让出CPU时间片，让出当前goroutine的执行权限，调度器安排其它等待的任务运行，并在下次某个时候从该位置恢复执行。\nruntime.Goexit()，调用此函数会立即使当前的goroutine的运行终止（终止协程），而其它的goroutine并不会受此影响。runtime.Goexit在终止当前goroutine前会先执行此goroutine的还未执行的defer语句。请注意千万别在主函数调用runtime.Goexit，因为会引发panic。\n04 如何控制协程数目。 The GOMAXPROCS variable limits the number of operating system threads that can execute user-level Go code simultaneously. There is no limit to the number of threads that can be blocked in system calls on behalf of Go code; those do not count against the GOMAXPROCS limit.\n从官方文档的解释可以看到，GOMAXPROCS 限制的是同时执行用户态 Go 代码的操作系统线程的数量，但是对于被系统调用阻塞的线程数量是没有限制的。GOMAXPROCS 的默认值等于 CPU 的逻辑核数，同一时间，一个核只能绑定一个线程，然后运行被调度的协程。因此对于 CPU 密集型的任务，若该值过大，例如设置为 CPU 逻辑核数的 2 倍，会增加线程切换的开销，降低性能。对于 I/O 密集型应用，适当地调大该值，可以提高 I/O 吞吐率。\n另外对于协程，可以用带缓冲区的channel来控制，下面的例子是协程数为1024的例子\nvar wg sync.WaitGroup ch := make(chan struct{}, 1024) for i:=0; i\u003c20000; i++{ wg.Add(1) ch\u003c-struct{}{} go func(){ defer wg.Done() \u003c-ch } } wg.Wait() 此外还可以用协程池：其原理无外乎是将上述代码中通道和协程函数解耦，并封装成单独的结构体。常见第三方协程池库，比如tunny等。\n面试题评价：★★★☆☆。偏容易和基础。分为基础语法、实现原理、并发编程三个大部分，需要读者有扎实的基础。\n-\n面试题2 来源：Durant Thorvalds\n❤new和make的区别？ new只用于分配内存，返回一个指向地址的指针。它为每个新类型分配一片内存，初始化为0且返回类型*T的内存地址，它相当于\u0026T{} make只可用于slice,map,channel的初始化,返回的是引用。 请你讲一下Go面向对象是如何实现的？ Go实现面向对象的两个关键是struct和interface。\n封装：对于同一个包，对象对包内的文件可见；对不同的包，需要将对象以大写开头才是可见的。\n继承：继承是编译时特征，在struct内加入所需要继承的类即可：\ntype A struct{} type B struct{ A } 多态：多态是运行时特征，Go多态通过interface来实现。类型和接口是松耦合的，某个类型的实例可以赋给它所实现的任意接口类型的变量。\nGo支持多重继承，就是在类型中嵌入所有必要的父类型。\nuint型变量值分别为 1，2，它们相减的结果是多少？ var a uint = 1 var b uint = 2 fmt.Println(a - b) 答案，结果会溢出，如果是32位系统，结果是2^32-1，如果是64位系统，结果2^64-1.\n讲一下go有没有函数在main之前执行？怎么用？ go的init函数在main函数之前执行，它有如下特点：\nfunc init() { ... } init函数非常特殊：\n初始化不能采用初始化表达式初始化的变量； 程序运行前执行注册 实现sync.Once功能 不能被其它函数调用 init函数没有入口参数和返回值： 每个包可以有多个init函数，每个源文件也可以有多个init函数。 同一个包的init执行顺序，golang没有明确定义，编程时要注意程序不要依赖这个执行顺序。 不同包的init函数按照包导入的依赖关系决定执行顺序。 下面这句代码是什么作用，为什么要定义一个空值？ type GobCodec struct{ conn io.ReadWriteCloser buf *bufio.Writer dec *gob.Decoder enc *gob.Encoder } type Codec interface { io.Closer ReadHeader(*Header) error ReadBody(interface{}) error Write(*Header, interface{}) error } var _ Codec = (*GobCodec)(nil) 答：将nil转换为*GobCodec类型，然后再转换为Codec接口，如果转换失败，说明*GobCodec没有实现Codec接口的所有方法。\n❤golang的内存管理的原理清楚吗？简述go内存管理机制。 golang内存管理基本是参考tcmalloc来进行的。go内存管理本质上是一个内存池，只不过内部做了很多优化：自动伸缩内存池大小，合理的切割内存块。\n一些基本概念：\n页Page：一块8K大小的内存空间。Go向操作系统申请和释放内存都是以页为单位的。\nspan : 内存块，一个或多个连续的 page 组成一个 span 。如果把 page 比喻成工人， span 可看成是小队，工人被分成若干个队伍，不同的队伍干不同的活。\nsizeclass : 空间规格，每个 span 都带有一个 sizeclass ，标记着该 span 中的 page 应该如何使用。使用上面的比喻，就是 sizeclass 标志着 span 是一个什么样的队伍。\nobject : 对象，用来存储一个变量数据内存空间，一个 span 在初始化时，会被切割成一堆等大的 object 。假设 object 的大小是 16B ， span 大小是 8K ，那么就会把 span 中的 page 就会被初始化 8K / 16B = 512 个 object 。所谓内存分配，就是分配一个 object 出去。\nmheap 一开始go从操作系统索取一大块内存作为内存池，并放在一个叫mheap的内存池进行管理，mheap将一整块内存切割为不同的区域，并将一部分内存切割为合适的大小。\n![](data:image/svg+xml;utf8,)\nmheap.spans ：用来存储 page 和 span 信息，比如一个 span 的起始地址是多少，有几个 page，已使用了多大等等。\nmheap.bitmap 存储着各个 span 中对象的标记信息，比如对象是否可回收等等。\nmheap.arena_start : 将要分配给应用程序使用的空间。\nmcentral 用途相同的span会以链表的形式组织在一起存放在mcentral中。这里用途用sizeclass来表示，就是该span存储哪种大小的对象。\n找到合适的 span 后，会从中取一个 object 返回给上层使用。\nmcache 为了提高内存并发申请效率，加入缓存层mcache。每一个mcache和处理器P对应。Go申请内存首先从P的mcache中分配，如果没有可用的span再从mcentral中获取。\n参考资料：Go 语言内存管理（二）：Go 内存管理\n❤mutex有几种模式？ mutex有两种模式：normal 和 starvation\n正常模式\n所有goroutine按照FIFO的顺序进行锁获取，被唤醒的goroutine和新请求锁的goroutine同时进行锁获取，通常新请求锁的goroutine更容易获取锁(持续占有cpu)，被唤醒的goroutine则不容易获取到锁。公平性：否。\n饥饿模式\n所有尝试获取锁的goroutine进行等待排队，新请求锁的goroutine不会进行锁获取(禁用自旋)，而是加入队列尾部等待获取锁。公平性：是。\n参考链接：Go Mutex 饥饿模式，GO 互斥锁（Mutex）原理\n-\n面试题3 来源**：**如果你是一个Golang面试官，你会问哪些问题？\n❤go如何进行调度的。GMP中状态流转。 Go里面GMP分别代表：G：goroutine，M：线程（真正在CPU上跑的），P：调度器。\n![](data:image/svg+xml;utf8,)\nGMP模型\n调度器是M和G之间桥梁。\ngo进行调度过程：\n某个线程尝试创建一个新的G，那么这个G就会被安排到这个线程的G本地队列LRQ中，如果LRQ满了，就会分配到全局队列GRQ中；\n尝试获取当前线程的M，如果无法获取，就会从空闲的M列表中找一个，如果空闲列表也没有，那么就创建一个M，然后绑定G与P运行。\n进入调度循环：\n找到一个合适的G\n执行G，完成以后退出\nGo什么时候发生阻塞？阻塞时，调度器会怎么做。 用于原子、互斥量或通道操作导致goroutine阻塞，调度器将把当前阻塞的goroutine从本地运行队列LRQ换出，并重新调度其它goroutine； 由于网络请求和IO导致的阻塞，Go提供了网络轮询器（Netpoller）来处理，后台用epoll等技术实现IO多路复用。 其它回答：\nchannel阻塞：当goroutine读写channel发生阻塞时，会调用gopark函数，该G脱离当前的M和P，调度器将新的G放入当前M。 系统调用：当某个G由于系统调用陷入内核态，该P就会脱离当前M，此时P会更新自己的状态为Psyscall，M与G相互绑定，进行系统调用。结束以后，若该P状态还是Psyscall，则直接关联该M和G，否则使用闲置的处理器处理该G。 系统监控：当某个G在P上运行的时间超过10ms时候，或者P处于Psyscall状态过长等情况就会调用retake函数，触发新的调度。 主动让出：由于是协作式调度，该G会主动让出当前的P（通过GoSched），更新状态为Grunnable，该P会调度队列中的G运行。 更多关于netpoller的内容可以参看：https://strikefreedom.top/go-netpoll-io-multiplexing-reactor\n❤Go中GMP有哪些状态？ ![](data:image/svg+xml;utf8,)\nG的状态：\n_Gidle：刚刚被分配并且还没有被初始化，值为0，为创建goroutine后的默认值\n_Grunnable： 没有执行代码，没有栈的所有权，存储在运行队列中，可能在某个P的本地队列或全局队列中(如上图)。\n_Grunning： 正在执行代码的goroutine，拥有栈的所有权(如上图)。\n_Gsyscall：正在执行系统调用，拥有栈的所有权，与P脱离，但是与某个M绑定，会在调用结束后被分配到运行队列(如上图)。\n_Gwaiting：被阻塞的goroutine，阻塞在某个channel的发送或者接收队列(如上图)。\n_Gdead： 当前goroutine未被使用，没有执行代码，可能有分配的栈，分布在空闲列表gFree，可能是一个刚刚初始化的goroutine，也可能是执行了goexit退出的goroutine(如上图)。\n_Gcopystac：栈正在被拷贝，没有执行代码，不在运行队列上，执行权在\n_Gscan ： GC 正在扫描栈空间，没有执行代码，可以与其他状态同时存在。\nP的状态：\n_Pidle ：处理器没有运行用户代码或者调度器，被空闲队列或者改变其状态的结构持有，运行队列为空\n_Prunning ：被线程 M 持有，并且正在执行用户代码或者调度器(如上图)\n_Psyscall：没有执行用户代码，当前线程陷入系统调用(如上图)\n_Pgcstop ：被线程 M 持有，当前处理器由于垃圾回收被停止\n_Pdead ：当前处理器已经不被使用\nM的状态：\n自旋线程：处于运行状态但是没有可执行goroutine的线程，数量最多为GOMAXPROC，若是数量大于GOMAXPROC就会进入休眠。\n非自旋线程：处于运行状态有可执行goroutine的线程。\nGMP能不能去掉P层？会怎么样？ P层的作用\n每个 P 有自己的本地队列，大幅度的减轻了对全局队列的直接依赖，所带来的效果就是锁竞争的减少。而 GM 模型的性能开销大头就是锁竞争。 每个 P 相对的平衡上，在 GMP 模型中也实现了 Work Stealing 算法，如果 P 的本地队列为空，则会从全局队列或其他 P 的本地队列中窃取可运行的 G 来运行，减少空转，提高了资源利用率。 参考资料：https://juejin.cn/post/6968311281220583454\n如果有一个G一直占用资源怎么办？什么是work stealing算法？ 如果有个goroutine一直占用资源，那么GMP模型会从正常模式转变为饥饿模式（类似于mutex），允许其它goroutine使用work stealing抢占（禁用自旋锁）。\nwork stealing算法指，一个线程如果处于空闲状态，则帮其它正在忙的线程分担压力，从全局队列取一个G任务来执行，可以极大提高执行效率。\ngoroutine什么情况会发生内存泄漏？如何避免。 在Go中内存泄露分为暂时性内存泄露和永久性内存泄露。\n暂时性内存泄露\n获取长字符串中的一段导致长字符串未释放 获取长slice中的一段导致长slice未释放 在长slice新建slice导致泄漏 string相比切片少了一个容量的cap字段，可以把string当成一个只读的切片类型。获取长string或者切片中的一段内容，由于新生成的对象和老的string或者切片共用一个内存空间，会导致老的string和切片资源暂时得不到释放，造成短暂的内存泄漏\n永久性内存泄露\ngoroutine永久阻塞而导致泄漏 time.Ticker未关闭导致泄漏 不正确使用Finalizer（Go版本的析构函数）导致泄漏 Go GC有几个阶段 目前的go GC采用三色标记法和混合写屏障技术。\nGo GC有四个阶段:\nSTW，开启混合写屏障，扫描栈对象； 将所有对象加入白色集合，从根对象开始，将其放入灰色集合。每次从灰色集合取出一个对象标记为黑色，然后遍历其子对象，标记为灰色，放入灰色集合； 如此循环直到灰色集合为空。剩余的白色对象就是需要清理的对象。 STW，关闭混合写屏障； 在后台进行GC（并发）。 go竞态条件了解吗？ 所谓竞态竞争，就是当两个或以上的goroutine访问相同资源时候，对资源进行读/写。\n比如var a int = 0，有两个协程分别对a+=1，我们发现最后a不一定为2.这就是竞态竞争。\n通常我们可以用go run -race xx.go来进行检测。\n解决方法是，对临界区资源上锁，或者使用原子操作(atomics)，原子操作的开销小于上锁。\n如果若干个goroutine，有一个panic会怎么做？ 有一个panic，那么剩余goroutine也会退出，程序退出。如果不想程序退出，那么必须通过调用 recover() 方法来捕获 panic 并恢复将要崩掉的程序。\n参考理解：goroutine配上panic会怎样。\ndefer可以捕获goroutine的子goroutine吗？ 不可以。它们处于不同的调度器P中。对于子goroutine，必须通过 recover() 机制来进行恢复，然后结合日志进行打印（或者通过channel传递error），下面是一个例子：\n// 心跳函数 func Ping(ctx context.Context) error { ... code ... go func() { defer func() { if r := recover(); r != nil { log.Errorc(ctx, \"ping panic: %v, stack: %v\", r, string(debug.Stack())) } }() ... code ... }() ... code ... return nil } ❤gRPC是什么？ 基于go的远程过程调用。RPC 框架的目标就是让远程服务调用更加简单、透明，RPC 框架负责屏蔽底层的传输方式（TCP 或者 UDP）、序列化方式（XML/Json/ 二进制）和通信细节。服务调用者可以像调用本地接口一样调用远程的服务提供者，而不需要关心底层通信细节和调用过程。\n![](data:image/svg+xml;utf8,)\ngRPC框架图\n面试题4 需要面试者有一定的大型项目经验经验，了解使用微服务，etcd，gin，gorm，gRPC等典型框架等模型或框架。\n微服务了解吗？ 微服务是一种开发软件的架构和组织方法，其中软件由通过明确定义的 API 进行通信的小型独立服务组成。微服务架构使应用程序更易于扩展和更快地开发，从而加速创新并缩短新功能的上市时间。\n![](data:image/svg+xml;utf8,)\n微服务示意图\n微服务有着自主，专用，灵活性等优点。\n参考资料：什么是微服务？| AWS\n服务发现是怎么做的？ 主要有两种服务发现机制：客户端发现和服务端发现。\n客户端发现模式：当我们使用客户端发现的时候，客户端负责决定可用服务实例的网络地址并且在集群中对请求负载均衡, 客户端访问服务登记表，也就是一个可用服务的数据库，然后客户端使用一种负载均衡算法选择一个可用的服务实例然后发起请求。该模式如下图所示：\n![](data:image/svg+xml;utf8,)\n客户端发现模式\n服务端发现模式：客户端通过负载均衡器向某个服务提出请求，负载均衡器查询服务注册表，并将请求转发到可用的服务实例。如同客户端发现，服务实例在服务注册表中注册或注销。\n![](data:image/svg+xml;utf8,)\n服务端发现模式\n参考资料：「Chris Richardson 微服务系列」服务发现的可行方案以及实践案例\nETCD用过吗？ etcd是一个高度一致的分布式键值存储，它提供了一种可靠的方式来存储需要由分布式系统或机器集群访问的数据。它可以优雅地处理网络分区期间的领导者选举，即使在领导者节点中也可以容忍机器故障。\netcd 是用Go语言编写的，它具有出色的跨平台支持，小的二进制文件和强大的社区。etcd机器之间的通信通过Raft共识算法处理。\n关于文档可以参考：v3.5 docs\nGIN怎么做参数校验？ go采用validator作参数校验。\n它具有以下独特功能：\n使用验证tag或自定义validator进行跨字段Field和跨结构体验证。 允许切片、数组和哈希表，多维字段的任何或所有级别进行校验。 能够对哈希表key和value进行验证 通过在验证之前确定它的基础类型来处理类型接口。 别名验证标签，允许将多个验证映射到单个标签，以便更轻松地定义结构体上的验证 gin web 框架的默认验证器； 参考资料：validator package - pkg.go.dev\n中间件用过吗？ Middleware是Web的重要组成部分，中间件（通常）是一小段代码，它们接受一个请求，对其进行处理，每个中间件只处理一件事情，完成后将其传递给另一个中间件或最终处理程序，这样就做到了程序的解耦。\nGo解析Tag是怎么实现的？ Go解析tag采用的是反射。\n具体来说使用reflect.ValueOf方法获取其反射值，然后获取其Type属性，之后再通过Field(i)获取第i+1个field，再.Tag获得Tag。\n反射实现的原理在: `src/reflect/type.go`中\n你项目有优雅的启停吗？ 所谓「优雅」启停就是在启动退出服务时要满足以下几个条件：\n不可以关闭现有连接（进程） 新的进程启动并「接管」旧进程 连接要随时响应用户请求，不可以出现拒绝请求的情况 停止的时候，必须处理完既有连接，并且停止接收新的连接。 为此我们必须引用信号来完成这些目的：\n启动：\n监听SIGHUP（在用户终端连接(正常或非正常)结束时发出）； 收到信号后将服务监听的文件描述符传递给新的子进程，此时新老进程同时接收请求； 退出：\n监听SIGINT和SIGSTP和SIGQUIT等。 父进程停止接收新请求，等待旧请求完成（或超时）； 父进程退出。 实现：go1.8采用Http.Server内置的Shutdown方法支持优雅关机。 然后fvbock/endless可以实现优雅重启。\n参考资料：gin框架实践连载八 | 如何优雅重启和停止 - 掘金，优雅地关闭或重启 go web 项目\n持久化怎么做的？ 所谓持久化就是将要保存的字符串写到硬盘等设备。\n最简单的方式就是采用ioutil的WriteFile()方法将字符串写到磁盘上，这种方法面临格式化方面的问题。 更好的做法是将数据按照固定协议进行组织再进行读写，比如JSON，XML，Gob，csv等。 如果要考虑高并发和高可用，必须把数据放入到数据库中，比如MySQL，PostgreDB，MongoDB等。 参考链接：Golang 持久化\n-\n面试题5 作者：Dylan2333 链接：\n该试题需要面试者有非常丰富的项目阅历和底层原理经验，熟练使用微服务，etcd，gin，gorm，gRPC等典型框架等模型或框架。\nchannel 死锁的场景 当一个channel中没有数据，而直接读取时，会发生死锁： q := make(chan int,2) \u003c-q 解决方案是采用select语句，再default放默认处理方式：\nq := make(chan int,2) select{ case val:=\u003c-q: default: ... } 当channel数据满了，再尝试写数据会造成死锁： q := make(chan int,2) q\u003c-1 q\u003c-2 q\u003c-3 解决方法，采用select\nfunc main() { q := make(chan int, 2) q \u003c- 1 q \u003c- 2 select { case q \u003c- 3: fmt.Println(\"ok\") default: fmt.Println(\"wrong\") } } 向一个关闭的channel写数据。 注意：一个已经关闭的channel，只能读数据，不能写数据。\n参考资料：Golang关于channel死锁情况的汇总以及解决方案\n对已经关闭的chan进行读写会怎么样？ 读已经关闭的chan能一直读到东西，但是读到的内容根据通道内关闭前是否有元素而不同。\n如果chan关闭前，buffer内有元素还未读,会正确读到chan内的值，且返回的第二个bool值（是否读成功）为true。\n如果chan关闭前，buffer内有元素已经被读完，chan内无值，接下来所有接收的值都会非阻塞直接成功，返回 channel 元素的零值，但是第二个bool值一直为false。\n写已经关闭的chan会panic。\n说说 atomic底层怎么实现的. atomic源码位于`sync\\atomic`。通过阅读源码可知，atomic采用CAS（CompareAndSwap）的方式实现的。所谓CAS就是使用了CPU中的原子性操作。在操作共享变量的时候，CAS不需要对其进行加锁，而是通过类似于乐观锁的方式进行检测，总是假设被操作的值未曾改变（即与旧值相等），并一旦确认这个假设的真实性就立即进行值替换。本质上是不断占用CPU资源来避免加锁的开销。\n参考资料：Go语言的原子操作atomic - 编程猎人\nchannel底层实现？是否线程安全。 channel底层实现在src/runtime/chan.go中\nchannel内部是一个循环链表。内部包含buf, sendx, recvx, lock ,recvq, sendq几个部分；\nbuf是有缓冲的channel所特有的结构，用来存储缓存数据。是个循环链表；\nsendx和recvx用于记录buf这个循环链表中的发送或者接收的index； lock是个互斥锁； recvq和sendq分别是接收(\u003c-channel)或者发送(channel \u003c- xxx)的goroutine抽象出来的结构体(sudog)的队列。是个双向链表。 channel是线程安全的。\n参考资料：Kitou：Golang 深度剖析 – channel的底层实现\nmap的底层实现。 源码位于src\\runtime\\map.go 中。\ngo的map和C++map不一样，底层实现是哈希表，包括两个部分：hmap和bucket。\n里面最重要的是buckets（桶），buckets是一个指针，最终它指向的是一个结构体：\n// A bucket for a Go map. type bmap struct { tophash [bucketCnt]uint8 } 每个bucket固定包含8个key和value(可以查看源码bucketCnt=8).实现上面是一个固定的大小连续内存块，分成四部分：每个条目的状态，8个key值，8个value值，指向下个bucket的指针。\n创建哈希表使用的是makemap函数.map 的一个关键点在于，哈希函数的选择。在程序启动时，会检测 cpu 是否支持 aes，如果支持，则使用 aes hash，否则使用 memhash。这是在函数 alginit() 中完成，位于路径：src/runtime/alg.go 下。\nmap查找就是将key哈希后得到64位（64位机）用最后B个比特位计算在哪个桶。在 bucket 中，从前往后找到第一个空位。这样，在查找某个 key 时，先找到对应的桶，再去遍历 bucket 中的 key。\n关于map的查找和扩容可以参考map的用法到map底层实现分析。\nselect的实现原理？ select源码位于src\\runtime\\select.go，最重要的scase 数据结构为：\ntype scase struct { c *hchan // chan elem unsafe.Pointer // data element } scase.c为当前case语句所操作的channel指针，这也说明了一个case语句只能操作一个channel。\nscase.elem表示缓冲区地址：\ncaseRecv ： scase.elem表示读出channel的数据存放地址； caseSend ： scase.elem表示将要写入channel的数据存放地址； select的主要实现位于：select.go函数：其主要功能如下：\n1. 锁定scase语句中所有的channel\n2. 按照随机顺序检测scase中的channel是否ready\n2.1 如果case可读，则读取channel中数据，解锁所有的channel，然后返回(case index, true)\n2.2 如果case可写，则将数据写入channel，解锁所有的channel，然后返回(case index, false)\n2.3 所有case都未ready，则解锁所有的channel，然后返回（default index, false）\n3. 所有case都未ready，且没有default语句\n3.1 将当前协程加入到所有channel的等待队列\n3.2 当将协程转入阻塞，等待被唤醒\n4. 唤醒后返回channel对应的case index\n4.1 如果是读操作，解锁所有的channel，然后返回(case index, true)\n4.2 如果是写操作，解锁所有的channel，然后返回(case index, false)\n参考资料：Go select的使用和实现原理.\ngo的interface怎么实现的？ go interface源码在runtime\\iface.go中。\ngo的接口由两种类型实现iface和eface。iface是包含方法的接口，而eface不包含方法。\niface 对应的数据结构是（位于src\\runtime\\runtime2.go）：\ntype iface struct { tab *itab data unsafe.Pointer } 可以简单理解为，tab表示接口的具体结构类型，而data是接口的值。\nitab： type itab struct { inter *interfacetype //此属性用于定位到具体interface _type *_type //此属性用于定位到具体interface hash uint32 // copy of _type.hash. Used for type switches. _ [4]byte fun [1]uintptr // variable sized. fun[0]==0 means _type does not implement inter. } 属性interfacetype类似于_type，其作用就是interface的公共描述，类似的还有maptype、arraytype、chantype…其都是各个结构的公共描述，可以理解为一种外在的表现信息。interfaetype和type唯一确定了接口类型，而hash用于查询和类型判断。fun表示方法集。\neface 与iface基本一致，但是用_type直接表示类型，这样的话就无法使用方法。\ntype eface struct { _type *_type data unsafe.Pointer } 这里篇幅有限，深入讨论可以看：深入研究 Go interface 底层实现\ngo的reflect 底层实现 go reflect源码位于src\\reflect\\下面，作为一个库独立存在。反射是基于接口实现的。\nGo反射有三大法则：\n反射从接口映射到反射对象； ![](data:image/svg+xml;utf8,)\n法则1\n反射从反射对象映射到接口值； ![](data:image/svg+xml;utf8,)\n法则2\n只有值可以修改(settable)，才可以修改反射对象。 Go反射基于上述三点实现。我们先从最核心的两个源文件入手type.go和value.go.\ntype用于获取当前值的类型。value用于获取当前的值。\n参考资料：The Laws of Reflection， 图解go反射实现原理\ngo GC的原理知道吗？ 如果需要从源码角度解释GC，推荐阅读（非常详细，图文并茂）：\nhttps://draveness.me/golang/docs/part3-runtime/ch07-memory/golang-garbage-collector/\ngo里用过哪些设计模式 ? go的调试/分析工具用过哪些。 go的自带工具链相当丰富，\ngo cover : 测试代码覆盖率； godoc: 用于生成go文档； pprof：用于性能调优，针对cpu，内存和并发； race：用于竞争检测； 进程被kill，如何保证所有goroutine顺利退出 goroutine监听SIGKILL信号，一旦接收到SIGKILL，则立刻退出。可采用select方法。\nvar wg = \u0026sync.WaitGroup{} func main() { wg.Add(1) go func() { c1 := make(chan os.Signal, 1) signal.Notify(c1, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT) fmt.Printf(\"goroutine 1 receive a signal : %v\\n\\n\", \u003c-c1) wg.Done() }() wg.Wait() fmt.Printf(\"all groutine done!\\n\") } 说说context包的作用？你用过哪些，原理知道吗？ context可以用来在goroutine之间传递上下文信息，相同的context可以传递给运行在不同goroutine中的函数，上下文对于多个goroutine同时使用是安全的，context包定义了上下文类型，可以使用background、TODO创建一个上下文，在函数调用链之间传播context，也可以使用WithDeadline、WithTimeout、WithCancel 或 WithValue 创建的修改副本替换它，听起来有点绕，其实总结起就是一句话：context的作用就是在不同的goroutine之间同步请求特定的数据、取消信号以及处理请求的截止日期。\n关于context原理，可以参看：小白也能看懂的context包详解：从入门到精通\ngrpc为啥好，基本原理是什么，和http比呢 官方介绍：gRPC 是一个现代开源的高性能远程过程调用 (RPC) 框架，可以在任何环境中运行。它可以通过对负载平衡、跟踪、健康检查和身份验证的可插拔支持有效地连接数据中心内和跨数据中心的服务。它也适用于分布式计算的最后一英里，将设备、移动应用程序和浏览器连接到后端服务。\n区别：\n- rpc是远程过程调用，就是本地去调用一个远程的函数，而http是通过 url和符合restful风格的数据包去发送和获取数据；\n- rpc的一般使用的编解码协议更加高效，比如grpc使用protobuf编解码。而http的一般使用json进行编解码，数据相比rpc更加直观，但是数据包也更大，效率低下；\n- rpc一般用在服务内部的相互调用，而http则用于和用户交互；\n相似点：\n都有类似的机制，例如grpc的metadata机制和http的头机制作用相似，而且web框架，和rpc框架中都有拦截器的概念。grpc使用的是http2.0协议。\n官网：gRPC\netcd怎么搭建的，具体怎么用的 熔断怎么做的 服务降级怎么搞 1亿条数据动态增长，取top10，怎么实现 进程挂了怎么办 nginx配置过吗，有哪些注意的点 设计一个阻塞队列 mq消费阻塞怎么办 性能没达到预期，有什么解决方案 -\n编程系列 实现使用字符串函数名，调用函数。 思路：采用反射的Call方法实现。\npackage main import ( \"fmt\" \"reflect\" ) type Animal struct{ } func (a *Animal) Eat(){ fmt.Println(\"Eat\") } func main(){ a := Animal{} reflect.ValueOf(\u0026a).MethodByName(\"Eat\").Call([]reflect.Value{}) } （Goroutine）有三个函数，分别打印\"cat\", “fish”,“dog\"要求每一个函数都用一个goroutine，按照顺序打印100次。 此题目考察channel，用三个无缓冲channel，如果一个channel收到信号则通知下一个。\npackage main import ( \"fmt\" \"time\" ) var dog = make(chan struct{}) var cat = make(chan struct{}) var fish = make(chan struct{}) func Dog() { \u003c-fish fmt.Println(\"dog\") dog \u003c- struct{}{} } func Cat() { \u003c-dog fmt.Println(\"cat\") cat \u003c- struct{}{} } func Fish() { \u003c-cat fmt.Println(\"fish\") fish \u003c- struct{}{} } func main() { for i := 0; i \u003c 100; i++ { go Dog() go Cat() go Fish() } fish \u003c- struct{}{} time.Sleep(10 * time.Second) } 两个协程交替打印10个字母和数字 思路：采用channel来协调goroutine之间顺序。\n主线程一般要waitGroup等待协程退出，这里简化了一下直接sleep。\npackage main import ( \"fmt\" \"time\" ) var word = make(chan struct{}, 1) var num = make(chan struct{}, 1) func printNums() { for i := 0; i \u003c 10; i++ { \u003c-word fmt.Println(1) num \u003c- struct{}{} } } func printWords() { for i := 0; i \u003c 10; i++ { \u003c-num fmt.Println(\"a\") word \u003c- struct{}{} } } func main() { num \u003c- struct{}{} go printNums() go printWords() time.Sleep(time.Second * 1) } 代码：\n@中二的灰太狼\n启动 2个groutine 2秒后取消， 第一个协程1秒执行完，第二个协程3秒执行完。 思路：采用ctx, _ := context.WithTimeout(context.Background(), time.Second*2)实现2s取消。协程执行完后通过channel通知，是否超时。\npackage main import ( \"context\" \"fmt\" \"time\" ) func f1(in chan struct{}) { time.Sleep(1 * time.Second) in \u003c- struct{}{} } func f2(in chan struct{}) { time.Sleep(3 * time.Second) in \u003c- struct{}{} } func main() { ch1 := make(chan struct{}) ch2 := make(chan struct{}) ctx, _ := context.WithTimeout(context.Background(), 2*time.Second) go func() { go f1(ch1) select { case \u003c-ctx.Done(): fmt.Println(\"f1 timeout\") break case \u003c-ch1: fmt.Println(\"f1 done\") } }() go func() { go f2(ch2) select { case \u003c-ctx.Done(): fmt.Println(\"f2 timeout\") break case \u003c-ch2: fmt.Println(\"f2 done\") } }() time.Sleep(time.Second * 5) } 代码：\n@中二的灰太狼\n当select监控多个chan同时到达就绪态时，如何先执行某个任务？ 可以在子case再加一个for select语句。\nfunc priority_select(ch1, ch2 \u003c-chan string) { for { select { case val := \u003c-ch1: fmt.Println(val) case val2 := \u003c-ch2: priority: for { select { case val1 := \u003c-ch1: fmt.Println(val1) default: break priority } } fmt.Println(val2) } } } 总结 Go面试复习应该有所侧重，关注切片，通道，异常处理，Goroutine，GMP模型，字符串高效拼接，指针，反射，接口，sync。对于比较难懂的部分，GMP模型和GC和内存管理，应该主动去看源码，然后慢慢理解。业务代码写多了，自然就有理解了。\n",
+  "wordCount" : "16929",
+  "inLanguage": "zh",
+  "datePublished": "2023-10-10T00:00:00Z",
+  "dateModified": "2023-10-10T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "liiqii"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://liiqii.github.io/posts/tech/go/go_interview_questions/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "liiqii",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://liiqii.github.io/img/icon.jpg"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    (function () {
+        let  arr,reg = new RegExp("(^| )"+"change-themes"+"=([^;]*)(;|$)");
+        if(arr = document.cookie.match(reg)) {
+        } else {
+            if (new Date().getHours() >= 19 || new Date().getHours() < 6) {
+                document.body.classList.add('dark');
+                localStorage.setItem("pref-theme", 'dark');
+            } else {
+                document.body.classList.remove('dark');
+                localStorage.setItem("pref-theme", 'light');
+            }
+        }
+    })()
+
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://liiqii.github.io/" accesskey="h" title="Home (Alt + H)">Home</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://liiqii.github.io/search" title="🔍 搜索 (Alt &#43; /)" accesskey=/>
+                <span>🔍 搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://liiqii.github.io/posts" title="📚 文章">
+                <span>📚 文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://liiqii.github.io/tags" title="🧩 标签">
+                <span>🧩 标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://liiqii.github.io/archives/" title="⏱️ 时间轴">
+                <span>⏱️ 时间轴</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main page">
+<style>
+    i[id*="post_meta_style"] {
+        display: flex;
+        align-items: center;
+        margin: 0 0 10px 0;
+    }
+</style>
+
+<article class="post-single">
+    <div id="single-content">
+        <header class="post-header">
+            <div class="breadcrumbs"><a href="https://liiqii.github.io/">🏠 主页</a>&nbsp;»&nbsp;<a href="https://liiqii.github.io/posts/">📚文章</a>&nbsp;»&nbsp;<a href="https://liiqii.github.io/posts/tech/">👨🏻‍💻 技术</a></div>
+            <h1 class="post-title">
+                Go常见面试题
+            </h1>
+            <div class="post-description">
+                Linux安装指定版本golang
+            </div>
+            <div class="post-meta">
+
+<style>
+    i[id*="post_meta_style"] {
+        display: flex;
+        align-items: center;
+        margin: 0 0 10px 0;
+    }
+
+    .parent-post-meta {
+        display: flex;
+        flex-wrap: wrap;
+        opacity: 0.8;
+    }
+</style>
+
+<span class="parent-post-meta">
+    <span id="post_meta_style_1">
+        <span class="fa fa-calendar-check-o"></span>
+        <span>2023-10-10
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    
+    
+    
+    
+    
+    
+    
+    <span id="post_meta_style_3">
+        <span class="fa fa-file-word-o"></span>
+        <span>16929字
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_4">
+        <span class="fa fa-clock-o"></span>
+        <span>34分钟
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_5">
+        <span class="fa fa-user-o"></span>
+        <span>liiqii
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_6">
+        <span class="fa fa-tags" style="opacity: 0.8"></span>
+        <span>
+            <span class="post-tags-meta">
+                <a href="https://liiqii.github.io/tags/go/" style="color: var(--secondary)!important;">Go</a>
+                &nbsp;<a href="https://liiqii.github.io/tags/linux/" style="color: var(--secondary)!important;">Linux</a>
+            </span>
+        </span>
+    </span>
+</span>
+<span style="opacity: 0.8;">
+                    <span id="post_meta_style_7">
+                        &nbsp;&nbsp;
+                        <span class="fa fa-eye" ></span>
+                        <span>
+                            <span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+                            &nbsp;&nbsp;
+                        </span>
+                    </span>
+                    <span id="post_meta_style_8">
+                        <span class="fa fa-commenting-o"></span>
+                        <span>
+                            <script src="https://cdn.staticfile.org/twikoo/1.5.8/twikoo.all.min.js"></script>
+                            <script>
+                                let url = document.documentURI
+                                
+                                let dnsUrl = "https://liiqii.github.io/"
+                                let urlSplit = url.split(dnsUrl)
+                                let finalUrl = urlSplit[1]
+                                if (finalUrl[0] !== '/') {
+                                    finalUrl = '/'+finalUrl
+                                }
+                                twikoo.getCommentsCount({
+                                    envId:  null , 
+                                region:  null , 
+                                urls: [ 
+                                    
+                                    finalUrl,
+                                ],
+                                    includeReply: false 
+                                }).then(function (res) {
+                                    let count = res[0].count
+                                    const obj = document.getElementById("comment_count");
+                                    obj.innerText = count
+                                    
+                                    
+                                    
+                                }).catch(function (err) {
+                                    
+                                    console.error(err);
+                                });
+                            </script>
+                            <span id="comment_count"></span>
+                        </span>
+                    </span>
+                </span>
+
+</div>
+        </header> <aside id="toc-container" class="toc-container wide">
+    <div class="toc">
+        <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">目录</span>
+        </summary>
+
+        <div class="inner"><ul><ul>
+                <li>
+                    <a href="#%e5%9f%ba%e7%a1%80%e8%af%ad%e6%b3%95" aria-label="基础语法">基础语法</a></li>
+                <li>
+                    <a href="#01--%e5%92%8c--%e7%9a%84%e5%8c%ba%e5%88%ab" aria-label="01 = 和 := 的区别？">01 <code>=</code> 和 <code>:=</code> 的区别？</a></li>
+                <li>
+                    <a href="#02-%e6%8c%87%e9%92%88%e7%9a%84%e4%bd%9c%e7%94%a8" aria-label="02 指针的作用">02 指针的作用</a></li>
+                <li>
+                    <a href="#03-go-%e5%85%81%e8%ae%b8%e5%a4%9a%e4%b8%aa%e8%bf%94%e5%9b%9e%e5%80%bc%e5%90%97" aria-label="03 Go 允许多个返回值吗？">03 Go 允许多个返回值吗？</a></li>
+                <li>
+                    <a href="#04-go-%e6%9c%89%e5%bc%82%e5%b8%b8%e7%b1%bb%e5%9e%8b%e5%90%97" aria-label="04 Go 有异常类型吗？">04 Go 有异常类型吗？</a></li>
+                <li>
+                    <a href="#05-%e4%bb%80%e4%b9%88%e6%98%af%e5%8d%8f%e7%a8%8bgoroutine" aria-label="05 什么是协程（Goroutine）">05 什么是协程（Goroutine）</a></li>
+                <li>
+                    <a href="#06--%e5%a6%82%e4%bd%95%e9%ab%98%e6%95%88%e5%9c%b0%e6%8b%bc%e6%8e%a5%e5%ad%97%e7%ac%a6%e4%b8%b2" aria-label="06 ❤ 如何高效地拼接字符串">06 ❤ 如何高效地拼接字符串</a></li>
+                <li>
+                    <a href="#07-%e4%bb%80%e4%b9%88%e6%98%af-rune-%e7%b1%bb%e5%9e%8b" aria-label="07 什么是 rune 类型">07 什么是 rune 类型</a></li>
+                <li>
+                    <a href="#08-%e5%a6%82%e4%bd%95%e5%88%a4%e6%96%ad-map-%e4%b8%ad%e6%98%af%e5%90%a6%e5%8c%85%e5%90%ab%e6%9f%90%e4%b8%aa-key-" aria-label="08 如何判断 map 中是否包含某个 key ？">08 如何判断 map 中是否包含某个 key ？</a></li>
+                <li>
+                    <a href="#09-go-%e6%94%af%e6%8c%81%e9%bb%98%e8%ae%a4%e5%8f%82%e6%95%b0%e6%88%96%e5%8f%af%e9%80%89%e5%8f%82%e6%95%b0%e5%90%97" aria-label="09 Go 支持默认参数或可选参数吗？">09 Go 支持默认参数或可选参数吗？</a></li>
+                <li>
+                    <a href="#10-defer-%e7%9a%84%e6%89%a7%e8%a1%8c%e9%a1%ba%e5%ba%8f" aria-label="10 defer 的执行顺序">10 defer 的执行顺序</a></li>
+                <li>
+                    <a href="#11-%e5%a6%82%e4%bd%95%e4%ba%a4%e6%8d%a2-2-%e4%b8%aa%e5%8f%98%e9%87%8f%e7%9a%84%e5%80%bc" aria-label="11 如何交换 2 个变量的值？">11 如何交换 2 个变量的值？</a></li>
+                <li>
+                    <a href="#12-go-%e8%af%ad%e8%a8%80-tag-%e7%9a%84%e7%94%a8%e5%a4%84" aria-label="12 Go 语言 tag 的用处？">12 Go 语言 tag 的用处？</a></li>
+                <li>
+                    <a href="#13-%e5%a6%82%e4%bd%95%e8%8e%b7%e5%8f%96%e4%b8%80%e4%b8%aa%e7%bb%93%e6%9e%84%e4%bd%93%e7%9a%84%e6%89%80%e6%9c%89tag" aria-label="13 如何获取一个结构体的所有tag？">13 如何获取一个结构体的所有tag？</a></li>
+                <li>
+                    <a href="#14-%e5%a6%82%e4%bd%95%e5%88%a4%e6%96%ad-2-%e4%b8%aa%e5%ad%97%e7%ac%a6%e4%b8%b2%e5%88%87%e7%89%87slice-%e6%98%af%e7%9b%b8%e7%ad%89%e7%9a%84" aria-label="14 如何判断 2 个字符串切片（slice) 是相等的？">14 如何判断 2 个字符串切片（slice) 是相等的？</a></li>
+                <li>
+                    <a href="#15-%e7%bb%93%e6%9e%84%e4%bd%93%e6%89%93%e5%8d%b0%e6%97%b6v-%e5%92%8c-v-%e7%9a%84%e5%8c%ba%e5%88%ab" aria-label="15 结构体打印时，%v 和 %&#43;v 的区别">15 结构体打印时，<code>%v</code> 和 <code>%+v</code> 的区别</a></li>
+                <li>
+                    <a href="#16-go-%e8%af%ad%e8%a8%80%e4%b8%ad%e5%a6%82%e4%bd%95%e8%a1%a8%e7%a4%ba%e6%9e%9a%e4%b8%be%e5%80%bcenums" aria-label="16 Go 语言中如何表示枚举值(enums)？">16 Go 语言中如何表示枚举值(enums)？</a></li>
+                <li>
+                    <a href="#17-%e7%a9%ba-struct-%e7%9a%84%e7%94%a8%e9%80%94" aria-label="17 空 struct{} 的用途">17 空 struct{} 的用途</a></li>
+                <li>
+                    <a href="#18-go%e9%87%8c%e9%9d%a2%e7%9a%84int%e5%92%8cint32%e6%98%af%e5%90%8c%e4%b8%80%e4%b8%aa%e6%a6%82%e5%bf%b5%e5%90%97" aria-label="18 go里面的int和int32是同一个概念吗？"><strong>18 go里面的int和int32是同一个概念吗？</strong></a></li>
+                <li>
+                    <a href="#%e5%ae%9e%e7%8e%b0%e5%8e%9f%e7%90%86" aria-label="实现原理">实现原理</a></li>
+                <li>
+                    <a href="#01-init-%e5%87%bd%e6%95%b0%e6%98%af%e4%bb%80%e4%b9%88%e6%97%b6%e5%80%99%e6%89%a7%e8%a1%8c%e7%9a%84" aria-label="01 init() 函数是什么时候执行的？">01 init() 函数是什么时候执行的？</a></li>
+                <li>
+                    <a href="#02-%e5%a6%82%e4%bd%95%e7%9f%a5%e9%81%93%e4%b8%80%e4%b8%aa%e5%af%b9%e8%b1%a1%e6%98%af%e5%88%86%e9%85%8d%e5%9c%a8%e6%a0%88%e4%b8%8a%e8%bf%98%e6%98%af%e5%a0%86%e4%b8%8a" aria-label="02 ❤如何知道一个对象是分配在栈上还是堆上？">02 ❤如何知道一个对象是分配在栈上还是堆上？</a></li>
+                <li>
+                    <a href="#03-2-%e4%b8%aa-interface-%e5%8f%af%e4%bb%a5%e6%af%94%e8%be%83%e5%90%97-" aria-label="03 2 个 interface 可以比较吗 ？">03 2 个 interface 可以比较吗 ？</a></li>
+                <li>
+                    <a href="#04-2-%e4%b8%aa-nil-%e5%8f%af%e8%83%bd%e4%b8%8d%e7%9b%b8%e7%ad%89%e5%90%97" aria-label="04 2 个 nil 可能不相等吗？">04 2 个 nil 可能不相等吗？</a></li>
+                <li>
+                    <a href="#05-%e7%ae%80%e8%bf%b0-go-%e8%af%ad%e8%a8%80gc%e5%9e%83%e5%9c%be%e5%9b%9e%e6%94%b6%e7%9a%84%e5%b7%a5%e4%bd%9c%e5%8e%9f%e7%90%86" aria-label="05 ❤简述 Go 语言GC(垃圾回收)的工作原理">05 ❤简述 Go 语言GC(垃圾回收)的工作原理</a></li>
+                <li>
+                    <a href="#06-%e5%87%bd%e6%95%b0%e8%bf%94%e5%9b%9e%e5%b1%80%e9%83%a8%e5%8f%98%e9%87%8f%e7%9a%84%e6%8c%87%e9%92%88%e6%98%af%e5%90%a6%e5%ae%89%e5%85%a8" aria-label="06 函数返回局部变量的指针是否安全？">06 函数返回局部变量的指针是否安全？</a></li>
+                <li>
+                    <a href="#07-%e9%9d%9e%e6%8e%a5%e5%8f%a3%e7%9a%84%e4%bb%bb%e6%84%8f%e7%b1%bb%e5%9e%8b-t-%e9%83%bd%e8%83%bd%e5%a4%9f%e8%b0%83%e7%94%a8-t-%e7%9a%84%e6%96%b9%e6%b3%95%e5%90%97%e5%8f%8d%e8%bf%87%e6%9d%a5%e5%91%a2" aria-label="07 非接口的任意类型 T() 都能够调用 *T 的方法吗？反过来呢？">07 非接口的任意类型 T() 都能够调用 <code>*T</code> 的方法吗？反过来呢？</a></li>
+                <li>
+                    <a href="#08-go-slice%e6%98%af%e6%80%8e%e4%b9%88%e6%89%a9%e5%ae%b9%e7%9a%84" aria-label="08 go slice是怎么扩容的？">08 go slice是怎么扩容的？</a></li>
+                <li>
+                    <a href="#%e5%b9%b6%e5%8f%91%e7%bc%96%e7%a8%8bhttpslinkzhihucomtargethttps3ageektutucompostqa-golang-3html" aria-label="并发编程"><a href="https://link.zhihu.com/?target=https%3A//geektutu.com/post/qa-golang-3.html">并发编程</a></a></li>
+                <li>
+                    <a href="#01-%e6%97%a0%e7%bc%93%e5%86%b2%e7%9a%84-channel-%e5%92%8c%e6%9c%89%e7%bc%93%e5%86%b2%e7%9a%84-channel-%e7%9a%84%e5%8c%ba%e5%88%ab" aria-label="01 ❤无缓冲的 channel 和有缓冲的 channel 的区别？">01 ❤无缓冲的 channel 和有缓冲的 channel 的区别？</a></li>
+                <li>
+                    <a href="#02-%e4%b8%ba%e4%bb%80%e4%b9%88%e6%9c%89%e5%8d%8f%e7%a8%8b%e6%b3%84%e9%9c%b2goroutine-leak" aria-label="02 为什么有协程泄露(Goroutine Leak)？">02 为什么有协程泄露(Goroutine Leak)？</a></li>
+                <li>
+                    <a href="#03-go-%e5%8f%af%e4%bb%a5%e9%99%90%e5%88%b6%e8%bf%90%e8%a1%8c%e6%97%b6%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f%e7%ba%bf%e7%a8%8b%e7%9a%84%e6%95%b0%e9%87%8f%e5%90%97-%e5%b8%b8%e8%a7%81%e7%9a%84goroutine%e6%93%8d%e4%bd%9c%e5%87%bd%e6%95%b0%e6%9c%89%e5%93%aa%e4%ba%9b" aria-label="03 Go 可以限制运行时操作系统线程的数量吗？ 常见的goroutine操作函数有哪些？">03 Go 可以限制运行时操作系统线程的数量吗？ 常见的goroutine操作函数有哪些？</a></li>
+                <li>
+                    <a href="#04-%e5%a6%82%e4%bd%95%e6%8e%a7%e5%88%b6%e5%8d%8f%e7%a8%8b%e6%95%b0%e7%9b%ae" aria-label="04 如何控制协程数目。">04 如何控制协程数目。</a></li></ul>
+                    
+                <li>
+                    <a href="#%e9%9d%a2%e8%af%95%e9%a2%982" aria-label="面试题2"><strong>面试题2</strong></a><ul>
+                        
+                <li>
+                    <a href="#new%e5%92%8cmake%e7%9a%84%e5%8c%ba%e5%88%ab" aria-label="❤new和make的区别？">❤new和make的区别？</a></li>
+                <li>
+                    <a href="#%e8%af%b7%e4%bd%a0%e8%ae%b2%e4%b8%80%e4%b8%8bgo%e9%9d%a2%e5%90%91%e5%af%b9%e8%b1%a1%e6%98%af%e5%a6%82%e4%bd%95%e5%ae%9e%e7%8e%b0%e7%9a%84" aria-label="请你讲一下Go面向对象是如何实现的？">请你讲一下Go面向对象是如何实现的？</a></li>
+                <li>
+                    <a href="#uint%e5%9e%8b%e5%8f%98%e9%87%8f%e5%80%bc%e5%88%86%e5%88%ab%e4%b8%ba-12%e5%ae%83%e4%bb%ac%e7%9b%b8%e5%87%8f%e7%9a%84%e7%bb%93%e6%9e%9c%e6%98%af%e5%a4%9a%e5%b0%91" aria-label="uint型变量值分别为 1，2，它们相减的结果是多少？">uint型变量值分别为 1，2，它们相减的结果是多少？</a></li>
+                <li>
+                    <a href="#%e8%ae%b2%e4%b8%80%e4%b8%8bgo%e6%9c%89%e6%b2%a1%e6%9c%89%e5%87%bd%e6%95%b0%e5%9c%a8main%e4%b9%8b%e5%89%8d%e6%89%a7%e8%a1%8c%e6%80%8e%e4%b9%88%e7%94%a8" aria-label="讲一下go有没有函数在main之前执行？怎么用？">讲一下go有没有函数在main之前执行？怎么用？</a></li>
+                <li>
+                    <a href="#%e4%b8%8b%e9%9d%a2%e8%bf%99%e5%8f%a5%e4%bb%a3%e7%a0%81%e6%98%af%e4%bb%80%e4%b9%88%e4%bd%9c%e7%94%a8%e4%b8%ba%e4%bb%80%e4%b9%88%e8%a6%81%e5%ae%9a%e4%b9%89%e4%b8%80%e4%b8%aa%e7%a9%ba%e5%80%bc" aria-label="下面这句代码是什么作用，为什么要定义一个空值？">下面这句代码是什么作用，为什么要定义一个空值？</a></li>
+                <li>
+                    <a href="#golang%e7%9a%84%e5%86%85%e5%ad%98%e7%ae%a1%e7%90%86%e7%9a%84%e5%8e%9f%e7%90%86%e6%b8%85%e6%a5%9a%e5%90%97%e7%ae%80%e8%bf%b0go%e5%86%85%e5%ad%98%e7%ae%a1%e7%90%86%e6%9c%ba%e5%88%b6" aria-label="❤golang的内存管理的原理清楚吗？简述go内存管理机制。">❤golang的内存管理的原理清楚吗？简述go内存管理机制。</a></li>
+                <li>
+                    <a href="#mutex%e6%9c%89%e5%87%a0%e7%a7%8d%e6%a8%a1%e5%bc%8f" aria-label="❤mutex有几种模式？">❤mutex有几种模式？</a></li></ul>
+                </li>
+                <li>
+                    <a href="#%e9%9d%a2%e8%af%95%e9%a2%983" aria-label="面试题3"><strong>面试题3</strong></a><ul>
+                        
+                <li>
+                    <a href="#go%e5%a6%82%e4%bd%95%e8%bf%9b%e8%a1%8c%e8%b0%83%e5%ba%a6%e7%9a%84gmp%e4%b8%ad%e7%8a%b6%e6%80%81%e6%b5%81%e8%bd%ac" aria-label="❤go如何进行调度的。GMP中状态流转。">❤go如何进行调度的。GMP中状态流转。</a></li>
+                <li>
+                    <a href="#go%e4%bb%80%e4%b9%88%e6%97%b6%e5%80%99%e5%8f%91%e7%94%9f%e9%98%bb%e5%a1%9e%e9%98%bb%e5%a1%9e%e6%97%b6%e8%b0%83%e5%ba%a6%e5%99%a8%e4%bc%9a%e6%80%8e%e4%b9%88%e5%81%9a" aria-label="Go什么时候发生阻塞？阻塞时，调度器会怎么做。">Go什么时候发生阻塞？阻塞时，调度器会怎么做。</a></li>
+                <li>
+                    <a href="#go%e4%b8%adgmp%e6%9c%89%e5%93%aa%e4%ba%9b%e7%8a%b6%e6%80%81" aria-label="❤Go中GMP有哪些状态？">❤Go中GMP有哪些状态？</a></li>
+                <li>
+                    <a href="#gmp%e8%83%bd%e4%b8%8d%e8%83%bd%e5%8e%bb%e6%8e%89p%e5%b1%82%e4%bc%9a%e6%80%8e%e4%b9%88%e6%a0%b7" aria-label="GMP能不能去掉P层？会怎么样？">GMP能不能去掉P层？会怎么样？</a></li>
+                <li>
+                    <a href="#%e5%a6%82%e6%9e%9c%e6%9c%89%e4%b8%80%e4%b8%aag%e4%b8%80%e7%9b%b4%e5%8d%a0%e7%94%a8%e8%b5%84%e6%ba%90%e6%80%8e%e4%b9%88%e5%8a%9e%e4%bb%80%e4%b9%88%e6%98%afwork-stealing%e7%ae%97%e6%b3%95" aria-label="如果有一个G一直占用资源怎么办？什么是work stealing算法？">如果有一个G一直占用资源怎么办？什么是work stealing算法？</a></li>
+                <li>
+                    <a href="#goroutine%e4%bb%80%e4%b9%88%e6%83%85%e5%86%b5%e4%bc%9a%e5%8f%91%e7%94%9f%e5%86%85%e5%ad%98%e6%b3%84%e6%bc%8f%e5%a6%82%e4%bd%95%e9%81%bf%e5%85%8d" aria-label="goroutine什么情况会发生内存泄漏？如何避免。">goroutine什么情况会发生内存泄漏？如何避免。</a></li>
+                <li>
+                    <a href="#go-gc%e6%9c%89%e5%87%a0%e4%b8%aa%e9%98%b6%e6%ae%b5" aria-label="Go GC有几个阶段">Go GC有几个阶段</a></li>
+                <li>
+                    <a href="#go%e7%ab%9e%e6%80%81%e6%9d%a1%e4%bb%b6%e4%ba%86%e8%a7%a3%e5%90%97" aria-label="go竞态条件了解吗？">go竞态条件了解吗？</a></li>
+                <li>
+                    <a href="#%e5%a6%82%e6%9e%9c%e8%8b%a5%e5%b9%b2%e4%b8%aagoroutine%e6%9c%89%e4%b8%80%e4%b8%aapanic%e4%bc%9a%e6%80%8e%e4%b9%88%e5%81%9a" aria-label="如果若干个goroutine，有一个panic会怎么做？">如果若干个goroutine，有一个panic会怎么做？</a></li>
+                <li>
+                    <a href="#defer%e5%8f%af%e4%bb%a5%e6%8d%95%e8%8e%b7goroutine%e7%9a%84%e5%ad%90goroutine%e5%90%97" aria-label="defer可以捕获goroutine的子goroutine吗？">defer可以捕获goroutine的子goroutine吗？</a></li>
+                <li>
+                    <a href="#grpc%e6%98%af%e4%bb%80%e4%b9%88" aria-label="❤gRPC是什么？">❤gRPC是什么？</a></li></ul>
+                </li>
+                <li>
+                    <a href="#%e9%9d%a2%e8%af%95%e9%a2%984" aria-label="面试题4">面试题4</a><ul>
+                        
+                <li>
+                    <a href="#%e5%be%ae%e6%9c%8d%e5%8a%a1%e4%ba%86%e8%a7%a3%e5%90%97" aria-label="微服务了解吗？">微服务了解吗？</a></li>
+                <li>
+                    <a href="#%e6%9c%8d%e5%8a%a1%e5%8f%91%e7%8e%b0%e6%98%af%e6%80%8e%e4%b9%88%e5%81%9a%e7%9a%84" aria-label="服务发现是怎么做的？">服务发现是怎么做的？</a></li>
+                <li>
+                    <a href="#etcd%e7%94%a8%e8%bf%87%e5%90%97" aria-label="ETCD用过吗？">ETCD用过吗？</a></li>
+                <li>
+                    <a href="#gin%e6%80%8e%e4%b9%88%e5%81%9a%e5%8f%82%e6%95%b0%e6%a0%a1%e9%aa%8c" aria-label="GIN怎么做参数校验？">GIN怎么做参数校验？</a></li>
+                <li>
+                    <a href="#%e4%b8%ad%e9%97%b4%e4%bb%b6%e7%94%a8%e8%bf%87%e5%90%97" aria-label="中间件用过吗？">中间件用过吗？</a></li>
+                <li>
+                    <a href="#go%e8%a7%a3%e6%9e%90tag%e6%98%af%e6%80%8e%e4%b9%88%e5%ae%9e%e7%8e%b0%e7%9a%84" aria-label="Go解析Tag是怎么实现的？">Go解析Tag是怎么实现的？</a></li>
+                <li>
+                    <a href="#%e4%bd%a0%e9%a1%b9%e7%9b%ae%e6%9c%89%e4%bc%98%e9%9b%85%e7%9a%84%e5%90%af%e5%81%9c%e5%90%97" aria-label="你项目有优雅的启停吗？">你项目有优雅的启停吗？</a></li>
+                <li>
+                    <a href="#%e6%8c%81%e4%b9%85%e5%8c%96%e6%80%8e%e4%b9%88%e5%81%9a%e7%9a%84" aria-label="持久化怎么做的？">持久化怎么做的？</a></li></ul>
+                </li>
+                <li>
+                    <a href="#%e9%9d%a2%e8%af%95%e9%a2%985" aria-label="面试题5"><strong>面试题5</strong></a><ul>
+                        
+                <li>
+                    <a href="#channel-%e6%ad%bb%e9%94%81%e7%9a%84%e5%9c%ba%e6%99%af" aria-label="channel 死锁的场景">channel 死锁的场景</a></li>
+                <li>
+                    <a href="#%e5%af%b9%e5%b7%b2%e7%bb%8f%e5%85%b3%e9%97%ad%e7%9a%84chan%e8%bf%9b%e8%a1%8c%e8%af%bb%e5%86%99%e4%bc%9a%e6%80%8e%e4%b9%88%e6%a0%b7" aria-label="对已经关闭的chan进行读写会怎么样？">对已经关闭的chan进行读写会怎么样？</a></li>
+                <li>
+                    <a href="#%e8%af%b4%e8%af%b4-atomic%e5%ba%95%e5%b1%82%e6%80%8e%e4%b9%88%e5%ae%9e%e7%8e%b0%e7%9a%84" aria-label="说说 atomic底层怎么实现的.">说说 atomic底层怎么实现的.</a></li>
+                <li>
+                    <a href="#channel%e5%ba%95%e5%b1%82%e5%ae%9e%e7%8e%b0%e6%98%af%e5%90%a6%e7%ba%bf%e7%a8%8b%e5%ae%89%e5%85%a8" aria-label="channel底层实现？是否线程安全。">channel底层实现？是否线程安全。</a></li>
+                <li>
+                    <a href="#map%e7%9a%84%e5%ba%95%e5%b1%82%e5%ae%9e%e7%8e%b0" aria-label="map的底层实现。">map的底层实现。</a></li>
+                <li>
+                    <a href="#select%e7%9a%84%e5%ae%9e%e7%8e%b0%e5%8e%9f%e7%90%86" aria-label="select的实现原理？">select的实现原理？</a></li>
+                <li>
+                    <a href="#go%e7%9a%84interface%e6%80%8e%e4%b9%88%e5%ae%9e%e7%8e%b0%e7%9a%84" aria-label="go的interface怎么实现的？">go的interface怎么实现的？</a></li>
+                <li>
+                    <a href="#go%e7%9a%84reflect-%e5%ba%95%e5%b1%82%e5%ae%9e%e7%8e%b0" aria-label="go的reflect 底层实现">go的reflect 底层实现</a></li>
+                <li>
+                    <a href="#go-gc%e7%9a%84%e5%8e%9f%e7%90%86%e7%9f%a5%e9%81%93%e5%90%97" aria-label="go GC的原理知道吗？">go GC的原理知道吗？</a></li>
+                <li>
+                    <a href="#go%e9%87%8c%e7%94%a8%e8%bf%87%e5%93%aa%e4%ba%9b%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-" aria-label="go里用过哪些设计模式 ?">go里用过哪些设计模式 ?</a></li>
+                <li>
+                    <a href="#go%e7%9a%84%e8%b0%83%e8%af%95%e5%88%86%e6%9e%90%e5%b7%a5%e5%85%b7%e7%94%a8%e8%bf%87%e5%93%aa%e4%ba%9b" aria-label="go的调试/分析工具用过哪些。">go的调试/分析工具用过哪些。</a></li>
+                <li>
+                    <a href="#%e8%bf%9b%e7%a8%8b%e8%a2%abkill%e5%a6%82%e4%bd%95%e4%bf%9d%e8%af%81%e6%89%80%e6%9c%89goroutine%e9%a1%ba%e5%88%a9%e9%80%80%e5%87%ba" aria-label="进程被kill，如何保证所有goroutine顺利退出">进程被kill，如何保证所有goroutine顺利退出</a></li>
+                <li>
+                    <a href="#%e8%af%b4%e8%af%b4context%e5%8c%85%e7%9a%84%e4%bd%9c%e7%94%a8%e4%bd%a0%e7%94%a8%e8%bf%87%e5%93%aa%e4%ba%9b%e5%8e%9f%e7%90%86%e7%9f%a5%e9%81%93%e5%90%97" aria-label="说说context包的作用？你用过哪些，原理知道吗？">说说context包的作用？你用过哪些，原理知道吗？</a></li>
+                <li>
+                    <a href="#grpc%e4%b8%ba%e5%95%a5%e5%a5%bd%e5%9f%ba%e6%9c%ac%e5%8e%9f%e7%90%86%e6%98%af%e4%bb%80%e4%b9%88%e5%92%8chttp%e6%af%94%e5%91%a2" aria-label="grpc为啥好，基本原理是什么，和http比呢">grpc为啥好，基本原理是什么，和http比呢</a></li>
+                <li>
+                    <a href="#etcd%e6%80%8e%e4%b9%88%e6%90%ad%e5%bb%ba%e7%9a%84%e5%85%b7%e4%bd%93%e6%80%8e%e4%b9%88%e7%94%a8%e7%9a%84" aria-label="etcd怎么搭建的，具体怎么用的">etcd怎么搭建的，具体怎么用的</a></li>
+                <li>
+                    <a href="#%e7%86%94%e6%96%ad%e6%80%8e%e4%b9%88%e5%81%9a%e7%9a%84" aria-label="熔断怎么做的">熔断怎么做的</a></li>
+                <li>
+                    <a href="#%e6%9c%8d%e5%8a%a1%e9%99%8d%e7%ba%a7%e6%80%8e%e4%b9%88%e6%90%9e" aria-label="服务降级怎么搞">服务降级怎么搞</a></li>
+                <li>
+                    <a href="#1%e4%ba%bf%e6%9d%a1%e6%95%b0%e6%8d%ae%e5%8a%a8%e6%80%81%e5%a2%9e%e9%95%bf%e5%8f%96top10%e6%80%8e%e4%b9%88%e5%ae%9e%e7%8e%b0" aria-label="1亿条数据动态增长，取top10，怎么实现">1亿条数据动态增长，取top10，怎么实现</a></li>
+                <li>
+                    <a href="#%e8%bf%9b%e7%a8%8b%e6%8c%82%e4%ba%86%e6%80%8e%e4%b9%88%e5%8a%9e" aria-label="进程挂了怎么办">进程挂了怎么办</a></li>
+                <li>
+                    <a href="#nginx%e9%85%8d%e7%bd%ae%e8%bf%87%e5%90%97%e6%9c%89%e5%93%aa%e4%ba%9b%e6%b3%a8%e6%84%8f%e7%9a%84%e7%82%b9" aria-label="nginx配置过吗，有哪些注意的点">nginx配置过吗，有哪些注意的点</a></li>
+                <li>
+                    <a href="#%e8%ae%be%e8%ae%a1%e4%b8%80%e4%b8%aa%e9%98%bb%e5%a1%9e%e9%98%9f%e5%88%97" aria-label="设计一个阻塞队列">设计一个阻塞队列</a></li>
+                <li>
+                    <a href="#mq%e6%b6%88%e8%b4%b9%e9%98%bb%e5%a1%9e%e6%80%8e%e4%b9%88%e5%8a%9e" aria-label="mq消费阻塞怎么办">mq消费阻塞怎么办</a></li>
+                <li>
+                    <a href="#%e6%80%a7%e8%83%bd%e6%b2%a1%e8%be%be%e5%88%b0%e9%a2%84%e6%9c%9f%e6%9c%89%e4%bb%80%e4%b9%88%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88" aria-label="性能没达到预期，有什么解决方案">性能没达到预期，有什么解决方案</a></li></ul>
+                </li>
+                <li>
+                    <a href="#%e7%bc%96%e7%a8%8b%e7%b3%bb%e5%88%97" aria-label="编程系列">编程系列</a><ul>
+                        
+                <li>
+                    <a href="#%e5%ae%9e%e7%8e%b0%e4%bd%bf%e7%94%a8%e5%ad%97%e7%ac%a6%e4%b8%b2%e5%87%bd%e6%95%b0%e5%90%8d%e8%b0%83%e7%94%a8%e5%87%bd%e6%95%b0" aria-label="实现使用字符串函数名，调用函数。">实现使用字符串函数名，调用函数。</a></li>
+                <li>
+                    <a href="#goroutine%e6%9c%89%e4%b8%89%e4%b8%aa%e5%87%bd%e6%95%b0%e5%88%86%e5%88%ab%e6%89%93%e5%8d%b0cat-fishdog%e8%a6%81%e6%b1%82%e6%af%8f%e4%b8%80%e4%b8%aa%e5%87%bd%e6%95%b0%e9%83%bd%e7%94%a8%e4%b8%80%e4%b8%aagoroutine%e6%8c%89%e7%85%a7%e9%a1%ba%e5%ba%8f%e6%89%93%e5%8d%b0100%e6%ac%a1" aria-label="（Goroutine）有三个函数，分别打印&amp;quot;cat&amp;quot;, &amp;ldquo;fish&amp;rdquo;,&amp;ldquo;dog&amp;quot;要求每一个函数都用一个goroutine，按照顺序打印100次。">（Goroutine）有三个函数，分别打印&quot;cat&quot;, &ldquo;fish&rdquo;,&ldquo;dog&quot;要求每一个函数都用一个goroutine，按照顺序打印100次。</a></li>
+                <li>
+                    <a href="#%e4%b8%a4%e4%b8%aa%e5%8d%8f%e7%a8%8b%e4%ba%a4%e6%9b%bf%e6%89%93%e5%8d%b010%e4%b8%aa%e5%ad%97%e6%af%8d%e5%92%8c%e6%95%b0%e5%ad%97" aria-label="两个协程交替打印10个字母和数字">两个协程交替打印10个字母和数字</a></li>
+                <li>
+                    <a href="#%e5%90%af%e5%8a%a8-2%e4%b8%aagroutine-2%e7%a7%92%e5%90%8e%e5%8f%96%e6%b6%88-%e7%ac%ac%e4%b8%80%e4%b8%aa%e5%8d%8f%e7%a8%8b1%e7%a7%92%e6%89%a7%e8%a1%8c%e5%ae%8c%e7%ac%ac%e4%ba%8c%e4%b8%aa%e5%8d%8f%e7%a8%8b3%e7%a7%92%e6%89%a7%e8%a1%8c%e5%ae%8c" aria-label="启动 2个groutine 2秒后取消， 第一个协程1秒执行完，第二个协程3秒执行完。">启动 2个groutine 2秒后取消， 第一个协程1秒执行完，第二个协程3秒执行完。</a></li>
+                <li>
+                    <a href="#%e5%bd%93select%e7%9b%91%e6%8e%a7%e5%a4%9a%e4%b8%aachan%e5%90%8c%e6%97%b6%e5%88%b0%e8%be%be%e5%b0%b1%e7%bb%aa%e6%80%81%e6%97%b6%e5%a6%82%e4%bd%95%e5%85%88%e6%89%a7%e8%a1%8c%e6%9f%90%e4%b8%aa%e4%bb%bb%e5%8a%a1" aria-label="当select监控多个chan同时到达就绪态时，如何先执行某个任务？">当select监控多个chan同时到达就绪态时，如何先执行某个任务？</a></li></ul>
+                </li>
+                <li>
+                    <a href="#%e6%80%bb%e7%bb%93" aria-label="总结">总结</a>
+                </li>
+            </ul>
+        </div>
+        </details>
+    </div>
+</aside>
+<script>
+    let activeElement;
+    let elements;
+    window.addEventListener('DOMContentLoaded', function (event) {
+        checkTocPosition();
+
+        elements = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]');
+        
+        activeElement = elements[0];
+        const id = encodeURI(activeElement.getAttribute('id')).toLowerCase();
+        document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+    }, false);
+
+    window.addEventListener('resize', function(event) {
+        checkTocPosition();
+    }, false);
+
+    window.addEventListener('scroll', () => {
+        
+        if (elements) {
+            activeElement = Array.from(elements).find((element) => {
+                if ((getOffsetTop(element) - window.pageYOffset) > 0 &&
+                    (getOffsetTop(element) - window.pageYOffset) < window.innerHeight/2) {
+                    return element;
+                }
+            }) || activeElement
+
+            elements.forEach(element => {
+                const id = encodeURI(element.getAttribute('id')).toLowerCase();
+                if (element === activeElement){
+                    document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+                } else {
+                    document.querySelector(`.inner ul li a[href="#${id}"]`).classList.remove('active');
+                }
+            })
+        }
+    }, false);
+
+    const main = parseInt(getComputedStyle(document.body).getPropertyValue('--article-width'), 10);
+    const toc = parseInt(getComputedStyle(document.body).getPropertyValue('--toc-width'), 10);
+    const gap = parseInt(getComputedStyle(document.body).getPropertyValue('--gap'), 10);
+
+    function checkTocPosition() {
+        const width = document.body.scrollWidth;
+        if (width - main - (toc * 2) - (gap * 4) > 0) {
+            document.getElementById("toc-container").classList.add("wide");
+        } else {
+            document.getElementById("toc-container").classList.remove("wide");
+        }
+    }
+
+    function getOffsetTop(element) {
+        if (!element.getClientRects().length) {
+            return 0;
+        }
+        let rect = element.getBoundingClientRect();
+        let win = element.ownerDocument.defaultView;
+        return rect.top + win.pageYOffset;
+    }
+</script>
+        <div class="post-content"><p>转自：<a href="https://zhuanlan.zhihu.com/p/471490292">Go常见面试题【由浅入深】2022版</a></p>
+<h3 id="基础语法">基础语法<a hidden class="anchor" aria-hidden="true" href="#基础语法">#</a></h3>
+<h3 id="01--和--的区别">01 <code>=</code> 和 <code>:=</code> 的区别？<a hidden class="anchor" aria-hidden="true" href="#01--和--的区别">#</a></h3>
+<p>=是赋值变量，:=是定义变量。</p>
+<h3 id="02-指针的作用">02 指针的作用<a hidden class="anchor" aria-hidden="true" href="#02-指针的作用">#</a></h3>
+<p>一个指针可以指向任意变量的地址，它所指向的地址在32位或64位机器上分别<strong>固定</strong>占4或8个字节。指针的作用有：</p>
+<ul>
+<li>获取变量的值</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span> <span style="color:#f92672">import</span> <span style="color:#a6e22e">fmt</span>
+</span></span><span style="display:flex;"><span> <span style="color:#960050;background-color:#1e0010">​</span>
+</span></span><span style="display:flex;"><span> <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>(){
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">p</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">a</span><span style="color:#75715e">//取址&amp;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;%d\n&#34;</span>, <span style="color:#f92672">*</span><span style="color:#a6e22e">p</span>);<span style="color:#75715e">//取值*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span> }
+</span></span></code></pre></div><ul>
+<li>改变变量的值</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span> <span style="color:#75715e">// 交换函数
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span> <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">swap</span>(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int</span>) {
+</span></span><span style="display:flex;"><span>     <span style="color:#f92672">*</span><span style="color:#a6e22e">a</span>, <span style="color:#f92672">*</span><span style="color:#a6e22e">b</span> = <span style="color:#f92672">*</span><span style="color:#a6e22e">b</span>, <span style="color:#f92672">*</span><span style="color:#a6e22e">a</span>
+</span></span><span style="display:flex;"><span> }
+</span></span></code></pre></div><ul>
+<li>用指针替代值传入函数，比如类的接收器就是这样的。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span> <span style="color:#66d9ef">type</span> <span style="color:#a6e22e">A</span> <span style="color:#66d9ef">struct</span>{}
+</span></span><span style="display:flex;"><span> <span style="color:#960050;background-color:#1e0010">​</span>
+</span></span><span style="display:flex;"><span> <span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">a</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">A</span>) <span style="color:#a6e22e">fun</span>(){}
+</span></span></code></pre></div><h3 id="03-go-允许多个返回值吗">03 Go 允许多个返回值吗？<a hidden class="anchor" aria-hidden="true" href="#03-go-允许多个返回值吗">#</a></h3>
+<p>可以。通常函数除了一般返回值还会返回一个error。</p>
+<h3 id="04-go-有异常类型吗">04 Go 有异常类型吗？<a hidden class="anchor" aria-hidden="true" href="#04-go-有异常类型吗">#</a></h3>
+<p>有。Go用error类型代替try&hellip;catch语句，这样可以节省资源。同时增加代码可读性：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">funcDemo</span>()
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>也可以用errors.New()来定义自己的异常。errors.Error()会返回异常的字符串表示。只要实现error接口就可以定义自己的异常，</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span> <span style="color:#66d9ef">type</span> <span style="color:#a6e22e">errorString</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">s</span> <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span> }
+</span></span><span style="display:flex;"><span> <span style="color:#960050;background-color:#1e0010">​</span>
+</span></span><span style="display:flex;"><span> <span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">e</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">errorString</span>) <span style="color:#a6e22e">Error</span>() <span style="color:#66d9ef">string</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">s</span>
+</span></span><span style="display:flex;"><span> }
+</span></span><span style="display:flex;"><span> <span style="color:#960050;background-color:#1e0010">​</span>
+</span></span><span style="display:flex;"><span> <span style="color:#75715e">// 多一个函数当作构造函数
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span> <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">New</span>(<span style="color:#a6e22e">text</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">error</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">errorString</span>{<span style="color:#a6e22e">text</span>}
+</span></span><span style="display:flex;"><span> }
+</span></span></code></pre></div><h3 id="05-什么是协程goroutine">05 什么是协程（Goroutine）<a hidden class="anchor" aria-hidden="true" href="#05-什么是协程goroutine">#</a></h3>
+<p>协程是<strong>用户态轻量级线程</strong>，它是<strong>线程调度的基本单位</strong>。通常在函数前加上go关键字就能实现并发。一个Goroutine会以一个很小的栈启动2KB或4KB，当遇到栈空间不足时，栈会<strong>自动伸缩</strong>， 因此可以轻易实现成千上万个goroutine同时启动。</p>
+<h3 id="06--如何高效地拼接字符串">06 ❤ 如何高效地拼接字符串<a hidden class="anchor" aria-hidden="true" href="#06--如何高效地拼接字符串">#</a></h3>
+<p>拼接字符串的方式有：<code>+</code> , <code>fmt.Sprintf</code> , <code>strings.Builder</code>, <code>bytes.Buffer</code>, <code>strings.Join</code></p>
+<p>1 &ldquo;+&rdquo;</p>
+<p>使用<code>+</code>操作符进行拼接时，会对字符串进行遍历，计算并开辟一个新的空间来存储原来的两个字符串。</p>
+<p>2 fmt.Sprintf</p>
+<p>由于采用了接口参数，必须要用反射获取值，因此有性能损耗。</p>
+<p>3 strings.Builder：</p>
+<p>用WriteString()进行拼接，内部实现是指针+切片，同时String()返回拼接后的字符串，它是直接把[]byte转换为string，从而避免变量拷贝。</p>
+<p>4 bytes.Buffer</p>
+<p><code>bytes.Buffer</code>是一个一个缓冲<code>byte</code>类型的缓冲器，这个缓冲器里存放着都是<code>byte</code>，</p>
+<p><code>bytes.buffer</code>底层也是一个<code>[]byte</code>切片。</p>
+<p>5 strings.join</p>
+<p><code>strings.join</code>也是基于<code>strings.builder</code>来实现的,并且可以自定义分隔符，在join方法内调用了b.Grow(n)方法，这个是进行初步的容量分配，而前面计算的n的长度就是我们要拼接的slice的长度，因为我们传入切片长度固定，所以提前进行容量分配可以减少内存分配，很高效。</p>
+<p><strong>性能比较</strong>：</p>
+<p>strings.Join ≈ strings.Builder &gt; bytes.Buffer &gt; &ldquo;+&rdquo; &gt; fmt.Sprintf</p>
+<p>5种拼接方法的实例代码</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>(){
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">string</span>{<span style="color:#e6db74">&#34;a&#34;</span>, <span style="color:#e6db74">&#34;b&#34;</span>, <span style="color:#e6db74">&#34;c&#34;</span>}
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//方式1：+
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">ret</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">+</span> <span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">+</span> <span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">2</span>]
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//方式2：fmt.Sprintf
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">ret</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%s%s%s&#34;</span>, <span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">0</span>],<span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">1</span>],<span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">2</span>])
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//方式3：strings.Builder
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">sb</span> <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Builder</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">sb</span>.<span style="color:#a6e22e">WriteString</span>(<span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">0</span>])
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">sb</span>.<span style="color:#a6e22e">WriteString</span>(<span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">1</span>])
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">sb</span>.<span style="color:#a6e22e">WriteString</span>(<span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">2</span>])
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ret</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sb</span>.<span style="color:#a6e22e">String</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//方式4：bytes.Buffer
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">buf</span> <span style="color:#f92672">:=</span> new(<span style="color:#a6e22e">bytes</span>.<span style="color:#a6e22e">Buffer</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">buf</span>.<span style="color:#a6e22e">Write</span>(<span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">0</span>])
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">buf</span>.<span style="color:#a6e22e">Write</span>(<span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">1</span>])
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">buf</span>.<span style="color:#a6e22e">Write</span>(<span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">2</span>])
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ret</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">buf</span>.<span style="color:#a6e22e">String</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//方式5：strings.Join
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">ret</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Join</span>(<span style="color:#a6e22e">a</span>,<span style="color:#e6db74">&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><blockquote>
+<p>参考资料：<a href="https://link.zhihu.com/?target=https%3A//geektutu.com/post/hpg-string-concat.html">字符串拼接性能及原理 | Go 语言高性能编程 | 极客兔兔</a></p>
+</blockquote>
+<h3 id="07-什么是-rune-类型">07 什么是 rune 类型<a hidden class="anchor" aria-hidden="true" href="#07-什么是-rune-类型">#</a></h3>
+<p>ASCII 码只需要 7 bit 就可以完整地表示，但只能表示英文字母在内的128个字符，为了表示世界上大部分的文字系统，发明了 Unicode， 它是ASCII的超集，包含世界上书写系统中存在的所有字符，并为每个代码分配一个标准编号（称为Unicode CodePoint），在 Go 语言中称之为 rune，是 int32 类型的别名。</p>
+<p>Go 语言中，字符串的底层表示是 byte (8 bit) 序列，而非 rune (32 bit) 序列。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">sample</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;我爱GO&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">runeSamp</span> <span style="color:#f92672">:=</span> []rune(<span style="color:#a6e22e">sample</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">runeSamp</span>[<span style="color:#ae81ff">0</span>] = <span style="color:#e6db74">&#39;你&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(string(<span style="color:#a6e22e">runeSamp</span>))  <span style="color:#75715e">// &#34;你爱GO&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(len(<span style="color:#a6e22e">runeSamp</span>))  <span style="color:#75715e">// 4
+</span></span></span></code></pre></div><h3 id="08-如何判断-map-中是否包含某个-key-">08 如何判断 map 中是否包含某个 key ？<a hidden class="anchor" aria-hidden="true" href="#08-如何判断-map-中是否包含某个-key-">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">sample</span> <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">int</span>]<span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sample</span>[<span style="color:#ae81ff">10</span>]; <span style="color:#a6e22e">ok</span> {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="09-go-支持默认参数或可选参数吗">09 Go 支持默认参数或可选参数吗？<a hidden class="anchor" aria-hidden="true" href="#09-go-支持默认参数或可选参数吗">#</a></h3>
+<p>不支持。但是可以利用结构体参数，或者&hellip;传入参数切片数组。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// 这个函数可以传入任意数量的整型参数
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">sum</span>(<span style="color:#a6e22e">nums</span> <span style="color:#f92672">...</span><span style="color:#66d9ef">int</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">total</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">num</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">nums</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">total</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">num</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">total</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="10-defer-的执行顺序">10 defer 的执行顺序<a hidden class="anchor" aria-hidden="true" href="#10-defer-的执行顺序">#</a></h3>
+<p>defer执行顺序和调用顺序相反，类似于栈<strong>后进先出</strong>(LIFO)。</p>
+<p>defer在return之后执行，但在函数退出之前，defer可以修改返回值。下面是一个例子：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">test</span>() <span style="color:#66d9ef">int</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;defer1&#34;</span>)
+</span></span><span style="display:flex;"><span>	}()
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">i</span> <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;defer2&#34;</span>)
+</span></span><span style="display:flex;"><span>	}()
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">i</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;return&#34;</span>, <span style="color:#a6e22e">test</span>())
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// defer2
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// defer1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// return 0
+</span></span></span></code></pre></div><p>上面这个例子中，test返回值并没有修改，这是由于Go的返回机制决定的，执行Return语句后，Go会创建一个临时变量保存返回值。如果是有名返回（也就是指明返回值<code>func test() (i int)</code>）</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">test</span>() (<span style="color:#a6e22e">i</span> <span style="color:#66d9ef">int</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">i</span> = <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">i</span> <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;defer2&#34;</span>)
+</span></span><span style="display:flex;"><span>	}()
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">i</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;return&#34;</span>, <span style="color:#a6e22e">test</span>())
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// defer2
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// return 1
+</span></span></span></code></pre></div><p>这个例子中，返回值被修改了。对于有名返回值的函数，执行 return 语句时，并不会再创建临时变量保存，因此，defer 语句修改了 i，即对返回值产生了影响。</p>
+<h3 id="11-如何交换-2-个变量的值">11 如何交换 2 个变量的值？<a hidden class="anchor" aria-hidden="true" href="#11-如何交换-2-个变量的值">#</a></h3>
+<p>对于变量而言<code>a,b = b,a</code>； 对于指针而言<code>*a,*b = *b, *a</code></p>
+<h3 id="12-go-语言-tag-的用处">12 Go 语言 tag 的用处？<a hidden class="anchor" aria-hidden="true" href="#12-go-语言-tag-的用处">#</a></h3>
+<p>tag可以为结构体成员提供属性。常见的：</p>
+<ol>
+<li>json序列化或反序列化时字段的名称</li>
+<li>db: sqlx模块中对应的数据库字段名</li>
+<li>form: gin框架中对应的前端的数据字段名</li>
+<li>binding: 搭配 form 使用, 默认如果没查找到结构体中的某个字段则不报错值为空, binding为 required 代表没找到返回错误给前端</li>
+</ol>
+<h3 id="13-如何获取一个结构体的所有tag">13 如何获取一个结构体的所有tag？<a hidden class="anchor" aria-hidden="true" href="#13-如何获取一个结构体的所有tag">#</a></h3>
+<p>利用反射：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#a6e22e">reflect</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Author</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Name</span>         <span style="color:#66d9ef">int</span>      <span style="color:#e6db74">`json:Name`</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Publications</span> []<span style="color:#66d9ef">string</span> <span style="color:#e6db74">`json:Publication,omitempty`</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">t</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">reflect</span>.<span style="color:#a6e22e">TypeOf</span>(<span style="color:#a6e22e">Author</span>{})
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">NumField</span>(); <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">name</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">Field</span>(<span style="color:#a6e22e">i</span>).<span style="color:#a6e22e">Name</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">s</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">FieldByName</span>(<span style="color:#a6e22e">name</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">name</span>, <span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">Tag</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>上述例子中，<code>reflect.TypeOf</code>方法获取对象的类型，之后<code>NumField()</code>获取结构体成员的数量。 通过<code>Field(i)</code>获取第i个成员的名字。 再通过其<code>Tag</code> 方法获得标签。</p>
+<h3 id="14-如何判断-2-个字符串切片slice-是相等的">14 如何判断 2 个字符串切片（slice) 是相等的？<a hidden class="anchor" aria-hidden="true" href="#14-如何判断-2-个字符串切片slice-是相等的">#</a></h3>
+<p><code>reflect.DeepEqual()</code> ， 但反射非常影响性能。</p>
+<h3 id="15-结构体打印时v-和-v-的区别">15 结构体打印时，<code>%v</code> 和 <code>%+v</code> 的区别<a hidden class="anchor" aria-hidden="true" href="#15-结构体打印时v-和-v-的区别">#</a></h3>
+<p><code>%v</code>输出结构体各成员的值；</p>
+<p><code>%+v</code>输出结构体各成员的<strong>名称</strong>和<strong>值</strong>；</p>
+<p><code>%#v</code>输出结构体名称和结构体各成员的名称和值</p>
+<h3 id="16-go-语言中如何表示枚举值enums">16 Go 语言中如何表示枚举值(enums)？<a hidden class="anchor" aria-hidden="true" href="#16-go-语言中如何表示枚举值enums">#</a></h3>
+<p>在常量中用iota可以表示枚举。iota从0开始。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">B</span> = <span style="color:#ae81ff">1</span> <span style="color:#f92672">&lt;&lt;</span> (<span style="color:#ae81ff">10</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">iota</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">KiB</span> 
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">MiB</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">GiB</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">TiB</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">PiB</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">EiB</span>
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><h3 id="17-空-struct-的用途">17 空 struct{} 的用途<a hidden class="anchor" aria-hidden="true" href="#17-空-struct-的用途">#</a></h3>
+<ul>
+<li>用map模拟一个set，那么就要把值置为struct{}，struct{}本身不占任何空间，可以避免任何多余的内存分配。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Set</span> <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">struct</span>{}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">set</span> <span style="color:#f92672">:=</span> make(<span style="color:#a6e22e">Set</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">item</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> []<span style="color:#66d9ef">string</span>{<span style="color:#e6db74">&#34;A&#34;</span>, <span style="color:#e6db74">&#34;A&#34;</span>, <span style="color:#e6db74">&#34;B&#34;</span>, <span style="color:#e6db74">&#34;C&#34;</span>} {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">set</span>[<span style="color:#a6e22e">item</span>] = <span style="color:#66d9ef">struct</span>{}{}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(len(<span style="color:#a6e22e">set</span>)) <span style="color:#75715e">// 3
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">set</span>[<span style="color:#e6db74">&#34;A&#34;</span>]; <span style="color:#a6e22e">ok</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;A exists&#34;</span>) <span style="color:#75715e">// A exists
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ul>
+<li>有时候给通道发送一个空结构体,channel&lt;-struct{}{}，也是节省了空间。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ch</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{}, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ch</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// do something
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	}()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ch</span> <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">struct</span>{}{}
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// ...
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><ul>
+<li>仅有方法的结构体</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Lamp</span> <span style="color:#66d9ef">struct</span>{}
+</span></span></code></pre></div><h3 id="18-go里面的int和int32是同一个概念吗"><strong>18 go里面的int和int32是同一个概念吗？</strong><a hidden class="anchor" aria-hidden="true" href="#18-go里面的int和int32是同一个概念吗">#</a></h3>
+<p>不是一个概念！千万不能混淆。go语言中的int的大小是和操作系统位数相关的，如果是32位操作系统，int类型的大小就是4字节。如果是64位操作系统，int类型的大小就是8个字节。除此之外uint也与操作系统有关。</p>
+<p>int8占1个字节，int16占2个字节，int32占4个字节，int64占8个字节。</p>
+<h3 id="实现原理">实现原理<a hidden class="anchor" aria-hidden="true" href="#实现原理">#</a></h3>
+<h3 id="01-init-函数是什么时候执行的">01 init() 函数是什么时候执行的？<a hidden class="anchor" aria-hidden="true" href="#01-init-函数是什么时候执行的">#</a></h3>
+<p><strong>简答</strong>： 在main函数之前执行。</p>
+<p><strong>详细</strong>：init()函数是go初始化的一部分，由runtime初始化每个导入的包，初始化不是按照从上到下的导入顺序，而是按照解析的依赖关系，没有依赖的包最先初始化。</p>
+<p>每个包首先初始化包作用域的常量和变量（常量优先于变量），然后执行包的<code>init()</code>函数。同一个包，甚至是同一个源文件可以有多个<code>init()</code>函数。<code>init()</code>函数没有入参和返回值，不能被其他函数调用，同一个包内多个<code>init()</code>函数的执行顺序不作保证。</p>
+<p>执行顺序：import –&gt; const –&gt; var –&gt;<code>init()</code>–&gt;<code>main()</code></p>
+<p>一个文件可以有多个<code>init()</code>函数！</p>
+<h3 id="02-如何知道一个对象是分配在栈上还是堆上">02 ❤如何知道一个对象是分配在栈上还是堆上？<a hidden class="anchor" aria-hidden="true" href="#02-如何知道一个对象是分配在栈上还是堆上">#</a></h3>
+<p>Go和C++不同，Go局部变量会进行<strong>逃逸分析</strong>。如果<strong>变量离开作用域后没有被引用</strong>，则<strong>优先</strong>分配到栈上，否则分配到堆上。那么如何判断是否发生了逃逸呢？</p>
+<p><code>go build -gcflags '-m -m -l' xxx.go</code>.</p>
+<p>关于逃逸的可能情况：变量大小不确定，变量类型不确定，变量分配的内存超过用户栈最大值，暴露给了外部指针。</p>
+<h3 id="03-2-个-interface-可以比较吗-">03 2 个 interface 可以比较吗 ？<a hidden class="anchor" aria-hidden="true" href="#03-2-个-interface-可以比较吗-">#</a></h3>
+<p>Go 语言中，interface 的内部实现包含了 2 个字段，类型 <code>T</code> 和 值 <code>V</code>，interface 可以使用 <code>==</code> 或 <code>!=</code> 比较。2 个 interface 相等有以下 2 种情况</p>
+<ol>
+<li>两个 interface 均等于 nil（此时 V 和 T 都处于 unset 状态）</li>
+<li>类型 T 相同，且对应的值 V 相等。</li>
+</ol>
+<p>看下面的例子：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Stu</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>     <span style="color:#a6e22e">Name</span> <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">StuInt</span> <span style="color:#66d9ef">interface</span>{}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>     <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">stu1</span>, <span style="color:#a6e22e">stu2</span> <span style="color:#a6e22e">StuInt</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">Stu</span>{<span style="color:#e6db74">&#34;Tom&#34;</span>}, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">Stu</span>{<span style="color:#e6db74">&#34;Tom&#34;</span>}
+</span></span><span style="display:flex;"><span>     <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">stu3</span>, <span style="color:#a6e22e">stu4</span> <span style="color:#a6e22e">StuInt</span> = <span style="color:#a6e22e">Stu</span>{<span style="color:#e6db74">&#34;Tom&#34;</span>}, <span style="color:#a6e22e">Stu</span>{<span style="color:#e6db74">&#34;Tom&#34;</span>}
+</span></span><span style="display:flex;"><span>     <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">stu1</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">stu2</span>) <span style="color:#75715e">// false
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>     <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">stu3</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">stu4</span>) <span style="color:#75715e">// true
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p><code>stu1</code> 和 <code>stu2</code> 对应的类型是 <code>*Stu</code>，值是 Stu 结构体的地址，两个地址不同，因此结果为 false。<br>
+<code>stu3</code> 和 <code>stu4</code> 对应的类型是 <code>Stu</code>，值是 Stu 结构体，且各字段相等，因此结果为 true。</p>
+<h3 id="04-2-个-nil-可能不相等吗">04 2 个 nil 可能不相等吗？<a hidden class="anchor" aria-hidden="true" href="#04-2-个-nil-可能不相等吗">#</a></h3>
+<p>可能不等。interface在运行时绑定值，只有值为nil接口值才为nil，但是与指针的nil不相等。举个例子：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">p</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int</span> = <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">i</span> <span style="color:#66d9ef">interface</span>{} = <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">p</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">i</span>){
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Equal&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>两者并不相同。总结：<strong>两个nil只有在类型相同时才相等</strong>。</p>
+<h3 id="05-简述-go-语言gc垃圾回收的工作原理">05 ❤简述 Go 语言GC(垃圾回收)的工作原理<a hidden class="anchor" aria-hidden="true" href="#05-简述-go-语言gc垃圾回收的工作原理">#</a></h3>
+<p>垃圾回收机制是Go一大特(nan)色(dian)。Go1.3采用<strong>标记清除法</strong>， Go1.5采用<strong>三色标记法</strong>，Go1.8采用<strong>三色标记法+混合写屏障</strong>。</p>
+<p><strong><em>标记清除法</em></strong></p>
+<p>分为两个阶段：标记和清除</p>
+<p>标记阶段：从根对象出发寻找并标记所有存活的对象。</p>
+<p>清除阶段：遍历堆中的对象，回收未标记的对象，并加入空闲链表。</p>
+<p>缺点是需要暂停程序STW。</p>
+<p><strong><em>三色标记法</em></strong>：</p>
+<p>将对象标记为白色，灰色或黑色。</p>
+<p>白色：不确定对象（默认色）；黑色：存活对象。灰色：存活对象，子对象待处理。</p>
+<p>标记开始时，先将所有对象加入白色集合（需要STW）。首先将根对象标记为灰色，然后将一个对象从灰色集合取出，遍历其子对象，放入灰色集合。同时将取出的对象放入黑色集合，直到灰色集合为空。最后的白色集合对象就是需要清理的对象。</p>
+<p>这种方法有一个缺陷，如果对象的引用被用户修改了，那么之前的标记就无效了。因此Go采用了<strong>写屏障技术</strong>，当对象新增或者更新会将其着色为灰色。</p>
+<p>一次完整的GC分为四个阶段：</p>
+<ol>
+<li>准备标记（需要STW），开启写屏障。</li>
+<li>开始标记</li>
+<li>标记结束（STW），关闭写屏障</li>
+<li>清理（并发）</li>
+</ol>
+<p>基于插入写屏障和删除写屏障在结束时需要STW来重新扫描栈，带来性能瓶颈。<strong>混合写屏障</strong>分为以下四步：</p>
+<ol>
+<li>GC开始时，将栈上的全部对象标记为黑色（不需要二次扫描，无需STW）；</li>
+<li>GC期间，任何栈上创建的新对象均为黑色</li>
+<li>被删除引用的对象标记为灰色</li>
+<li>被添加引用的对象标记为灰色</li>
+</ol>
+<p>总而言之就是确保黑色对象不能引用白色对象，这个改进直接使得GC时间从 2s降低到2us。</p>
+<h3 id="06-函数返回局部变量的指针是否安全">06 函数返回局部变量的指针是否安全？<a hidden class="anchor" aria-hidden="true" href="#06-函数返回局部变量的指针是否安全">#</a></h3>
+<p>这一点和C++不同，在Go里面返回局部变量的指针是安全的。因为Go会进行<strong>逃逸分析</strong>，如果发现局部变量的作用域超过该函数则会<strong>把指针分配到堆区</strong>，避免内存泄漏。</p>
+<h3 id="07-非接口的任意类型-t-都能够调用-t-的方法吗反过来呢">07 非接口的任意类型 T() 都能够调用 <code>*T</code> 的方法吗？反过来呢？<a hidden class="anchor" aria-hidden="true" href="#07-非接口的任意类型-t-都能够调用-t-的方法吗反过来呢">#</a></h3>
+<p>一个T类型的值可以调用*T类型声明的方法，当且仅当T是<strong>可寻址的</strong>。</p>
+<p>反之：*T 可以调用T()的方法，因为指针可以解引用。</p>
+<h3 id="08-go-slice是怎么扩容的">08 go slice是怎么扩容的？<a hidden class="anchor" aria-hidden="true" href="#08-go-slice是怎么扩容的">#</a></h3>
+<p>Go &lt;= 1.17</p>
+<p>如果当前容量小于1024，则判断所需容量是否大于原来容量2倍，如果大于，当前容量加上所需容量；否则当前容量乘2。</p>
+<p>如果当前容量大于1024，则每次按照1.25倍速度递增容量，也就是每次加上cap/4。</p>
+<p>Go1.18之后，引入了新的扩容规则：<a href="https://link.zhihu.com/?target=https%3A//www.lookcos.cn/archives/1204.html">浅谈 Go 1.18.1的切片扩容机制</a></p>
+<h3 id="并发编程httpslinkzhihucomtargethttps3ageektutucompostqa-golang-3html"><a href="https://link.zhihu.com/?target=https%3A//geektutu.com/post/qa-golang-3.html">并发编程</a><a hidden class="anchor" aria-hidden="true" href="#并发编程httpslinkzhihucomtargethttps3ageektutucompostqa-golang-3html">#</a></h3>
+<h3 id="01-无缓冲的-channel-和有缓冲的-channel-的区别">01 ❤无缓冲的 channel 和有缓冲的 channel 的区别？<a hidden class="anchor" aria-hidden="true" href="#01-无缓冲的-channel-和有缓冲的-channel-的区别">#</a></h3>
+<p>（这个问题笔者也纠结了很久，直到看到一篇文章，阻塞与否是分别针对发送接收方而言的，才茅塞顿开）</p>
+<p>对于无缓冲区channel：</p>
+<p>发送的数据如果没有被接收方接收，那么**发送方阻塞；**如果一直接收不到发送方的数据，<strong>接收方阻塞</strong>；</p>
+<p>有缓冲的channel：</p>
+<p>发送方在缓冲区满的时候阻塞，接收方不阻塞；接收方在缓冲区为空的时候阻塞，发送方不阻塞。</p>
+<p>可以类比生产者与消费者问题。</p>
+<p><img loading="lazy" src="https://pic3.zhimg.com/v2-b770e5632874d40780ecfe79701324f2_b.jpg" alt=""  />
+</p>
+<p>![](data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='650' height='182'></svg>)</p>
+<h3 id="02-为什么有协程泄露goroutine-leak">02 为什么有协程泄露(Goroutine Leak)？<a hidden class="anchor" aria-hidden="true" href="#02-为什么有协程泄露goroutine-leak">#</a></h3>
+<p>协程泄漏是指协程创建之后没有得到释放。主要原因有：</p>
+<ol>
+<li>缺少接收器，导致发送阻塞</li>
+<li>缺少发送器，导致接收阻塞</li>
+<li>死锁。多个协程由于竞争资源导致死锁。</li>
+<li>创建协程的没有回收。</li>
+</ol>
+<h3 id="03-go-可以限制运行时操作系统线程的数量吗-常见的goroutine操作函数有哪些">03 Go 可以限制运行时操作系统线程的数量吗？ 常见的goroutine操作函数有哪些？<a hidden class="anchor" aria-hidden="true" href="#03-go-可以限制运行时操作系统线程的数量吗-常见的goroutine操作函数有哪些">#</a></h3>
+<p>可以，使用runtime.GOMAXPROCS(num int)可以设置线程数目。该值默认为CPU逻辑核数，如果设的太大，会引起频繁的线程切换，降低性能。</p>
+<p>runtime.Gosched()，用于让出CPU时间片，让出当前goroutine的执行权限，调度器安排其它等待的任务运行，并在下次某个时候从该位置恢复执行。<br>
+runtime.Goexit()，调用此函数会立即使当前的goroutine的运行终止（终止协程），而其它的goroutine并不会受此影响。runtime.Goexit在终止当前goroutine前会先执行此goroutine的还未执行的defer语句。请注意千万别在主函数调用runtime.Goexit，因为会引发panic。</p>
+<h3 id="04-如何控制协程数目">04 如何控制协程数目。<a hidden class="anchor" aria-hidden="true" href="#04-如何控制协程数目">#</a></h3>
+<blockquote>
+<p>The GOMAXPROCS variable limits the number of operating system threads that can execute user-level Go code simultaneously. There is no limit to the number of threads that can be blocked in system calls on behalf of Go code; those do not count against the GOMAXPROCS limit.</p>
+</blockquote>
+<p>从官方文档的解释可以看到，<code>GOMAXPROCS</code> 限制的是同时执行用户态 Go 代码的操作系统线程的数量，但是对于被系统调用阻塞的线程数量是没有限制的。<code>GOMAXPROCS</code> 的默认值等于 CPU 的逻辑核数，同一时间，一个核只能绑定一个线程，然后运行被调度的协程。因此对于 CPU 密集型的任务，若该值过大，例如设置为 CPU 逻辑核数的 2 倍，会增加线程切换的开销，降低性能。对于 I/O 密集型应用，适当地调大该值，可以提高 I/O 吞吐率。</p>
+<p>另外对于协程，可以用带缓冲区的channel来控制，下面的例子是协程数为1024的例子</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wg</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ch</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{}, <span style="color:#ae81ff">1024</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span><span style="color:#f92672">:=</span><span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span>&lt;<span style="color:#ae81ff">20000</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ch</span><span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">struct</span>{}{}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>(){
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ch</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
+</span></span></code></pre></div><p>此外还可以用<strong>协程池</strong>：其原理无外乎是将上述代码中通道和协程函数解耦，并封装成单独的结构体。常见第三方协程池库，比如<a href="https://link.zhihu.com/?target=http%3A//github.com/Jeffail/tunny">tunny</a>等。</p>
+<p>面试题评价：★★★☆☆。偏容易和基础。分为基础语法、实现原理、并发编程三个大部分，需要读者有扎实的基础。</p>
+<p>-</p>
+<h2 id="面试题2"><strong>面试题2</strong><a hidden class="anchor" aria-hidden="true" href="#面试题2">#</a></h2>
+<p>来源：Durant Thorvalds</p>
+<h3 id="new和make的区别">❤new和make的区别？<a hidden class="anchor" aria-hidden="true" href="#new和make的区别">#</a></h3>
+<ul>
+<li>new只用于分配内存，返回一个指向地址的<strong>指针</strong>。它为每个新类型分配一片内存，初始化为0且返回类型*T的内存地址，它相当于&amp;T{}</li>
+<li>make只可用于<strong>slice,map,channel</strong>的初始化,返回的是<strong>引用</strong>。</li>
+</ul>
+<h3 id="请你讲一下go面向对象是如何实现的">请你讲一下Go面向对象是如何实现的？<a hidden class="anchor" aria-hidden="true" href="#请你讲一下go面向对象是如何实现的">#</a></h3>
+<p>Go实现面向对象的两个关键是struct和interface。</p>
+<p>封装：对于同一个包，对象对包内的文件可见；对不同的包，需要将对象以大写开头才是可见的。</p>
+<p>继承：继承是编译时特征，在struct内加入所需要继承的类即可：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">A</span> <span style="color:#66d9ef">struct</span>{}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">B</span> <span style="color:#66d9ef">struct</span>{
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">A</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>多态：多态是运行时特征，Go多态通过interface来实现。类型和接口是松耦合的，某个类型的实例可以赋给它所实现的任意接口类型的变量。</p>
+<p>Go支持多重继承，就是在类型中嵌入所有必要的父类型。</p>
+<h3 id="uint型变量值分别为-12它们相减的结果是多少">uint型变量值分别为 1，2，它们相减的结果是多少？<a hidden class="anchor" aria-hidden="true" href="#uint型变量值分别为-12它们相减的结果是多少">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">a</span> <span style="color:#66d9ef">uint</span> = <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">b</span> <span style="color:#66d9ef">uint</span> = <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">a</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">b</span>)
+</span></span></code></pre></div><p>答案，结果会溢出，如果是32位系统，结果是2^32-1，如果是64位系统，结果2^64-1.</p>
+<h3 id="讲一下go有没有函数在main之前执行怎么用">讲一下go有没有函数在main之前执行？怎么用？<a hidden class="anchor" aria-hidden="true" href="#讲一下go有没有函数在main之前执行怎么用">#</a></h3>
+<p>go的init函数在main函数之前执行，它有如下特点：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">init</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>init函数非常特殊：</p>
+<ul>
+<li>初始化不能采用初始化表达式初始化的变量；</li>
+<li>程序运行前执行注册</li>
+<li>实现sync.Once功能</li>
+<li>不能被其它函数调用</li>
+<li>init函数没有入口参数和返回值：</li>
+<li>每个包可以有多个init函数，<strong>每个源文件也可以有多个init函数</strong>。</li>
+<li>同一个包的init执行顺序，golang没有明确定义，编程时要注意程序不要依赖这个执行顺序。</li>
+<li>不同包的init函数按照包导入的依赖关系决定执行顺序。</li>
+</ul>
+<h3 id="下面这句代码是什么作用为什么要定义一个空值">下面这句代码是什么作用，为什么要定义一个空值？<a hidden class="anchor" aria-hidden="true" href="#下面这句代码是什么作用为什么要定义一个空值">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">GobCodec</span> <span style="color:#66d9ef">struct</span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">conn</span> <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">ReadWriteCloser</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">buf</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">bufio</span>.<span style="color:#a6e22e">Writer</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">dec</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">gob</span>.<span style="color:#a6e22e">Decoder</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">enc</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">gob</span>.<span style="color:#a6e22e">Encoder</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Codec</span> <span style="color:#66d9ef">interface</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Closer</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ReadHeader</span>(<span style="color:#f92672">*</span><span style="color:#a6e22e">Header</span>) <span style="color:#66d9ef">error</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ReadBody</span>(<span style="color:#66d9ef">interface</span>{})  <span style="color:#66d9ef">error</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Write</span>(<span style="color:#f92672">*</span><span style="color:#a6e22e">Header</span>, <span style="color:#66d9ef">interface</span>{}) <span style="color:#66d9ef">error</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">_</span> <span style="color:#a6e22e">Codec</span> = (<span style="color:#f92672">*</span><span style="color:#a6e22e">GobCodec</span>)(<span style="color:#66d9ef">nil</span>)
+</span></span></code></pre></div><p>答：将nil转换为*GobCodec类型，然后再转换为Codec接口，如果转换失败，说明*GobCodec没有实现Codec接口的所有方法。</p>
+<h3 id="golang的内存管理的原理清楚吗简述go内存管理机制">❤golang的内存管理的原理清楚吗？简述go内存管理机制。<a hidden class="anchor" aria-hidden="true" href="#golang的内存管理的原理清楚吗简述go内存管理机制">#</a></h3>
+<p>golang内存管理基本是参考tcmalloc来进行的。go内存管理本质上是一个内存池，只不过内部做了很多优化：自动伸缩内存池大小，合理的切割内存块。</p>
+<blockquote>
+<p>一些基本概念：<br>
+页Page：一块8K大小的内存空间。Go向操作系统申请和释放内存都是以页为单位的。<br>
+span : 内存块，一个或多个连续的 page 组成一个 span 。如果把 page 比喻成工人， span 可看成是小队，工人被分成若干个队伍，不同的队伍干不同的活。<br>
+sizeclass : 空间规格，每个 span 都带有一个 sizeclass ，标记着该 span 中的 page 应该如何使用。使用上面的比喻，就是 sizeclass 标志着 span 是一个什么样的队伍。<br>
+object : 对象，用来存储一个变量数据内存空间，一个 span 在初始化时，会被切割成一堆等大的 object 。假设 object 的大小是 16B ， span 大小是 8K ，那么就会把 span 中的 page 就会被初始化 8K / 16B = 512 个 object 。所谓内存分配，就是分配一个 object 出去。</p>
+</blockquote>
+<ol>
+<li><strong>mheap</strong></li>
+</ol>
+<p>一开始go从操作系统索取一大块内存作为内存池，并放在一个叫mheap的内存池进行管理，mheap将一整块内存切割为不同的区域，并将一部分内存切割为合适的大小。</p>
+<p><img loading="lazy" src="https://pic3.zhimg.com/v2-05f622a5c88a9a9456d43ee301622582_b.jpg" alt=""  />
+</p>
+<p>![](data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1064' height='351'></svg>)</p>
+<p>mheap.spans ：用来存储 page 和 span 信息，比如一个 span 的起始地址是多少，有几个 page，已使用了多大等等。</p>
+<p>mheap.bitmap 存储着各个 span 中对象的标记信息，比如对象是否可回收等等。</p>
+<p>mheap.arena_start : 将要分配给应用程序使用的空间。</p>
+<ol>
+<li><strong>mcentral</strong></li>
+</ol>
+<p>用途相同的span会以链表的形式组织在一起存放在mcentral中。这里用途用<strong>sizeclass</strong>来表示，就是该span存储哪种大小的对象。</p>
+<p>找到合适的 span 后，会从中取一个 object 返回给上层使用。</p>
+<ol>
+<li><strong>mcache</strong></li>
+</ol>
+<p>为了提高内存并发申请效率，加入缓存层mcache。每一个mcache和处理器P对应。Go申请内存首先从P的mcache中分配，如果没有可用的span再从mcentral中获取。</p>
+<blockquote>
+<p>参考资料：<a href="https://link.zhihu.com/?target=https%3A//cloud.tencent.com/developer/article/1422392">Go 语言内存管理（二）：Go 内存管理</a></p>
+</blockquote>
+<h3 id="mutex有几种模式">❤mutex有几种模式？<a hidden class="anchor" aria-hidden="true" href="#mutex有几种模式">#</a></h3>
+<p>mutex有两种模式：<strong>normal</strong> 和 <strong>starvation</strong></p>
+<p>正常模式</p>
+<p>所有goroutine按照FIFO的顺序进行锁获取，被唤醒的goroutine和新请求锁的goroutine同时进行锁获取，通常<strong>新请求锁的goroutine更容易获取锁</strong>(持续占有cpu)，被唤醒的goroutine则不容易获取到锁。公平性：否。</p>
+<p>饥饿模式</p>
+<p>所有尝试获取锁的goroutine进行等待排队，<strong>新请求锁的goroutine不会进行锁获取</strong>(禁用自旋)，而是加入队列尾部等待获取锁。公平性：是。</p>
+<blockquote>
+<p>参考链接：<a href="https://link.zhihu.com/?target=https%3A//blog.csdn.net/qq_37102984/article/details/115322706">Go Mutex 饥饿模式</a>，<a href="https://link.zhihu.com/?target=https%3A//blog.csdn.net/baolingye/article/details/111357407%23%3A~%3Atext%3D%25E6%25AF%258F%25E4%25B8%25AAMutex%25E9%2583%25BD%2Ctarving%25E3%2580%2582">GO 互斥锁（Mutex）原理</a></p>
+</blockquote>
+<p>-</p>
+<h2 id="面试题3"><strong>面试题3</strong><a hidden class="anchor" aria-hidden="true" href="#面试题3">#</a></h2>
+<p>来源**：**<a href="https://www.zhihu.com/question/67846139/answer/1983588716">如果你是一个Golang面试官，你会问哪些问题？</a></p>
+<h3 id="go如何进行调度的gmp中状态流转">❤go如何进行调度的。GMP中状态流转。<a hidden class="anchor" aria-hidden="true" href="#go如何进行调度的gmp中状态流转">#</a></h3>
+<p>Go里面GMP分别代表：G：goroutine，M：线程（真正在CPU上跑的），P：调度器。</p>
+<p><img loading="lazy" src="https://pic3.zhimg.com/v2-63a317972091b6d43863c5144a6badce_b.jpg" alt=""  />
+</p>
+<p>![](data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='508' height='488'></svg>)</p>
+<p>GMP模型</p>
+<p>调度器是M和G之间桥梁。</p>
+<p>go进行调度过程：</p>
+<ul>
+<li>
+<p>某个线程尝试创建一个新的G，那么这个G就会被安排到这个线程的G本地队列LRQ中，如果LRQ满了，就会分配到全局队列GRQ中；</p>
+</li>
+<li>
+<p>尝试获取当前线程的M，如果无法获取，就会从空闲的M列表中找一个，如果空闲列表也没有，那么就创建一个M，然后绑定G与P运行。</p>
+</li>
+<li>
+<p>进入调度循环：</p>
+</li>
+<li>
+<p>找到一个合适的G</p>
+</li>
+<li>
+<p>执行G，完成以后退出</p>
+</li>
+</ul>
+<h3 id="go什么时候发生阻塞阻塞时调度器会怎么做">Go什么时候发生阻塞？阻塞时，调度器会怎么做。<a hidden class="anchor" aria-hidden="true" href="#go什么时候发生阻塞阻塞时调度器会怎么做">#</a></h3>
+<ul>
+<li>用于<strong>原子、互斥量或通道</strong>操作导致goroutine阻塞，调度器将把当前阻塞的goroutine从本地运行队列<strong>LRQ换出</strong>，并重新调度其它goroutine；</li>
+<li>由于<strong>网络请求</strong>和<strong>IO</strong>导致的阻塞，Go提供了网络轮询器（Netpoller）来处理，后台用epoll等技术实现IO多路复用。</li>
+</ul>
+<p>其它回答：</p>
+<ul>
+<li><strong>channel阻塞</strong>：当goroutine读写channel发生阻塞时，会调用gopark函数，该G脱离当前的M和P，调度器将新的G放入当前M。</li>
+<li><strong>系统调用</strong>：当某个G由于系统调用陷入内核态，该P就会脱离当前M，此时P会更新自己的状态为Psyscall，M与G相互绑定，进行系统调用。结束以后，若该P状态还是Psyscall，则直接关联该M和G，否则使用闲置的处理器处理该G。</li>
+<li><strong>系统监控</strong>：当某个G在P上运行的时间超过10ms时候，或者P处于Psyscall状态过长等情况就会调用retake函数，触发新的调度。</li>
+<li><strong>主动让出</strong>：由于是协作式调度，该G会主动让出当前的P（通过GoSched），更新状态为Grunnable，该P会调度队列中的G运行。</li>
+</ul>
+<blockquote>
+<p>更多关于netpoller的内容可以参看：<a href="https://link.zhihu.com/?target=https%3A//strikefreedom.top/go-netpoll-io-multiplexing-reactor">https://strikefreedom.top/go-netpoll-io-multiplexing-reactor</a></p>
+</blockquote>
+<h3 id="go中gmp有哪些状态">❤Go中GMP有哪些状态？<a hidden class="anchor" aria-hidden="true" href="#go中gmp有哪些状态">#</a></h3>
+<p><img loading="lazy" src="https://pic4.zhimg.com/v2-87beb4a53dd92ddccef4ecb486dfa213_b.jpg" alt=""  />
+</p>
+<p>![](data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='720' height='370'></svg>)</p>
+<p>G的状态：</p>
+<p><strong>_Gidle</strong>：刚刚被分配并且还没有被初始化，值为0，为创建goroutine后的默认值</p>
+<p><strong>_Grunnable</strong>： 没有执行代码，没有栈的所有权，存储在运行队列中，可能在某个P的本地队列或全局队列中(如上图)。</p>
+<p><strong>_Grunning</strong>： 正在执行代码的goroutine，拥有栈的所有权(如上图)。</p>
+<p><strong>_Gsyscall</strong>：正在执行系统调用，拥有栈的所有权，与P脱离，但是与某个M绑定，会在调用结束后被分配到运行队列(如上图)。</p>
+<p><strong>_Gwaiting</strong>：被阻塞的goroutine，阻塞在某个channel的发送或者接收队列(如上图)。</p>
+<p><strong>_Gdead</strong>： 当前goroutine未被使用，没有执行代码，可能有分配的栈，分布在空闲列表gFree，可能是一个刚刚初始化的goroutine，也可能是执行了goexit退出的goroutine(如上图)。</p>
+<p><strong>_Gcopystac</strong>：栈正在被拷贝，没有执行代码，不在运行队列上，执行权在</p>
+<p><strong>_Gscan</strong> ： GC 正在扫描栈空间，没有执行代码，可以与其他状态同时存在。</p>
+<p>P的状态：</p>
+<p><strong>_Pidle</strong> ：处理器没有运行用户代码或者调度器，被空闲队列或者改变其状态的结构持有，运行队列为空</p>
+<p><strong>_Prunning</strong> ：被线程 M 持有，并且正在执行用户代码或者调度器(如上图)</p>
+<p><strong>_Psyscall</strong>：没有执行用户代码，当前线程陷入系统调用(如上图)</p>
+<p><strong>_Pgcstop</strong> ：被线程 M 持有，当前处理器由于垃圾回收被停止</p>
+<p><strong>_Pdead</strong> ：当前处理器已经不被使用</p>
+<p>M的状态：</p>
+<p><strong>自旋线程</strong>：处于运行状态但是没有可执行goroutine的线程，数量最多为GOMAXPROC，若是数量大于GOMAXPROC就会进入休眠。</p>
+<p><strong>非自旋线程</strong>：处于运行状态有可执行goroutine的线程。</p>
+<h3 id="gmp能不能去掉p层会怎么样">GMP能不能去掉P层？会怎么样？<a hidden class="anchor" aria-hidden="true" href="#gmp能不能去掉p层会怎么样">#</a></h3>
+<p>P层的作用</p>
+<ul>
+<li>每个 P 有自己的本地队列，大幅度的减轻了对全局队列的直接依赖，所带来的效果就是锁竞争的减少。而 GM 模型的性能开销大头就是锁竞争。</li>
+<li>每个 P 相对的平衡上，在 GMP 模型中也实现了 Work Stealing 算法，如果 P 的本地队列为空，则会从全局队列或其他 P 的本地队列中窃取可运行的 G 来运行，减少空转，提高了资源利用率。</li>
+</ul>
+<p>参考资料：<a href="https://link.zhihu.com/?target=https%3A//juejin.cn/post/6968311281220583454">https://juejin.cn/post/6968311281220583454</a></p>
+<h3 id="如果有一个g一直占用资源怎么办什么是work-stealing算法">如果有一个G一直占用资源怎么办？什么是work stealing算法？<a hidden class="anchor" aria-hidden="true" href="#如果有一个g一直占用资源怎么办什么是work-stealing算法">#</a></h3>
+<p>如果有个goroutine一直占用资源，那么GMP模型会<strong>从正常模式转变为饥饿模式</strong>（类似于mutex），允许其它goroutine使用work stealing抢占（禁用自旋锁）。</p>
+<p>work stealing算法指，一个线程如果处于空闲状态，则帮其它正在忙的线程分担压力，从全局队列取一个G任务来执行，可以极大提高执行效率。</p>
+<h3 id="goroutine什么情况会发生内存泄漏如何避免">goroutine什么情况会发生内存泄漏？如何避免。<a hidden class="anchor" aria-hidden="true" href="#goroutine什么情况会发生内存泄漏如何避免">#</a></h3>
+<p>在Go中内存泄露分为暂时性内存泄露和永久性内存泄露。</p>
+<p><strong>暂时性内存泄露</strong></p>
+<ul>
+<li>获取长字符串中的一段导致长字符串未释放</li>
+<li>获取长slice中的一段导致长slice未释放</li>
+<li>在长slice新建slice导致泄漏</li>
+</ul>
+<p>string相比切片少了一个容量的cap字段，可以把string当成一个只读的切片类型。获取长string或者切片中的一段内容，由于新生成的对象和老的string或者切片共用一个内存空间，会导致老的string和切片资源暂时得不到释放，造成短暂的内存泄漏</p>
+<p><strong>永久性内存泄露</strong></p>
+<ul>
+<li>goroutine永久阻塞而导致泄漏</li>
+<li>time.Ticker未关闭导致泄漏</li>
+<li>不正确使用Finalizer（Go版本的析构函数）导致泄漏</li>
+</ul>
+<h3 id="go-gc有几个阶段">Go GC有几个阶段<a hidden class="anchor" aria-hidden="true" href="#go-gc有几个阶段">#</a></h3>
+<p>目前的go GC采用<strong>三色标记法</strong>和<strong>混合写屏障</strong>技术。</p>
+<p>Go GC有<strong>四</strong>个阶段:</p>
+<ul>
+<li>STW，开启混合写屏障，扫描栈对象；</li>
+<li>将所有对象加入白色集合，从根对象开始，将其放入灰色集合。每次从灰色集合取出一个对象标记为黑色，然后遍历其子对象，标记为灰色，放入灰色集合；</li>
+<li>如此循环直到灰色集合为空。剩余的白色对象就是需要清理的对象。</li>
+<li>STW，关闭混合写屏障；</li>
+<li>在后台进行GC（并发）。</li>
+</ul>
+<h3 id="go竞态条件了解吗">go竞态条件了解吗？<a hidden class="anchor" aria-hidden="true" href="#go竞态条件了解吗">#</a></h3>
+<p>所谓竞态竞争，就是当<strong>两个或以上的goroutine访问相同资源时候，对资源进行读/写。</strong></p>
+<p>比如<code>var a int = 0</code>，有两个协程分别对a+=1，我们发现最后a不一定为2.这就是竞态竞争。</p>
+<p>通常我们可以用<code>go run -race xx.go</code>来进行检测。</p>
+<p>解决方法是，对临界区资源上锁，或者使用原子操作(atomics)，原子操作的开销小于上锁。</p>
+<h3 id="如果若干个goroutine有一个panic会怎么做">如果若干个goroutine，有一个panic会怎么做？<a hidden class="anchor" aria-hidden="true" href="#如果若干个goroutine有一个panic会怎么做">#</a></h3>
+<p>有一个panic，那么剩余goroutine也会退出，程序退出。如果不想程序退出，那么必须通过调用 recover() 方法来捕获 panic 并恢复将要崩掉的程序。</p>
+<blockquote>
+<p>参考理解：<a href="https://link.zhihu.com/?target=https%3A//blog.csdn.net/huorongbj/article/details/123013273">goroutine配上panic会怎样</a>。</p>
+</blockquote>
+<h3 id="defer可以捕获goroutine的子goroutine吗">defer可以捕获goroutine的子goroutine吗？<a hidden class="anchor" aria-hidden="true" href="#defer可以捕获goroutine的子goroutine吗">#</a></h3>
+<p>不可以。它们处于不同的调度器P中。对于子goroutine，必须通过 <strong>recover() 机制来进行恢复</strong>，然后结合日志进行打印（或者通过channel传递error），下面是一个例子：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// 心跳函数
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Ping</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>) <span style="color:#66d9ef">error</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">...</span> <span style="color:#a6e22e">code</span> <span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">defer</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">r</span> <span style="color:#f92672">:=</span> recover(); <span style="color:#a6e22e">r</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Errorc</span>(<span style="color:#a6e22e">ctx</span>, <span style="color:#e6db74">&#34;ping panic: %v, stack: %v&#34;</span>, <span style="color:#a6e22e">r</span>, string(<span style="color:#a6e22e">debug</span>.<span style="color:#a6e22e">Stack</span>()))
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}()
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">...</span> <span style="color:#a6e22e">code</span> <span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span>	}()
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">...</span> <span style="color:#a6e22e">code</span> <span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="grpc是什么">❤gRPC是什么？<a hidden class="anchor" aria-hidden="true" href="#grpc是什么">#</a></h3>
+<p>基于go的<strong>远程过程调用</strong>。RPC 框架的目标就是让远程服务调用更加简单、透明，RPC 框架负责屏蔽底层的传输方式（TCP 或者 UDP）、序列化方式（XML/Json/ 二进制）和通信细节。服务调用者可以像调用本地接口一样调用远程的服务提供者，而不需要关心底层通信细节和调用过程。</p>
+<p><img loading="lazy" src="https://pic3.zhimg.com/v2-53fcdf2682c027f2d16292c4b4ba20d6_b.jpg" alt=""  />
+</p>
+<p>![](data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='541' height='302'></svg>)</p>
+<p>gRPC框架图</p>
+<h2 id="面试题4">面试题4<a hidden class="anchor" aria-hidden="true" href="#面试题4">#</a></h2>
+<p>需要面试者有一定的大型项目经验经验，了解使用<strong>微服务，etcd，gin，gorm，gRPC</strong>等典型框架等模型或框架。</p>
+<h3 id="微服务了解吗">微服务了解吗？<a hidden class="anchor" aria-hidden="true" href="#微服务了解吗">#</a></h3>
+<p>微服务是一种开发软件的架构和组织方法，其中软件由通过明确定义的 API 进行通信的小型独立服务组成。微服务架构使应用程序更易于扩展和更快地开发，从而加速创新并缩短新功能的上市时间。</p>
+<p><img loading="lazy" src="https://pic3.zhimg.com/v2-56601175dc48fbec496c79284488ecee_b.jpg" alt=""  />
+</p>
+<p>![](data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='491' height='301'></svg>)</p>
+<p>微服务示意图</p>
+<p>微服务有着自主，专用，灵活性等优点。</p>
+<blockquote>
+<p>参考资料：<a href="https://link.zhihu.com/?target=https%3A//aws.amazon.com/cn/microservices/">什么是微服务？| AWS</a></p>
+</blockquote>
+<h3 id="服务发现是怎么做的">服务发现是怎么做的？<a hidden class="anchor" aria-hidden="true" href="#服务发现是怎么做的">#</a></h3>
+<p>主要有两种服务发现机制：<strong>客户端发现</strong>和<strong>服务端发现</strong>。</p>
+<p><strong>客户端发现模式</strong>：当我们使用客户端发现的时候，客户端负责决定可用服务实例的网络地址并且在集群中对请求负载均衡, 客户端访问<strong>服务登记表</strong>，也就是一个可用服务的数据库，然后客户端使用一种<strong>负载均衡算法</strong>选择一个可用的服务实例然后发起请求。该模式如下图所示：</p>
+<p><img loading="lazy" src="https://pic2.zhimg.com/v2-915e057bb7b6783393cdf1bfd2d0d745_b.jpg" alt=""  />
+</p>
+<p>![](data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='474' height='436'></svg>)</p>
+<p>客户端发现模式</p>
+<p><strong>服务端发现模式</strong>：客户端通过<strong>负载均衡器</strong>向某个服务提出请求，负载均衡器查询服务注册表，并将请求转发到可用的服务实例。如同客户端发现，服务实例在服务注册表中注册或注销。</p>
+<p><img loading="lazy" src="https://pic3.zhimg.com/v2-fe7926e3a7007f985a87e102743a842e_b.jpg" alt=""  />
+</p>
+<p>![](data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1024' height='631'></svg>)</p>
+<p>服务端发现模式</p>
+<p>参考资料：<a href="https://link.zhihu.com/?target=http%3A//blog.daocloud.io/3289.html">「Chris Richardson 微服务系列」服务发现的可行方案以及实践案例</a></p>
+<h3 id="etcd用过吗">ETCD用过吗？<a hidden class="anchor" aria-hidden="true" href="#etcd用过吗">#</a></h3>
+<p><strong>etcd</strong>是一个<strong>高度一致</strong>的<strong>分布式键值存储</strong>，它提供了一种可靠的方式来存储需要由分布式系统或机器集群访问的数据。它可以优雅地处理网络分区期间的领导者<strong>选举</strong>，即使在领导者节点中也可以容忍机器故障。</p>
+<p>etcd 是用<strong>Go语言</strong>编写的，它具有出色的跨平台支持，小的二进制文件和强大的社区。etcd机器之间的通信通过<strong>Raft共识算法</strong>处理。</p>
+<p>关于文档可以参考：<a href="https://link.zhihu.com/?target=https%3A//etcd.io/docs/v3.5/">v3.5 docs</a></p>
+<h3 id="gin怎么做参数校验">GIN怎么做参数校验？<a hidden class="anchor" aria-hidden="true" href="#gin怎么做参数校验">#</a></h3>
+<p>go采用validator作参数校验。</p>
+<p>它具有以下独特功能：</p>
+<ul>
+<li>使用验证tag或自定义validator进行跨字段Field和跨结构体验证。</li>
+<li>允许切片、数组和哈希表，多维字段的任何或所有级别进行校验。</li>
+<li>能够对哈希表key和value进行验证</li>
+<li>通过在验证之前确定它的基础类型来处理类型接口。</li>
+<li>别名验证标签，允许将多个验证映射到单个标签，以便更轻松地定义结构体上的验证</li>
+<li>gin web 框架的默认验证器；</li>
+</ul>
+<p>参考资料：<a href="https://link.zhihu.com/?target=https%3A//pkg.go.dev/github.com/go-playground/validator%23section-readme">validator package - pkg.go.dev</a></p>
+<h3 id="中间件用过吗">中间件用过吗？<a hidden class="anchor" aria-hidden="true" href="#中间件用过吗">#</a></h3>
+<p>Middleware是Web的重要组成部分，中间件（通常）是一小段代码，它们接受一个请求，对其进行处理，每个中间件只处理一件事情，完成后将其传递给另一个中间件或最终处理程序，这样就做到了程序的解耦。</p>
+<h3 id="go解析tag是怎么实现的">Go解析Tag是怎么实现的？<a hidden class="anchor" aria-hidden="true" href="#go解析tag是怎么实现的">#</a></h3>
+<p>Go解析tag采用的是<strong>反射</strong>。</p>
+<p>具体来说使用reflect.ValueOf方法获取其反射值，然后获取其Type属性，之后再通过Field(i)获取第i+1个field，再.Tag获得Tag。</p>
+<p>反射实现的原理在: `src/reflect/type.go`中</p>
+<h3 id="你项目有优雅的启停吗">你项目有优雅的启停吗？<a hidden class="anchor" aria-hidden="true" href="#你项目有优雅的启停吗">#</a></h3>
+<p>所谓「优雅」启停就是在启动退出服务时要满足以下几个条件：</p>
+<ul>
+<li><strong>不可以关闭现有连接</strong>（进程）</li>
+<li>新的进程启动并「<strong>接管</strong>」旧进程</li>
+<li>连接要<strong>随时响应用户请求</strong>，不可以出现拒绝请求的情况</li>
+<li>停止的时候，必须<strong>处理完既有连接</strong>，并且<strong>停止接收新的连接</strong>。</li>
+</ul>
+<p>为此我们必须引用<strong>信号</strong>来完成这些目的：</p>
+<p>启动：</p>
+<ul>
+<li>监听SIGHUP（在用户终端连接(正常或非正常)结束时发出）；</li>
+<li>收到信号后将服务监听的文件描述符传递给新的子进程，此时新老进程同时接收请求；</li>
+</ul>
+<p>退出：</p>
+<ul>
+<li>监听SIGINT和SIGSTP和SIGQUIT等。</li>
+<li>父进程停止接收新请求，等待旧请求完成（或超时）；</li>
+<li>父进程退出。</li>
+</ul>
+<p>实现：go1.8采用Http.Server内置的Shutdown方法支持优雅关机。 然后<a href="https://link.zhihu.com/?target=http%3A//github.com/fvbock/endless">fvbock/endless</a>可以实现优雅重启。</p>
+<blockquote>
+<p>参考资料：<a href="https://link.zhihu.com/?target=https%3A//juejin.cn/post/6867074626427502600%23heading-3">gin框架实践连载八 | 如何优雅重启和停止 - 掘金</a>，<a href="https://link.zhihu.com/?target=http%3A//www.phpxs.com/post/7186/">优雅地关闭或重启 go web 项目</a></p>
+</blockquote>
+<h3 id="持久化怎么做的">持久化怎么做的？<a hidden class="anchor" aria-hidden="true" href="#持久化怎么做的">#</a></h3>
+<p>所谓持久化就是将要保存的字符串写到硬盘等设备。</p>
+<ul>
+<li>最简单的方式就是采用ioutil的WriteFile()方法将字符串写到磁盘上，这种方法面临<strong>格式化</strong>方面的问题。</li>
+<li>更好的做法是将数据按照<strong>固定协议</strong>进行组织再进行读写，比如JSON，XML，Gob，csv等。</li>
+<li>如果要考虑<strong>高并发</strong>和<strong>高可用</strong>，必须把数据放入到数据库中，比如MySQL，PostgreDB，MongoDB等。</li>
+</ul>
+<p>参考链接：<a href="https://link.zhihu.com/?target=https%3A//www.jianshu.com/p/015aca3e11ae">Golang 持久化</a></p>
+<p>-</p>
+<h2 id="面试题5"><strong>面试题5</strong><a hidden class="anchor" aria-hidden="true" href="#面试题5">#</a></h2>
+<p>作者：Dylan2333 链接：</p>
+<p>该试题需要面试者有非常丰富的项目阅历和底层原理经验，熟练使用<strong>微服务，etcd，gin，gorm，gRPC</strong>等典型框架等模型或框架。</p>
+<h3 id="channel-死锁的场景">channel 死锁的场景<a hidden class="anchor" aria-hidden="true" href="#channel-死锁的场景">#</a></h3>
+<ul>
+<li>当一个<code>channel</code>中没有数据，而直接读取时，会发生死锁：</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">q</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>,<span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">q</span>
+</span></span></code></pre></div><p>解决方案是采用select语句，再default放默认处理方式：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">q</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>,<span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">select</span>{
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">val</span><span style="color:#f92672">:=&lt;-</span><span style="color:#a6e22e">q</span>:
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">default</span>:
+</span></span><span style="display:flex;"><span>         <span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ul>
+<li>当channel数据满了，再尝试写数据会造成死锁：</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">q</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>,<span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">q</span><span style="color:#f92672">&lt;-</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">q</span><span style="color:#f92672">&lt;-</span><span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">q</span><span style="color:#f92672">&lt;-</span><span style="color:#ae81ff">3</span>
+</span></span></code></pre></div><p>解决方法，采用select</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">q</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">q</span> <span style="color:#f92672">&lt;-</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">q</span> <span style="color:#f92672">&lt;-</span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">select</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">q</span> <span style="color:#f92672">&lt;-</span> <span style="color:#ae81ff">3</span>:
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;ok&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">default</span>:
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;wrong&#34;</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ul>
+<li>向一个关闭的channel写数据。</li>
+</ul>
+<p>注意：一个已经关闭的channel，只能读数据，不能写数据。</p>
+<p>参考资料：<a href="https://link.zhihu.com/?target=https%3A//blog.csdn.net/qq_35976351/article/details/81984117">Golang关于channel死锁情况的汇总以及解决方案</a></p>
+<h3 id="对已经关闭的chan进行读写会怎么样">对已经关闭的chan进行读写会怎么样？<a hidden class="anchor" aria-hidden="true" href="#对已经关闭的chan进行读写会怎么样">#</a></h3>
+<ul>
+<li>
+<p>读已经关闭的chan能一直读到东西，但是读到的内容根据通道内关闭前是否有元素而不同。</p>
+</li>
+<li>
+<p>如果chan关闭前，buffer内有元素还未读,会正确读到chan内的值，且返回的第二个bool值（是否读成功）为true。</p>
+</li>
+<li>
+<p>如果chan关闭前，buffer内有元素已经被读完，chan内无值，接下来所有接收的值都会非阻塞直接成功，返回 channel 元素的零值，但是第二个bool值一直为false。</p>
+</li>
+</ul>
+<p>写已经关闭的chan会panic。</p>
+<h3 id="说说-atomic底层怎么实现的">说说 atomic底层怎么实现的.<a hidden class="anchor" aria-hidden="true" href="#说说-atomic底层怎么实现的">#</a></h3>
+<p>atomic源码位于`sync\atomic`。通过阅读源码可知，atomic采用<strong>CAS</strong>（CompareAndSwap）的方式实现的。所谓CAS就是使用了CPU中的原子性操作。在操作共享变量的时候，CAS不需要对其进行加锁，而是通过类似于乐观锁的方式进行检测，总是假设被操作的值未曾改变（即与旧值相等），并一旦确认这个假设的真实性就立即进行值替换。本质上是<strong>不断占用CPU资源来避免加锁的开销</strong>。</p>
+<blockquote>
+<p>参考资料：<a href="https://link.zhihu.com/?target=https%3A//www.programminghunter.com/article/37392193442/">Go语言的原子操作atomic - 编程猎人</a></p>
+</blockquote>
+<h3 id="channel底层实现是否线程安全">channel底层实现？是否线程安全。<a hidden class="anchor" aria-hidden="true" href="#channel底层实现是否线程安全">#</a></h3>
+<p>channel底层实现在<code>src/runtime/chan.go</code>中</p>
+<p>channel内部是一个循环链表。内部包含buf, sendx, recvx, lock ,recvq, sendq几个部分；</p>
+<p>buf是有缓冲的channel所特有的结构，用来存储缓存数据。是个循环链表；</p>
+<ul>
+<li>sendx和recvx用于记录buf这个循环链表中的发送或者接收的index；</li>
+<li>lock是个互斥锁；</li>
+<li>recvq和sendq分别是接收(&lt;-channel)或者发送(channel &lt;- xxx)的goroutine抽象出来的结构体(sudog)的队列。是个双向链表。</li>
+</ul>
+<p>channel是<strong>线程安全</strong>的。</p>
+<blockquote>
+<p>参考资料：<a href="https://zhuanlan.zhihu.com/p/264305133">Kitou：Golang 深度剖析 &ndash; channel的底层实现</a></p>
+</blockquote>
+<h3 id="map的底层实现">map的底层实现。<a hidden class="anchor" aria-hidden="true" href="#map的底层实现">#</a></h3>
+<p>源码位于<code>src\runtime\map.go</code> 中。</p>
+<p>go的map和C++map不一样，底层实现是哈希表，包括两个部分：<strong>hmap</strong>和<strong>bucket</strong>。</p>
+<p>里面最重要的是buckets（桶），buckets是一个指针，最终它指向的是一个结构体：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// A bucket for a Go map.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">bmap</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">tophash</span> [<span style="color:#a6e22e">bucketCnt</span>]<span style="color:#66d9ef">uint8</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>每个bucket固定包含8个key和value(可以查看源码bucketCnt=8).实现上面是一个固定的大小连续内存块，分成四部分：每个条目的状态，8个key值，8个value值，指向下个bucket的指针。</p>
+<p>创建哈希表使用的是<code>makemap</code>函数.map 的一个关键点在于，<strong>哈希函数</strong>的选择。在程序启动时，会检测 cpu 是否支持 aes，如果支持，则使用 aes hash，否则使用 memhash。这是在函数 alginit() 中完成，位于路径：<code>src/runtime/alg.go</code> 下。</p>
+<p>map查找就是将key哈希后得到64位（64位机）用最后B个比特位计算在哪个桶。在 bucket 中，从前往后找到第一个空位。这样，在查找某个 key 时，先找到对应的桶，再去遍历 bucket 中的 key。</p>
+<p>关于map的查找和扩容可以参考<a href="https://link.zhihu.com/?target=https%3A//blog.csdn.net/chenxun_2010/article/details/103768011%3Futm_medium%3Ddistribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0.pc_relevant_aa%26spm%3D1001.2101.3001.4242.1%26utm_relevant_index%3D3">map的用法到map底层实现分析</a>。</p>
+<h3 id="select的实现原理">select的实现原理？<a hidden class="anchor" aria-hidden="true" href="#select的实现原理">#</a></h3>
+<p>select源码位于<code>src\runtime\select.go</code>，最重要的<code>scase</code> 数据结构为：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">scase</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">c</span>    <span style="color:#f92672">*</span><span style="color:#a6e22e">hchan</span>         <span style="color:#75715e">// chan
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">elem</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span> <span style="color:#75715e">// data element
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>scase.c为当前case语句所操作的channel指针，这也说明了一个case语句只能操作一个channel。</p>
+<p>scase.elem表示缓冲区地址：</p>
+<ul>
+<li>caseRecv ： scase.elem表示读出channel的数据存放地址；</li>
+<li>caseSend ： scase.elem表示将要写入channel的数据存放地址；</li>
+</ul>
+<p>select的主要实现位于：<code>select.go</code>函数：其主要功能如下：</p>
+<p>1. 锁定scase语句中所有的channel</p>
+<p>2. 按照随机顺序检测scase中的channel是否ready</p>
+<p>2.1 如果case可读，则读取channel中数据，解锁所有的channel，然后返回(case index, true)</p>
+<p>2.2 如果case可写，则将数据写入channel，解锁所有的channel，然后返回(case index, false)</p>
+<p>2.3 所有case都未ready，则解锁所有的channel，然后返回（default index, false）</p>
+<p>3. 所有case都未ready，且没有default语句</p>
+<p>3.1 将当前协程加入到所有channel的等待队列</p>
+<p>3.2 当将协程转入阻塞，等待被唤醒</p>
+<p>4. 唤醒后返回channel对应的case index</p>
+<p>4.1 如果是读操作，解锁所有的channel，然后返回(case index, true)</p>
+<p>4.2 如果是写操作，解锁所有的channel，然后返回(case index, false)</p>
+<p>参考资料：<a href="https://link.zhihu.com/?target=https%3A//www.cnblogs.com/wuyepeng/p/13910678.html%23%3A~%3Atext%3D%25E4%25B8%2580%25E3%2580%2581select%25E7%25AE%2580%25E4%25BB%258B.%25201.Go%25E7%259A%2584select%25E8%25AF%25AD%25E5%258F%25A5%25E6%2598%25AF%25E4%25B8%2580%25E7%25A7%258D%25E4%25BB%2585%25E8%2583%25BD%25E7%2594%25A8%25E4%25BA%258Echannl%25E5%258F%2591%25E9%2580%2581%25E5%2592%258C%25E6%258E%25A5%25E6%2594%25B6%25E6%25B6%2588%25E6%2581%25AF%25E7%259A%2584%25E4%25B8%2593%25E7%2594%25A8%25E8%25AF%25AD%25E5%258F%25A5%25EF%25BC%258C%25E6%25AD%25A4%25E8%25AF%25AD%25E5%258F%25A5%25E8%25BF%2590%25E8%25A1%258C%25E6%259C%259F%25E9%2597%25B4%25E6%2598%25AF%25E9%2598%25BB%25E5%25A1%259E%25E7%259A%2584%25EF%25BC%259B%25E5%25BD%2593select%25E4%25B8%25AD%25E6%25B2%25A1%25E6%259C%2589case%25E8%25AF%25AD%25E5%258F%25A5%25E7%259A%2584%25E6%2597%25B6%25E5%2580%2599%25EF%25BC%258C%25E4%25BC%259A%25E9%2598%25BB%25E5%25A1%259E%25E5%25BD%2593%25E5%2589%258Dgroutine%25E3%2580%2582.%25202.select%25E6%2598%25AFGolang%25E5%259C%25A8%25E8%25AF%25AD%25E8%25A8%2580%25E5%25B1%2582%25E9%259D%25A2%25E6%258F%2590%25E4%25BE%259B%25E7%259A%2584I%252FO%25E5%25A4%259A%25E8%25B7%25AF%25E5%25A4%258D%25E7%2594%25A8%25E7%259A%2584%25E6%259C%25BA%25E5%2588%25B6%25EF%25BC%258C%25E5%2585%25B6%25E4%25B8%2593%25E9%2597%25A8%25E7%2594%25A8%25E6%259D%25A5%25E6%25A3%2580%25E6%25B5%258B%25E5%25A4%259A%25E4%25B8%25AAchannel%25E6%2598%25AF%25E5%2590%25A6%25E5%2587%2586%25E5%25A4%2587%25E5%25AE%258C%25E6%25AF%2595%25EF%25BC%259A%25E5%258F%25AF%25E8%25AF%25BB%25E6%2588%2596%25E5%258F%25AF%25E5%2586%2599%25E3%2580%2582.%2C3.select%25E8%25AF%25AD%25E5%258F%25A5%25E4%25B8%25AD%25E9%2599%25A4default%25E5%25A4%2596%25EF%25BC%258C%25E6%25AF%258F%25E4%25B8%25AAcase%25E6%2593%258D%25E4%25BD%259C%25E4%25B8%2580%25E4%25B8%25AAchannel%25EF%25BC%258C%25E8%25A6%2581%25E4%25B9%2588%25E8%25AF%25BB%25E8%25A6%2581%25E4%25B9%2588%25E5%2586%2599.%25204.select%25E8%25AF%25AD%25E5%258F%25A5%25E4%25B8%25AD%25E9%2599%25A4default%25E5%25A4%2596%25EF%25BC%258C%25E5%2590%2584case%25E6%2589%25A7%25E8%25A1%258C%25E9%25A1%25BA%25E5%25BA%258F%25E6%2598%25AF%25E9%259A%258F%25E6%259C%25BA%25E7%259A%2584.%25205.select%25E8%25AF%25AD%25E5%258F%25A5%25E4%25B8%25AD%25E5%25A6%2582%25E6%259E%259C%25E6%25B2%25A1%25E6%259C%2589default%25E8%25AF%25AD%25E5%258F%25A5%25EF%25BC%258C%25E5%2588%2599%25E4%25BC%259A%25E9%2598%25BB%25E5%25A1%259E%25E7%25AD%2589%25E5%25BE%2585%25E4%25BB%25BB%25E4%25B8%2580case.%25206.select%25E8%25AF%25AD%25E5%258F%25A5%25E4%25B8%25AD%25E8%25AF%25BB%25E6%2593%258D%25E4%25BD%259C%25E8%25A6%2581%25E5%2588%25A4%25E6%2596%25AD%25E6%2598%25AF%25E5%2590%25A6%25E6%2588%2590%25E5%258A%259F%25E8%25AF%25BB%25E5%258F%2596%25EF%25BC%258C%25E5%2585%25B3%25E9%2597%25AD%25E7%259A%2584channel%25E4%25B9%259F%25E5%258F%25AF%25E4%25BB%25A5%25E8%25AF%25BB%25E5%258F%2596">Go select的使用和实现原理</a>.</p>
+<h3 id="go的interface怎么实现的">go的interface怎么实现的？<a hidden class="anchor" aria-hidden="true" href="#go的interface怎么实现的">#</a></h3>
+<p>go interface源码在<code>runtime\iface.go</code>中。</p>
+<p>go的接口由两种类型实现<code>iface</code>和<code>eface</code>。iface是包含方法的接口，而eface不包含方法。</p>
+<ul>
+<li><code>iface</code></li>
+</ul>
+<p>对应的数据结构是（位于<code>src\runtime\runtime2.go</code>）：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">iface</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">tab</span>  <span style="color:#f92672">*</span><span style="color:#a6e22e">itab</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">data</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>可以简单理解为，tab表示接口的具体结构类型，而data是接口的值。</p>
+<ul>
+<li>itab：</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">itab</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">inter</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">interfacetype</span> <span style="color:#75715e">//此属性用于定位到具体interface
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">_type</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">_type</span> <span style="color:#75715e">//此属性用于定位到具体interface
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">hash</span>  <span style="color:#66d9ef">uint32</span> <span style="color:#75715e">// copy of _type.hash. Used for type switches.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">_</span>     [<span style="color:#ae81ff">4</span>]<span style="color:#66d9ef">byte</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fun</span>   [<span style="color:#ae81ff">1</span>]<span style="color:#66d9ef">uintptr</span> <span style="color:#75715e">// variable sized. fun[0]==0 means _type does not implement inter.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>属性<code>interfacetype</code>类似于<code>_type</code>，其作用就是interface的公共描述，类似的还有<code>maptype</code>、<code>arraytype</code>、<code>chantype</code>…其都是各个结构的公共描述，可以理解为一种外在的表现信息。interfaetype和type唯一确定了接口类型，而hash用于查询和类型判断。fun表示方法集。</p>
+<ul>
+<li><code>eface</code></li>
+</ul>
+<p>与iface基本一致，但是用<code>_type</code>直接表示类型，这样的话就无法使用方法。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">eface</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">_type</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">_type</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">data</span>  <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>这里篇幅有限，深入讨论可以看：<a href="https://link.zhihu.com/?target=https%3A//halfrost.com/go_interface/%23toc-1">深入研究 Go interface 底层实现</a></p>
+<h3 id="go的reflect-底层实现">go的reflect 底层实现<a hidden class="anchor" aria-hidden="true" href="#go的reflect-底层实现">#</a></h3>
+<p>go reflect源码位于<code>src\reflect\</code>下面，作为一个库独立存在。反射是基于<strong>接口</strong>实现的。</p>
+<p>Go反射有三大法则：</p>
+<ul>
+<li>反射从<strong>接口</strong>映射到<strong>反射对象；</strong></li>
+</ul>
+<p><img loading="lazy" src="https://pic2.zhimg.com/v2-350518add3d5e2757a8bc98f3c6fc15d_b.jpg" alt=""  />
+</p>
+<p>![](data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='545' height='231'></svg>)</p>
+<p>法则1</p>
+<ul>
+<li>反射从<strong>反射对象</strong>映射到<strong>接口值</strong>；</li>
+</ul>
+<p><img loading="lazy" src="https://pic3.zhimg.com/v2-c2354d13a1514a482efa60e3d8cff816_b.jpg" alt=""  />
+</p>
+<p>![](data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='543' height='231'></svg>)</p>
+<p>法则2</p>
+<ul>
+<li>只有<strong>值可以修改</strong>(settable)，才可以<strong>修改</strong>反射对象。</li>
+</ul>
+<p>Go反射基于上述三点实现。我们先从最核心的两个源文件入手<code>type.go</code>和<code>value.go</code>.</p>
+<p>type用于获取当前值的类型。value用于获取当前的值。</p>
+<blockquote>
+<p>参考资料：<a href="https://link.zhihu.com/?target=https%3A//go.dev/blog/laws-of-reflection">The Laws of Reflection</a>， <a href="https://link.zhihu.com/?target=https%3A//i6448038.github.io/2020/02/15/golang-reflection/">图解go反射实现原理</a></p>
+</blockquote>
+<h3 id="go-gc的原理知道吗">go GC的原理知道吗？<a hidden class="anchor" aria-hidden="true" href="#go-gc的原理知道吗">#</a></h3>
+<p>如果需要从源码角度解释GC，推荐阅读（非常详细，图文并茂）：</p>
+<p><a href="https://link.zhihu.com/?target=https%3A//draveness.me/golang/docs/part3-runtime/ch07-memory/golang-garbage-collector/">https://draveness.me/golang/docs/part3-runtime/ch07-memory/golang-garbage-collector/</a></p>
+<h3 id="go里用过哪些设计模式-">go里用过哪些设计模式 ?<a hidden class="anchor" aria-hidden="true" href="#go里用过哪些设计模式-">#</a></h3>
+<h3 id="go的调试分析工具用过哪些">go的调试/分析工具用过哪些。<a hidden class="anchor" aria-hidden="true" href="#go的调试分析工具用过哪些">#</a></h3>
+<p>go的自带工具链相当丰富，</p>
+<ul>
+<li>go cover : 测试代码覆盖率；</li>
+<li>godoc: 用于生成go文档；</li>
+<li>pprof：用于性能调优，针对cpu，内存和并发；</li>
+<li>race：用于竞争检测；</li>
+</ul>
+<h3 id="进程被kill如何保证所有goroutine顺利退出">进程被kill，如何保证所有goroutine顺利退出<a hidden class="anchor" aria-hidden="true" href="#进程被kill如何保证所有goroutine顺利退出">#</a></h3>
+<p>goroutine监听SIGKILL信号，一旦接收到SIGKILL，则立刻退出。可采用select方法。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wg</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>{}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">c1</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Signal</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">signal</span>.<span style="color:#a6e22e">Notify</span>(<span style="color:#a6e22e">c1</span>, <span style="color:#a6e22e">syscall</span>.<span style="color:#a6e22e">SIGINT</span>, <span style="color:#a6e22e">syscall</span>.<span style="color:#a6e22e">SIGTERM</span>, <span style="color:#a6e22e">syscall</span>.<span style="color:#a6e22e">SIGQUIT</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;goroutine 1 receive a signal : %v\n\n&#34;</span>, <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">c1</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
+</span></span><span style="display:flex;"><span>	}()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;all groutine done!\n&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="说说context包的作用你用过哪些原理知道吗">说说context包的作用？你用过哪些，原理知道吗？<a hidden class="anchor" aria-hidden="true" href="#说说context包的作用你用过哪些原理知道吗">#</a></h3>
+<p><code>context</code>可以用来在<code>goroutine</code>之间传递上下文信息，相同的<code>context</code>可以传递给运行在不同<code>goroutine</code>中的函数，上下文对于多个<code>goroutine</code>同时使用是安全的，<code>context</code>包定义了上下文类型，可以使用<code>background</code>、<code>TODO</code>创建一个上下文，在函数调用链之间传播<code>context</code>，也可以使用<code>WithDeadline</code>、<code>WithTimeout</code>、<code>WithCancel</code> 或 <code>WithValue</code> 创建的修改副本替换它，听起来有点绕，其实总结起就是一句话：<strong><code>context</code>的作用就是在不同的<code>goroutine</code>之间同步请求特定的数据、取消信号以及处理请求的截止日期</strong>。</p>
+<p>关于context原理，可以参看：<a href="https://link.zhihu.com/?target=https%3A//cloud.tencent.com/developer/article/1900658">小白也能看懂的context包详解：从入门到精通</a></p>
+<h3 id="grpc为啥好基本原理是什么和http比呢">grpc为啥好，基本原理是什么，和http比呢<a hidden class="anchor" aria-hidden="true" href="#grpc为啥好基本原理是什么和http比呢">#</a></h3>
+<p>官方介绍：gRPC 是一个现代开源的<strong>高性能远程过程调用</strong> (RPC) 框架，可以在<strong>任何环境</strong>中运行。它可以通过对负载平衡、跟踪、健康检查和身份验证的可插拔支持有效地连接数据中心内和跨数据中心的服务。它也适用于分布式计算的最后一英里，将设备、移动应用程序和浏览器连接到后端服务。</p>
+<p>区别：<br>
+- rpc是远程过程调用，就是本地去调用一个远程的函数，而http是通过 url和符合restful风格的数据包去发送和获取数据；<br>
+- rpc的一般使用的编解码协议更加高效，比如grpc使用protobuf编解码。而http的一般使用json进行编解码，数据相比rpc更加直观，但是数据包也更大，效率低下；<br>
+- rpc一般用在服务内部的相互调用，而http则用于和用户交互；<br>
+相似点：<br>
+都有类似的机制，例如grpc的metadata机制和http的头机制作用相似，而且web框架，和rpc框架中都有拦截器的概念。grpc使用的是http2.0协议。<br>
+官网：<a href="https://link.zhihu.com/?target=https%3A//grpc.io/">gRPC</a></p>
+<h3 id="etcd怎么搭建的具体怎么用的">etcd怎么搭建的，具体怎么用的<a hidden class="anchor" aria-hidden="true" href="#etcd怎么搭建的具体怎么用的">#</a></h3>
+<h3 id="熔断怎么做的">熔断怎么做的<a hidden class="anchor" aria-hidden="true" href="#熔断怎么做的">#</a></h3>
+<h3 id="服务降级怎么搞">服务降级怎么搞<a hidden class="anchor" aria-hidden="true" href="#服务降级怎么搞">#</a></h3>
+<h3 id="1亿条数据动态增长取top10怎么实现">1亿条数据动态增长，取top10，怎么实现<a hidden class="anchor" aria-hidden="true" href="#1亿条数据动态增长取top10怎么实现">#</a></h3>
+<h3 id="进程挂了怎么办">进程挂了怎么办<a hidden class="anchor" aria-hidden="true" href="#进程挂了怎么办">#</a></h3>
+<h3 id="nginx配置过吗有哪些注意的点">nginx配置过吗，有哪些注意的点<a hidden class="anchor" aria-hidden="true" href="#nginx配置过吗有哪些注意的点">#</a></h3>
+<h3 id="设计一个阻塞队列">设计一个阻塞队列<a hidden class="anchor" aria-hidden="true" href="#设计一个阻塞队列">#</a></h3>
+<h3 id="mq消费阻塞怎么办">mq消费阻塞怎么办<a hidden class="anchor" aria-hidden="true" href="#mq消费阻塞怎么办">#</a></h3>
+<h3 id="性能没达到预期有什么解决方案">性能没达到预期，有什么解决方案<a hidden class="anchor" aria-hidden="true" href="#性能没达到预期有什么解决方案">#</a></h3>
+<p>-</p>
+<h2 id="编程系列">编程系列<a hidden class="anchor" aria-hidden="true" href="#编程系列">#</a></h2>
+<h3 id="实现使用字符串函数名调用函数">实现使用字符串函数名，调用函数。<a hidden class="anchor" aria-hidden="true" href="#实现使用字符串函数名调用函数">#</a></h3>
+<p>思路：采用反射的Call方法实现。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;reflect&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Animal</span> <span style="color:#66d9ef">struct</span>{
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">a</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Animal</span>) <span style="color:#a6e22e">Eat</span>(){
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Eat&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>(){
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">Animal</span>{}
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">reflect</span>.<span style="color:#a6e22e">ValueOf</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">a</span>).<span style="color:#a6e22e">MethodByName</span>(<span style="color:#e6db74">&#34;Eat&#34;</span>).<span style="color:#a6e22e">Call</span>([]<span style="color:#a6e22e">reflect</span>.<span style="color:#a6e22e">Value</span>{})
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="goroutine有三个函数分别打印cat-fishdog要求每一个函数都用一个goroutine按照顺序打印100次">（Goroutine）有三个函数，分别打印&quot;cat&quot;, &ldquo;fish&rdquo;,&ldquo;dog&quot;要求每一个函数都用一个goroutine，按照顺序打印100次。<a hidden class="anchor" aria-hidden="true" href="#goroutine有三个函数分别打印cat-fishdog要求每一个函数都用一个goroutine按照顺序打印100次">#</a></h3>
+<p>此题目考察channel，用三个无缓冲channel，如果一个channel收到信号则通知下一个。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;time&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">dog</span> = make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{})
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">cat</span> = make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{})
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">fish</span> = make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Dog</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">fish</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;dog&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">dog</span> <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">struct</span>{}{}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Cat</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">dog</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;cat&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cat</span> <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">struct</span>{}{}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Fish</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">cat</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;fish&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fish</span> <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">struct</span>{}{}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">100</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">go</span> <span style="color:#a6e22e">Dog</span>()
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">go</span> <span style="color:#a6e22e">Cat</span>()
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">go</span> <span style="color:#a6e22e">Fish</span>()
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fish</span> <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">struct</span>{}{}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">10</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="两个协程交替打印10个字母和数字">两个协程交替打印10个字母和数字<a hidden class="anchor" aria-hidden="true" href="#两个协程交替打印10个字母和数字">#</a></h3>
+<p>思路：采用channel来协调goroutine之间顺序。</p>
+<p>主线程一般要waitGroup等待协程退出，这里简化了一下直接sleep。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;time&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">word</span> = make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{}, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">num</span> = make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{}, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">printNums</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">10</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">word</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">num</span> <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">struct</span>{}{}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">printWords</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">10</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">num</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;a&#34;</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">word</span> <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">struct</span>{}{}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">num</span> <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">struct</span>{}{}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">go</span> <span style="color:#a6e22e">printNums</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">go</span> <span style="color:#a6e22e">printWords</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>代码：</p>
+<p><a href="https://www.zhihu.com/people/2d6eba22144ae58788cef3ed60485e9d">@中二的灰太狼</a></p>
+<h3 id="启动-2个groutine-2秒后取消-第一个协程1秒执行完第二个协程3秒执行完">启动 2个groutine 2秒后取消， 第一个协程1秒执行完，第二个协程3秒执行完。<a hidden class="anchor" aria-hidden="true" href="#启动-2个groutine-2秒后取消-第一个协程1秒执行完第二个协程3秒执行完">#</a></h3>
+<p>思路：采用<code>ctx, _ := context.WithTimeout(context.Background(), time.Second*2)</code>实现2s取消。协程执行完后通过channel通知，是否超时。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;context&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;time&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">f1</span>(<span style="color:#a6e22e">in</span> <span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{}) {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">1</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">in</span> <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">struct</span>{}{}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">f2</span>(<span style="color:#a6e22e">in</span> <span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{}) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">3</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">in</span> <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">struct</span>{}{}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ch1</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{})
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ch2</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{})
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ctx</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">WithTimeout</span>(<span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Background</span>(), <span style="color:#ae81ff">2</span><span style="color:#f92672">*</span><span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">go</span> <span style="color:#a6e22e">f1</span>(<span style="color:#a6e22e">ch1</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">select</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">Done</span>():
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;f1 timeout&#34;</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ch1</span>:
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;f1 done&#34;</span>)
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">go</span> <span style="color:#a6e22e">f2</span>(<span style="color:#a6e22e">ch2</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">select</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">Done</span>():
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;f2 timeout&#34;</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ch2</span>:
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;f2 done&#34;</span>)
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">5</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>代码：</p>
+<p><a href="https://www.zhihu.com/people/2d6eba22144ae58788cef3ed60485e9d">@中二的灰太狼</a></p>
+<h3 id="当select监控多个chan同时到达就绪态时如何先执行某个任务">当select监控多个chan同时到达就绪态时，如何先执行某个任务？<a hidden class="anchor" aria-hidden="true" href="#当select监控多个chan同时到达就绪态时如何先执行某个任务">#</a></h3>
+<p>可以在子case再加一个for select语句。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">priority_select</span>(<span style="color:#a6e22e">ch1</span>, <span style="color:#a6e22e">ch2</span> <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">string</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">select</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">val</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ch1</span>:
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">val</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">val2</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ch2</span>:
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">priority</span>:
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">for</span> {
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">select</span> {
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">val1</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ch1</span>:
+</span></span><span style="display:flex;"><span>					<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">val1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">default</span>:
+</span></span><span style="display:flex;"><span>					<span style="color:#66d9ef">break</span> <span style="color:#a6e22e">priority</span>
+</span></span><span style="display:flex;"><span>				}
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">val2</span>)
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="总结">总结<a hidden class="anchor" aria-hidden="true" href="#总结">#</a></h2>
+<p>Go面试复习应该有所侧重，关注切片，通道，异常处理，Goroutine，GMP模型，字符串高效拼接，指针，反射，接口，sync。对于比较难懂的部分，GMP模型和GC和内存管理，应该主动去看<strong>源码</strong>，然后慢慢理解。业务代码写多了，自然就有理解了。</p>
+
+
+        </div>
+
+        <footer class="post-footer">
+            
+<nav class="paginav">
+  <a class="prev" href="https://liiqii.github.io/posts/tech/go/go_regexp/">
+    <span class="title">« 上一页</span>
+    <br>
+    <span>Go 正则表达式</span>
+  </a>
+  <a class="next" href="https://liiqii.github.io/posts/tech/linux/linux_crontab/">
+    <span class="title">下一页 »</span>
+    <br>
+    <span>Linux 定时任务</span>
+  </a>
+</nav>
+
+
+<div class="share-buttons">
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Go常见面试题 on twitter"
+       href="https://twitter.com/intent/tweet/?text=Go%e5%b8%b8%e8%a7%81%e9%9d%a2%e8%af%95%e9%a2%98&amp;url=https%3a%2f%2fliiqii.github.io%2fposts%2ftech%2fgo%2fgo_interview_questions%2f&amp;hashtags=Go%2cLinux">
+    <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve">
+            <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-253.927,424.544c135.939,0 210.268,-112.643 210.268,-210.268c0,-3.218 0,-6.437 -0.153,-9.502c14.406,-10.421 26.973,-23.448 36.935,-38.314c-13.18,5.824 -27.433,9.809 -42.452,11.648c15.326,-9.196 26.973,-23.602 32.49,-40.92c-14.252,8.429 -30.038,14.56 -46.896,17.931c-13.487,-14.406 -32.644,-23.295 -53.946,-23.295c-40.767,0 -73.87,33.104 -73.87,73.87c0,5.824 0.613,11.494 1.992,16.858c-61.456,-3.065 -115.862,-32.49 -152.337,-77.241c-6.284,10.881 -9.962,23.601 -9.962,37.088c0,25.594 13.027,48.276 32.95,61.456c-12.107,-0.307 -23.448,-3.678 -33.41,-9.196l0,0.92c0,35.862 25.441,65.594 59.311,72.49c-6.13,1.686 -12.72,2.606 -19.464,2.606c-4.751,0 -9.348,-0.46 -13.946,-1.38c9.349,29.426 36.628,50.728 68.965,51.341c-25.287,19.771 -57.164,31.571 -91.8,31.571c-5.977,0 -11.801,-0.306 -17.625,-1.073c32.337,21.15 71.264,33.41 112.95,33.41Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Go常见面试题 on linkedin"
+       href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fliiqii.github.io%2fposts%2ftech%2fgo%2fgo_interview_questions%2f&amp;title=Go%e5%b8%b8%e8%a7%81%e9%9d%a2%e8%af%95%e9%a2%98&amp;summary=Go%e5%b8%b8%e8%a7%81%e9%9d%a2%e8%af%95%e9%a2%98&amp;source=https%3a%2f%2fliiqii.github.io%2fposts%2ftech%2fgo%2fgo_interview_questions%2f">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve">
+            <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Go常见面试题 on reddit"
+       href="https://reddit.com/submit?url=https%3a%2f%2fliiqii.github.io%2fposts%2ftech%2fgo%2fgo_interview_questions%2f&title=Go%e5%b8%b8%e8%a7%81%e9%9d%a2%e8%af%95%e9%a2%98">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve">
+            <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Go常见面试题 on facebook"
+       href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fliiqii.github.io%2fposts%2ftech%2fgo%2fgo_interview_questions%2f">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve">
+            <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Go常见面试题 on whatsapp"
+       href="https://api.whatsapp.com/send?text=Go%e5%b8%b8%e8%a7%81%e9%9d%a2%e8%af%95%e9%a2%98%20-%20https%3a%2f%2fliiqii.github.io%2fposts%2ftech%2fgo%2fgo_interview_questions%2f">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve">
+            <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Go常见面试题 on telegram"
+       href="https://telegram.me/share/url?text=Go%e5%b8%b8%e8%a7%81%e9%9d%a2%e8%af%95%e9%a2%98&amp;url=https%3a%2f%2fliiqii.github.io%2fposts%2ftech%2fgo%2fgo_interview_questions%2f">
+        <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28">
+            <path
+                    d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+        </svg>
+    </a>
+</div>
+
+        </footer>
+    </div>
+
+<style>
+    .comments_details summary::marker {
+        font-size: 20px;
+        content: '👉展开评论';
+        color: var(--content);
+    }
+    .comments_details[open] summary::marker{
+        font-size: 20px;
+        content: '👇关闭评论';
+        color: var(--content);
+    }
+</style>
+
+
+<div>
+    <details class="comments_details">
+        <summary style="cursor: pointer; margin: 50px 0 20px 0;width: 130px;">
+            <span style="font-size: 20px;color: var(--content);">...</span>
+        </summary>
+        <div id="tcomment"></div>
+    </details>
+    <script src="https://cdn.staticfile.org/twikoo/1.5.8/twikoo.all.min.js">
+    </script>
+    <script>
+        twikoo.init({
+            envId:  null ,
+        el: "#tcomment",
+            lang: 'zh-CN',
+            region:  null ,
+        path: window.TWIKOO_MAGIC_PATH||window.location.pathname,
+        })
+    </script>
+</div>
+</article>
+</main>
+
+<footer class="footer">
+    <span>
+        &copy;
+        -2023
+        <a href="https://liiqii.github.io/" style="color:#939393;">liiqii</a>
+    </span>
+    
+    <span>Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &amp;
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+    
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>
